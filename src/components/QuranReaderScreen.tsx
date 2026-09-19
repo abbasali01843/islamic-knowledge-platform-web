@@ -13,7 +13,7 @@ import {
   Search,
   Check,
 } from 'lucide-react';
-import { Surah, ReaderAyah } from '../types';
+import type { Surah, ReaderAyah } from '../types';
 import { quranSurahs } from '../data/quranCatalog';
 import { QuranReaderRepository } from '../data/quranRepository';
 import { QuranPreferences } from '../utils/preferences';
