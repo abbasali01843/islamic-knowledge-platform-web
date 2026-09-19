@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { X, Search, Navigation, Check, MapPin } from 'lucide-react';
 import { LocationConfig } from '../../types/prayer';
 import { BANGLADESH_DISTRICTS, INTERNATIONAL_CITIES } from '../../data/bangladeshDistricts';
+import { requestBrowserLocation } from '../../utils/browserLocation';
 
 interface LocationPickerModalProps {
   currentLocation: LocationConfig;
@@ -43,59 +44,26 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
     );
   }, [searchQuery, selectedDivision]);
 
-  const handleDetectGps = () => {
-    if (!navigator.geolocation) {
-      setGpsError('আপনার ডিভাইসে জিপিএস সমর্থন করে না।');
-      return;
-    }
-
+  const handleDetectGps = async () => {
     setIsDetectingGps(true);
     setGpsError(null);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsDetectingGps(false);
-        const { latitude, longitude } = position.coords;
-
-        // Find closest district in Bangladesh or create custom
-        let closestLoc: LocationConfig = BANGLADESH_DISTRICTS[0];
-        let minDistance = Number.MAX_VALUE;
-
-        const allLocs = [...BANGLADESH_DISTRICTS, ...INTERNATIONAL_CITIES];
-        for (const loc of allLocs) {
-          const dLat = loc.latitude - latitude;
-          const dLon = loc.longitude - longitude;
-          const dist = Math.sqrt(dLat * dLat + dLon * dLon);
-          if (dist < minDistance) {
-            minDistance = dist;
-            closestLoc = loc;
-          }
-        }
-
-        // If reasonably close to a known district (within ~0.8 degrees ~85km), use that district with exact GPS coordinates
-        const gpsConfig: LocationConfig = {
-          id: 'gps-current',
-          nameBengali: closestLoc ? `${closestLoc.nameBengali} (জিপিএস)` : 'বর্তমান অবস্থান',
-          nameEnglish: closestLoc ? `${closestLoc.nameEnglish} (GPS)` : 'Current Location (GPS)',
-          country: closestLoc.country,
-          latitude: parseFloat(latitude.toFixed(4)),
-          longitude: parseFloat(longitude.toFixed(4)),
-          timezone: closestLoc.timezone,
-        };
-
-        onSelectLocation(gpsConfig);
-        onClose();
-      },
-      (err) => {
-        setIsDetectingGps(false);
-        setGpsError(
-          err.code === 1
-            ? 'লোকেশন পারমিশন দেওয়া হয়নি। অনুগ্রহ করে পারমিশন দিন বা তালিকা থেকে জেলা নির্বাচন করুন।'
-            : 'অবস্থান নির্ণয় করা সম্ভব হয়নি। তালিকা থেকে জেলা বেছে নিন।'
-        );
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    try {
+      const gpsConfig = await requestBrowserLocation();
+      onSelectLocation(gpsConfig);
+      onClose();
+    } catch (error) {
+      const code = typeof error === 'object' && error && 'code' in error
+        ? (error as { code?: number }).code
+        : undefined;
+      setGpsError(
+        code === 1
+          ? 'লোকেশন পারমিশন দেওয়া হয়নি। অনুগ্রহ করে পারমিশন দিন বা তালিকা থেকে জেলা নির্বাচন করুন।'
+          : 'অবস্থান নির্ণয় করা সম্ভব হয়নি। তালিকা থেকে জেলা বেছে নিন।'
+      );
+    } finally {
+      setIsDetectingGps(false);
+    }
   };
 
   return (
@@ -236,7 +204,7 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
 
         {/* Footer info */}
         <div className="p-3 bg-[#F7FAF7] dark:bg-[#141B16] border-t border-[#E8EFEA] dark:border-[#3A4D43]/60 text-center text-xs text-[#717A74]">
-          জেলা পরিবর্তনের সাথে সাথে স্বয়ংক্রিয়ভাবে নামাজের সময় পুনর্গণনা করা হবে।
+          GPS ব্যবহার করলে আপনার বর্তমান স্থান ও ডিভাইসের সময়-অফসেট অনুযায়ী নামাজের সময় পুনর্গণনা করা হবে।
         </div>
       </div>
     </div>
