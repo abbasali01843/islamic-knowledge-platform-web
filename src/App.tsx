@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import {Sun,Moon} from 'lucide-react';
-import {Surah,HomeDestination} from './types';
+import type {Surah,HomeDestination} from './types';
 import {findQuranSurah} from './data/quranCatalog';
 import {HomeScreen} from './components/HomeScreen';
 import {QuranScreen} from './components/QuranScreen';
