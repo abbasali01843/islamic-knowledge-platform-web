@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   ArrowLeft,
   Calculator,
@@ -14,14 +14,13 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import {
-  DEFAULT_GOLD_GRAM_PRICE_BDT,
-  DEFAULT_SILVER_GRAM_PRICE_BDT,
   NISAB_GOLD_GRAMS,
   NISAB_SILVER_GRAMS,
   ZAKAT_RECIPIENTS,
   ZAKAT_FAQS,
 } from '../../data/zakatData';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
+import { fetchLiveNisab, NISAB_SOURCE_LABEL, NISAB_SOURCE_URL } from '../../services/nisabApi';
 
 interface ZakatScreenProps {
   onBack: () => void;
@@ -34,9 +33,25 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
   const [copied, setCopied] = useState(false);
 
   // Price configurations (BDT)
-  const [goldGramPrice, setGoldGramPrice] = useState<number>(DEFAULT_GOLD_GRAM_PRICE_BDT);
-  const [silverGramPrice, setSilverGramPrice] = useState<number>(DEFAULT_SILVER_GRAM_PRICE_BDT);
+  const [goldGramPrice, setGoldGramPrice] = useState<number>(0);
+  const [silverGramPrice, setSilverGramPrice] = useState<number>(0);
+  const [liveNisab, setLiveNisab] = useState<{ goldNisabValueBdt:number; silverNisabValueBdt:number; updatedAt:string; standard:string } | null>(null);
+  const [nisabLoading, setNisabLoading] = useState(true);
+  const [nisabError, setNisabError] = useState('');
   const [showPriceSettings, setShowPriceSettings] = useState<boolean>(false);
+
+  useEffect(() => {
+    let active = true;
+    fetchLiveNisab('BDT', 'hanafi').then((data) => {
+      if (!active) return;
+      setGoldGramPrice(data.goldGramPriceBdt);
+      setSilverGramPrice(data.silverGramPriceBdt);
+      setLiveNisab(data);
+      setNisabError('');
+    }).catch(() => { if (active) setNisabError('লাইভ নিসাবের তথ্য পাওয়া যায়নি। নিচের মূল্য হাতে দিয়ে সেট করুন।'); })
+      .finally(() => { if (active) setNisabLoading(false); });
+    return () => { active = false; };
+  }, []);
 
   // Asset inputs (BDT or values)
   const [cashInHand, setCashInHand] = useState<string>('');
@@ -89,8 +104,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
   const netWealth = Math.max(0, totalAssets - totalLiabilities);
 
-  const silverNisabValue = NISAB_SILVER_GRAMS * silverGramPrice;
-  const goldNisabValue = NISAB_GOLD_GRAMS * goldGramPrice;
+  const silverNisabValue = liveNisab?.silverNisabValueBdt ?? NISAB_SILVER_GRAMS * silverGramPrice;
+  const goldNisabValue = liveNisab?.goldNisabValueBdt ?? NISAB_GOLD_GRAMS * goldGramPrice;
 
   // By default, for mixed assets, the silver nisab is preferred to benefit the poor
   const isEligible = netWealth >= silverNisabValue;
@@ -144,7 +159,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
             যাকাত ক্যালকুলেটর
           </h1>
           <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
-            স্বর্ণ, রৌপ্য, নগদ অর্থ ও ব্যবসায়ের সম্পদের নিসাব এবং ২.৫% সঠিক হিসাব
+            স্বর্ণ, রৌপ্য, নগদ অর্থ ও ব্যবসায়ের সম্পদের নিসাব এবং ২.৫% হিসাব
           </p>
         </div>
       </div>
@@ -258,7 +273,11 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Price Settings Accordion */}
+          {nisabLoading && <div className="text-xs text-[#717A74]">লাইভ নিসাবের মূল্য লোড হচ্ছে…</div>}
+      {nisabError && <div className="text-xs text-amber-700 dark:text-amber-300">{nisabError}</div>}
+      {liveNisab && <div className="text-[11px] text-[#717A74] dark:text-[#8B958E]">নিসাব উৎস: <a className="underline" href={NISAB_SOURCE_URL} target="_blank" rel="noreferrer">{NISAB_SOURCE_LABEL}</a> · ফিকহ স্ট্যান্ডার্ড: হানাফি · আপডেট: {new Date(liveNisab.updatedAt).toLocaleString('bn-BD')}</div>}
+
+      {/* Price Settings Accordion */}
           <div className="rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-white dark:bg-[#1A221C] overflow-hidden">
             <button
               type="button"
@@ -286,7 +305,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                       className="w-full px-3 py-2 rounded-xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-[#F4F8F5] dark:bg-[#252F28] font-bold"
                     />
                     <span className="text-[11px] text-[#717A74] mt-1 block">
-                      স্বর্ণের নিসাব (৮৭.৪৮ গ্রাম / ৭.৫ ভরি): ৳{' '}
+                      স্বর্ণের নিসাব: ৳{' '}
                       {toBengaliNumerals(Math.round(goldNisabValue).toLocaleString('en-US'))}
                     </span>
                   </div>
@@ -302,7 +321,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                       className="w-full px-3 py-2 rounded-xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-[#F4F8F5] dark:bg-[#252F28] font-bold"
                     />
                     <span className="text-[11px] text-[#717A74] mt-1 block">
-                      রূপার নিসাব (৬১২.৩৬ গ্রাম / ৫২.৫ ভরি): ৳{' '}
+                      রূপার নিসাব: ৳{' '}
                       {toBengaliNumerals(Math.round(silverNisabValue).toLocaleString('en-US'))}
                     </span>
                   </div>
@@ -313,6 +332,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
           {/* Asset Inputs */}
           <div className="space-y-4">
+            <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200">যাকাতের কিছু মাসআলায় মাজহাবভেদে মতভেদ আছে। এই ক্যালকুলেটরটি হানাফি স্ট্যান্ডার্ডের নিসাব ব্যবহার করছে; ব্যক্তিগত ফতোয়ার জন্য যোগ্য আলেমের পরামর্শ নিন।</div>
             <h3 className="text-sm font-extrabold text-[#181D19] dark:text-[#E1E5E1] flex items-center gap-2">
               <Coins className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
               <span>১. যাকাতযোগ্য সম্পদের বিবরণ (টাকায়)</span>
