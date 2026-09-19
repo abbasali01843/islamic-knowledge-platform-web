@@ -494,6 +494,9 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
       {/* TAB 2: 8 CATEGORIES OF RECIPIENTS */}
       {activeTab === 'recipients' && (
+        <>
+          {contentLoading && <div className="mb-3 p-3 rounded-xl border text-xs">অনলাইন কনটেন্ট লোড হচ্ছে…</div>}
+          {contentError && <div className="mb-3 p-3 rounded-xl border border-amber-300 text-xs">{contentError}</div>}
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-[#005236]/30 border border-emerald-500/30 text-xs text-[#181D19] dark:text-[#E1E5E1]">
             <strong className="font-bold block mb-1 text-[#176B4D] dark:text-[#9DD6B9]">যাকাতের প্রাপকের তথ্য</strong>
@@ -524,10 +527,14 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
             ))}
           </div>
         </div>
+        </>
       )}
 
       {/* TAB 3: FAQ & FIQH RULES */}
       {activeTab === 'faq' && (
+        <>
+          {contentLoading && <div className="mb-3 p-3 rounded-xl border text-xs">অনলাইন কনটেন্ট লোড হচ্ছে…</div>}
+          {contentError && <div className="mb-3 p-3 rounded-xl border border-amber-300 text-xs">{contentError}</div>}
         <div className="space-y-4">
           {content?.faqs.map((faq, idx) => (
             <div
@@ -545,6 +552,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
             </div>
           ))}
         </div>
+        </>
       )}
     </div>
   );
