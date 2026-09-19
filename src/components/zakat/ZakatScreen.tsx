@@ -496,12 +496,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
       {activeTab === 'recipients' && (
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-[#005236]/30 border border-emerald-500/30 text-xs text-[#181D19] dark:text-[#E1E5E1]">
-            <strong className="font-bold block mb-1 text-[#176B4D] dark:text-[#9DD6B9]">
-              পবিত্র কুরআনে বর্ণিত যাকাতের ৮টি খাত (সূরা আত-তাওবা: ৬০)
-            </strong>
-            <p>
-              "যাকাত কেবল ফকির, মিসকীন, যাকাত আদায়ে নিযুক্ত কর্মচারী, যাদের চিত্ত আকর্ষণ করা প্রয়োজন, দাসমুক্তি, ঋণগ্রস্তদের সাহায্য, আল্লাহর পথে এবং নিঃস্ব মুসাফিরদের জন্য। এটি আল্লাহর পক্ষ থেকে নির্ধারিত বিধান।"
-            </p>
+            <strong className="font-bold block mb-1 text-[#176B4D] dark:text-[#9DD6B9]">যাকাতের প্রাপকের তথ্য</strong>
+            <p>প্রতিটি শ্রেণির বিবরণ অনলাইন উৎস থেকে লোড করা হচ্ছে এবং নিচে সংশ্লিষ্ট উৎস দেখানো হয়েছে।</p>
           </div>
 
           <div className="grid grid-cols-1 gap-3">
