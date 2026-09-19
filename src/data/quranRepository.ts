@@ -3,7 +3,7 @@ import { ReaderAyah } from '../types';
 const API_ROOT = 'https://api.alquran.cloud/v1';
 const ARABIC_EDITION = 'quran-uthmani';
 const BENGALI_EDITION = 'bn.bengali';
-const SOURCE = 'কুরআন: Al Quran Cloud API • Arabic: Uthmani • বাংলা: Muhiuddin Khan (Tanzil edition)';
+const SOURCE = 'কুরআন: Al Quran Cloud API • Arabic: quran-uthmani • বাংলা edition: bn.bengali';
 
 interface ApiAyah {
   number: number;
