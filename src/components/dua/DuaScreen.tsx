@@ -9,9 +9,9 @@ import {toBengaliNumerals} from '../../utils/prayerCalculation';
 type Tab='LIBRARY'|'TASBEEH'|'MORNING_EVENING';
 export const DuaScreen:React.FC=()=>{
  const [tab,setTab]=useState<Tab>('LIBRARY'),[category,setCategory]=useState<DuaCategoryKey>('ALL'),[query,setQuery]=useState(''),[duas,setDuas]=useState<DuaItem[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(false);
- const [bookmarks,setBookmarks]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('user_bookmarked_duas')||'[]')}catch{return []}});
+ const [bookmarks,setBookmarks]=useState<string[]>([]);
  useEffect(()=>{let cancelled=false;setLoading(true);setError(false);fetchLiveDuas().then(d=>{if(!cancelled)setDuas(d)}).catch(()=>{if(!cancelled)setError(true)}).finally(()=>{if(!cancelled)setLoading(false)});return()=>{cancelled=true}},[]);
- const toggle=(id:string)=>setBookmarks(prev=>{const next=prev.includes(id)?prev.filter(x=>x!==id):[...prev,id];try{localStorage.setItem('user_bookmarked_duas',JSON.stringify(next))}catch{}return next});
+ const toggle=(id:string)=>setBookmarks(prev=>{const next=prev.includes(id)?prev.filter(x=>x!==id):[...prev,id];return next});
  const filtered=useMemo(()=>duas.filter(d=>(category==='ALL'||d.category===category)&&(!query.trim()||[d.titleBengali,d.bengaliMeaning,d.arabicText,d.reference,...(d.tags||[])].join(' ').toLowerCase().includes(query.toLowerCase().trim()))),[duas,category,query]);
  const morning=duas.filter(d=>d.category==='MORNING_EVENING');
  return <div className="max-w-3xl mx-auto px-4 py-6 space-y-6 pb-28">
