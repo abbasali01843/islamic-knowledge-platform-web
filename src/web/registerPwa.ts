@@ -1,1 +1,0 @@
-Remove offline service worker registration
