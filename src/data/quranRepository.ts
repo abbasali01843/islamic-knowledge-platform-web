@@ -13,6 +13,7 @@ interface ApiAyah {
   hizbQuarter?: number;
   page?: number;
   sajda?: boolean | { id?: number; recommended?: boolean; obligatory?: boolean };
+  surah?: { number?: number };
 }
 
 interface ApiSurah {
@@ -66,7 +67,7 @@ export class QuranReaderRepository {
     const payload = await getJson<ApiResponse>(API_ROOT + '/juz/' + juz + '/' + ARABIC_EDITION);
     const first = payload.data.ayahs[0];
     return first ? {
-      surahNumber: Number((first as ApiAyah & { surah?: { number?: number } }).surah?.number ?? 1),
+      surahNumber: Number(first.surah?.number ?? 1),
       ayah: {
         number: first.numberInSurah,
         arabic: first.text,
