@@ -15,6 +15,7 @@ import type { HomeDestination } from '../types';
 import { SectionHeader } from './SectionHeader';
 import type { LocationConfig, Madhab, CalculationMethod } from '../types/prayer';
 import { DEFAULT_LOCATION } from '../data/bangladeshDistricts';
+import { requestGrantedBrowserLocation } from '../utils/browserLocation';
 import {
   calculatePrayerTimes,
   formatTimeBengali,
@@ -34,10 +35,20 @@ interface QuickAction {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [location, setLocation] = useState<LocationConfig>(DEFAULT_LOCATION);
 
-  const location: LocationConfig = DEFAULT_LOCATION;
   const madhab: Madhab = 'HANAFI';
   const calcMethod: CalculationMethod = 'IFB';
+
+  useEffect(() => {
+    let cancelled = false;
+    requestGrantedBrowserLocation().then((detectedLocation) => {
+      if (!cancelled && detectedLocation) setLocation(detectedLocation);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,9 +57,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
     return () => clearInterval(timer);
   }, []);
 
-  const prayerData = useMemo(() => {
-    return calculatePrayerTimes(currentTime, location, madhab, calcMethod);
-  }, [currentTime, location, madhab, calcMethod]);
+  const prayerData = useMemo(() => calculatePrayerTimes(currentTime, location, madhab, calcMethod), [currentTime, location, madhab, calcMethod]);
 
   const actions: QuickAction[] = [
     {
@@ -119,7 +128,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
               পরবর্তী ওয়াক্ত
             </span>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-medium">
-              {location.nameBengali}
+              {location.id === 'gps-current' ? location.nameBengali : `${location.nameBengali} (ডিফল্ট)`}
             </span>
           </div>
 
