@@ -65,7 +65,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
     },
     {
       title: 'হাদিস',
-      subtitle: 'সহিহ হাদিস সংকলন',
+      subtitle: 'হাদিস ও মান',
       destination: 'HADITH',
       icon: BookOpen,
     },
@@ -215,7 +215,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
                 <Sparkles className="w-5 h-5" />
               </div>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
-                সহীহ সুন্নাহ
+                উৎস-ভিত্তিক
               </span>
             </div>
             <div>
