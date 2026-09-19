@@ -11,9 +11,9 @@ import {
   Calendar,
   Sparkles,
 } from 'lucide-react';
-import { HomeDestination } from '../types';
+import type { HomeDestination } from '../types';
 import { SectionHeader } from './SectionHeader';
-import { LocationConfig, Madhab, CalculationMethod } from '../types/prayer';
+import type { LocationConfig, Madhab, CalculationMethod } from '../types/prayer';
 import { DEFAULT_LOCATION } from '../data/bangladeshDistricts';
 import {
   calculatePrayerTimes,
