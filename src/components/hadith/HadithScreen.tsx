@@ -17,15 +17,7 @@ import {
   Check,
 } from 'lucide-react';
 import { HadithItem } from '../../types/hadith';
-const HADITH_TOPICS = [
-  { id: 'ALL', titleBengali: 'সব হাদিস', titleEnglish: 'All Hadith', iconName: 'BookMarked', description: 'অনলাইন API থেকে লোড হওয়া হাদিস' },
-  { id: 'IBADAH', titleBengali: 'ইবাদত', titleEnglish: 'Worship', iconName: 'Sparkles', description: 'ইবাদত সম্পর্কিত হাদিস' },
-  { id: 'AKHLAQ', titleBengali: 'আখলাক', titleEnglish: 'Character', iconName: 'Heart', description: 'চরিত্র ও নৈতিকতা' },
-  { id: 'KNOWLEDGE', titleBengali: 'জ্ঞান', titleEnglish: 'Knowledge', iconName: 'GraduationCap', description: 'জ্ঞান ও শিক্ষা' },
-  { id: 'FAMILY', titleBengali: 'পরিবার', titleEnglish: 'Family', iconName: 'Users', description: 'পরিবার ও সম্পর্ক' },
-  { id: 'CHARITY', titleBengali: 'দান-সদকা', titleEnglish: 'Charity', iconName: 'Coins', description: 'দান ও সদকা' },
-  { id: 'SOCIAL', titleBengali: 'সমাজ', titleEnglish: 'Society', iconName: 'Handshake', description: 'সামাজিক আচরণ' },
-] as const;
+const HADITH_TOPICS = [{ id: 'ALL', titleBengali: 'সব হাদিস', titleEnglish: 'All Hadith', iconName: 'BookMarked', description: 'অনলাইন API থেকে লোড হওয়া হাদিস' }] as const;
 
 import { HadithCard } from './HadithCard';
 import { NawawiFortyView } from './NawawiFortyView';
