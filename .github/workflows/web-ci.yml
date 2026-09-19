@@ -16,7 +16,7 @@ on:
       - 'content/**'
       - '.github/workflows/web-ci.yml'
   pull_request:
-    branches: [ main, develop, web-standalone ]
+    branches: [ main ]
     paths:
       - 'src/**'
       - 'index.html'
@@ -53,7 +53,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci || npm install
+        run: npm ci
 
       - name: Typecheck
         run: npm run lint
