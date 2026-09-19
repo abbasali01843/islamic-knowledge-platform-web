@@ -1,0 +1,34 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio
+.idea/
+*.iml
+local.properties
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+.kotlin/
+
+# Generated files
+captures/
+output-metadata.json
+
+# Signing
+*.jks
+*.keystore
+keystore.properties
+
+# Node / Web (Vite)
+node_modules/
+dist/
+.dist/
+*.local
+.vite/
+
+# OS
+.DS_Store
+Thumbs.db
