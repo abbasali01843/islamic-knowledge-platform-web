@@ -35,36 +35,9 @@ interface QuickAction {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
-  // Location from localStorage
-  const location: LocationConfig = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('user_prayer_location');
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // fallback
-        }
-      }
-    }
-    return DEFAULT_LOCATION;
-  }, []);
-
-  const madhab: Madhab = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('user_prayer_madhab') as Madhab;
-      if (saved === 'HANAFI' || saved === 'STANDARD') return saved;
-    }
-    return 'HANAFI';
-  }, []);
-
-  const calcMethod: CalculationMethod = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('user_calc_method') as CalculationMethod;
-      if (saved) return saved;
-    }
-    return 'IFB';
-  }, []);
+  const location: LocationConfig = DEFAULT_LOCATION;
+  const madhab: Madhab = 'HANAFI';
+  const calcMethod: CalculationMethod = 'IFB';
 
   useEffect(() => {
     const timer = setInterval(() => {
