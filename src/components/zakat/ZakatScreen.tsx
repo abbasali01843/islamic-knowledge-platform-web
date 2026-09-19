@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   Calculator,
   Coins,
-  FileText,
   HelpCircle,
   Copy,
   Check,
@@ -13,8 +12,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { ZakatContent } from '../../services/zakatContentApi';
 import { fetchZakatContent } from '../../services/zakatContentApi';
+import type { ZakatContent } from '../../services/zakatContentApi';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
 import { fetchLiveNisab, NISAB_SOURCE_LABEL, NISAB_SOURCE_URL } from '../../services/nisabApi';
 
