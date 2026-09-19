@@ -27,35 +27,18 @@ import { fetchHadithSection, fetchLiveHadiths } from '../../services/hadithApi';
 
 type HadithTab = 'topics' | 'nawawi' | 'books' | 'bookmarks';
 
-const STORAGE_BOOKMARKS_KEY = 'islamic_platform_hadith_bookmarks';
-
 export const HadithScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<HadithTab>('topics');
   const [selectedTopicId, setSelectedTopicId] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [gradeFilter, setGradeFilter] = useState<'ALL' | 'SAHIH' | 'HASAN'>('ALL');
-  const [bookmarks, setBookmarks] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_BOOKMARKS_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
 
   const [dailyHadithCopied, setDailyHadithCopied] = useState(false);
   const [liveHadiths, setLiveHadiths] = useState<HadithItem[]>([]);
   const [apiState, setApiState] = useState<'loading' | 'online' | 'error'>('loading');
   const [nextSection, setNextSection] = useState(2);
   const [loadingMore, setLoadingMore] = useState(false);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_BOOKMARKS_KEY, JSON.stringify(bookmarks));
-    } catch {
-      // ignore
-    }
-  }, [bookmarks]);
 
   useEffect(() => {
     let cancelled = false;
