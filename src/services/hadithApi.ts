@@ -12,6 +12,7 @@ const BOOKS = [
   { id: 'abudawud', api: 'abudawud', name: 'সুনান আবু দাউদ' },
   { id: 'nasai', api: 'nasai', name: 'সুনান আন-নাসাঈ' },
   { id: 'ibnmajah', api: 'ibnmajah', name: 'সুনান ইবন মাজাহ' },
+  { id: 'nawawi', api: 'nawawi', name: 'ইমাম নববীর ৪০ হাদিস' },
 ] as const;
 
 async function getJson(url: string): Promise<unknown> {
