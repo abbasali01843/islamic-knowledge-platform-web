@@ -30,6 +30,8 @@ export interface DuaItem {
   virtue?: string;
   repeatTarget?: number;
   tags?: string[];
+  sourceLabel?: string;
+  sourceUrl?: string;
 }
 
 export interface TasbeehPreset {
