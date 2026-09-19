@@ -1,217 +1,29 @@
-import React, { useState, useMemo } from 'react';
-import {
-  BookOpen,
-  Search,
-  Bookmark,
-  Sparkles,
-  Sun,
-  Flame,
-} from 'lucide-react';
-import { DuaCategoryKey } from '../../types/dua';
-import { DUA_CATEGORIES, DUA_ITEMS } from '../../data/duaData';
-import { DuaCard } from './DuaCard';
-import { TasbeehCounter } from './TasbeehCounter';
-import { MorningEveningCompanion } from './MorningEveningCompanion';
-import { toBengaliNumerals } from '../../utils/prayerCalculation';
+import React,{useEffect,useMemo,useState} from 'react';
+import {BookOpen,Search,Bookmark,Sun,Flame,Loader2,RefreshCw} from 'lucide-react';
+import type {DuaCategoryKey,DuaItem} from '../../types/dua';
+import {DUA_CATEGORIES,DUA_SOURCE_LABEL,DUA_SOURCE_URL,fetchLiveDuas} from '../../services/duaApi';
+import {DuaCard} from './DuaCard';
+import {TasbeehCounter} from './TasbeehCounter';
+import {toBengaliNumerals} from '../../utils/prayerCalculation';
 
-type DuaMainTab = 'LIBRARY' | 'TASBEEH' | 'MORNING_EVENING';
-
-export const DuaScreen: React.FC = () => {
-  const [selectedMainTab, setSelectedMainTab] = useState<DuaMainTab>('LIBRARY');
-  const [selectedCategory, setSelectedCategory] = useState<DuaCategoryKey>('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showOnlyBookmarks, setShowOnlyBookmarks] = useState(false);
-
-  // Persistent bookmarks
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('user_bookmarked_duas');
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // fallback
-        }
-      }
-    }
-    return ['sayyidul-istighfar', 'distress-yunus'];
-  });
-
-  const toggleBookmark = (id: string) => {
-    setBookmarkedIds((prev) => {
-      const exists = prev.includes(id);
-      const updated = exists ? prev.filter((item) => item !== id) : [...prev, id];
-      localStorage.setItem('user_bookmarked_duas', JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  // Filtered Duas
-  const filteredDuas = useMemo(() => {
-    return DUA_ITEMS.filter((dua) => {
-      // Category match
-      if (selectedCategory !== 'ALL' && dua.category !== selectedCategory) {
-        return false;
-      }
-      // Bookmark filter
-      if (showOnlyBookmarks && !bookmarkedIds.includes(dua.id)) {
-        return false;
-      }
-      // Search query
-      if (!searchQuery.trim()) return true;
-
-      const q = searchQuery.toLowerCase().trim();
-      return (
-        dua.titleBengali.toLowerCase().includes(q) ||
-        dua.bengaliMeaning.toLowerCase().includes(q) ||
-        dua.bengaliTransliteration.toLowerCase().includes(q) ||
-        dua.reference.toLowerCase().includes(q) ||
-        (dua.tags && dua.tags.some((t) => t.toLowerCase().includes(q)))
-      );
-    });
-  }, [selectedCategory, showOnlyBookmarks, bookmarkedIds, searchQuery]);
-
-  return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28">
-      {/* Top Header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[#181D19] dark:text-[#E1E5E1]">
-          দোয়া ও হিসনুল মুসলিম
-        </h1>
-        <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">
-          সহীহ হাদিস ও কুরআনুল কারীম থেকে সংকলিত মাসনূন দোয়া ও জিকির
-        </p>
-      </div>
-
-      {/* Main Mode Navigation Tabs */}
-      <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#E8EFEA] dark:bg-[#222C25] rounded-2xl">
-        {[
-          { id: 'LIBRARY' as const, label: 'দোয়া ভাণ্ডার', icon: BookOpen },
-          { id: 'TASBEEH' as const, label: 'ডিজিটাল তাসবীহ', icon: Flame },
-          { id: 'MORNING_EVENING' as const, label: 'সকাল-সন্ধ্যা আমল', icon: Sun },
-        ].map((tab) => {
-          const isSelected = selectedMainTab === tab.id;
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setSelectedMainTab(tab.id)}
-              className={`py-2 px-1 rounded-xl text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-1 transition-all ${
-                isSelected
-                  ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-                  : 'text-[#717A74] dark:text-[#8B958E] hover:text-[#181D19] dark:hover:text-[#E1E5E1]'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span className="truncate">{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* SUB-VIEW 1: DUA LIBRARY */}
-      {selectedMainTab === 'LIBRARY' && (
-        <div className="space-y-4">
-          {/* Search Box & Bookmark filter */}
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#717A74]" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="দোয়া বা বিষয়ের নাম খুঁজুন (যেমন: ক্ষমা, ঘুম, ঋণ, বিপদ)..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] text-[#181D19] dark:text-[#E1E5E1] placeholder-[#717A74] border border-transparent focus:border-[#176B4D] dark:focus:border-[#9DD6B9] outline-hidden"
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowOnlyBookmarks(!showOnlyBookmarks)}
-              className={`px-3.5 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 transition-colors border ${
-                showOnlyBookmarks
-                  ? 'bg-[#176B4D] text-white border-[#176B4D]'
-                  : 'bg-[#E8EFEA] dark:bg-[#252F28] text-[#414A45] dark:text-[#C1CAC4] border-black/5 dark:border-white/5'
-              }`}
-              title="বুকমার্ক করা দোয়া"
-            >
-              <Bookmark className={`w-4 h-4 ${showOnlyBookmarks ? 'fill-current' : ''}`} />
-              <span className="hidden sm:inline">বুকমার্ক</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/10 dark:bg-white/20 font-bold">
-                {toBengaliNumerals(bookmarkedIds.length)}
-              </span>
-            </button>
-          </div>
-
-          {/* Category Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-            {DUA_CATEGORIES.map((cat) => {
-              const isSelected = selectedCategory === cat.id && !showOnlyBookmarks;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    setShowOnlyBookmarks(false);
-                  }}
-                  className={`text-xs px-3.5 py-1.5 rounded-full whitespace-nowrap font-medium transition-colors ${
-                    isSelected
-                      ? 'bg-[#176B4D] text-white shadow-xs'
-                      : 'bg-[#E8EFEA] dark:bg-[#252F28] text-[#414A45] dark:text-[#C1CAC4] hover:bg-[#dce7e0]'
-                  }`}
-                >
-                  {cat.nameBengali}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Category Meta */}
-          {!showOnlyBookmarks && (
-            <div className="flex items-center justify-between text-xs text-[#717A74] dark:text-[#8B958E] px-1">
-              <span>
-                মোট {toBengaliNumerals(filteredDuas.length)} টি দোয়া পাওয়া গেছে
-              </span>
-              <span className="flex items-center gap-1 text-[#176B4D] dark:text-[#9DD6B9]">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>উৎস ও সনদ যাচাইকৃত</span>
-              </span>
-            </div>
-          )}
-
-          {/* Duas List */}
-          {filteredDuas.length === 0 ? (
-            <div className="py-16 text-center space-y-2">
-              <BookOpen className="w-10 h-10 mx-auto text-[#717A74]/50" />
-              <p className="text-sm font-semibold text-[#181D19] dark:text-[#E1E5E1]">
-                কোনো দোয়া পাওয়া যায়নি
-              </p>
-              <p className="text-xs text-[#717A74]">
-                অন্য কোনো শব্দ দিয়ে অনুসন্ধান করুন অথবা ক্যাটাগরি পরিবর্তন করুন।
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredDuas.map((dua) => (
-                <DuaCard
-                  key={dua.id}
-                  dua={dua}
-                  isBookmarked={bookmarkedIds.includes(dua.id)}
-                  onToggleBookmark={toggleBookmark}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* SUB-VIEW 2: DIGITAL TASBEEH */}
-      {selectedMainTab === 'TASBEEH' && <TasbeehCounter />}
-
-      {/* SUB-VIEW 3: MORNING & EVENING COMPANION */}
-      {selectedMainTab === 'MORNING_EVENING' && <MorningEveningCompanion />}
-    </div>
-  );
+type Tab='LIBRARY'|'TASBEEH'|'MORNING_EVENING';
+export const DuaScreen:React.FC=()=>{
+ const [tab,setTab]=useState<Tab>('LIBRARY'),[category,setCategory]=useState<DuaCategoryKey>('ALL'),[query,setQuery]=useState(''),[duas,setDuas]=useState<DuaItem[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(false);
+ const [bookmarks,setBookmarks]=useState<string[]>(()=>{try{return JSON.parse(localStorage.getItem('user_bookmarked_duas')||'[]')}catch{return []}});
+ useEffect(()=>{let cancelled=false;setLoading(true);setError(false);fetchLiveDuas().then(d=>{if(!cancelled)setDuas(d)}).catch(()=>{if(!cancelled)setError(true)}).finally(()=>{if(!cancelled)setLoading(false)});return()=>{cancelled=true}},[]);
+ const toggle=(id:string)=>setBookmarks(prev=>{const next=prev.includes(id)?prev.filter(x=>x!==id):[...prev,id];try{localStorage.setItem('user_bookmarked_duas',JSON.stringify(next))}catch{}return next});
+ const filtered=useMemo(()=>duas.filter(d=>(category==='ALL'||d.category===category)&&(!query.trim()||[d.titleBengali,d.bengaliMeaning,d.arabicText,d.reference,...(d.tags||[])].join(' ').toLowerCase().includes(query.toLowerCase().trim()))),[duas,category,query]);
+ const morning=duas.filter(d=>d.category==='MORNING_EVENING');
+ return <div className="max-w-3xl mx-auto px-4 py-6 space-y-6 pb-28">
+  <div><h1 className="text-2xl font-bold">দোয়া ও হিসনুল মুসলিম</h1><p className="text-xs text-[#717A74] mt-1">অনলাইন উৎস থেকে সরাসরি লোড হওয়া বাংলা অনুবাদসহ মাসনূন দোয়া ও যিকির</p></div>
+  <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#E8EFEA] dark:bg-[#222C25] rounded-2xl">
+   {([['LIBRARY','দোয়া ভাণ্ডার',BookOpen],['TASBEEH','ডিজিটাল তাসবীহ',Flame],['MORNING_EVENING','সকাল-সন্ধ্যা',Sun]] as const).map(([id,label,Icon])=><button key={id} onClick={()=>setTab(id)} className={`py-2.5 rounded-xl text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 ${tab===id?'bg-white dark:bg-[#1A221C] text-[#176B4D] shadow-xs':'text-[#717A74]'}`}><Icon className="w-4 h-4"/>{label}</button>)}
+  </div>
+  {tab==='TASBEEH'?<TasbeehCounter/>:tab==='MORNING_EVENING'?<div className="space-y-4"><div className="p-4 rounded-2xl bg-[#D4F2E2]/30 border border-[#176B4D]/20 text-xs">সকাল-সন্ধ্যার {toBengaliNumerals(morning.length)}টি দোয়া অনলাইন API থেকে লোড হয়েছে।</div>{morning.map(d=><DuaCard key={d.id} dua={d} isBookmarked={bookmarks.includes(d.id)} onToggleBookmark={toggle}/>)}</div>:
+  <div className="space-y-5">
+   <div className="flex flex-col sm:flex-row gap-3"><div className="relative flex-1"><Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#717A74]"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="দোয়া খুঁজুন..." className="w-full pl-9 py-3 rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-white dark:bg-[#1A221C] text-xs"/></div><div className="flex gap-1 overflow-x-auto no-scrollbar">{DUA_CATEGORIES.filter(c=>c.id!=='FAVORITES').map(c=><button key={c.id} onClick={()=>setCategory(c.id)} className={`shrink-0 px-3 py-2 rounded-xl text-xs font-bold ${category===c.id?'bg-[#176B4D] text-white':'bg-[#E8EFEA] dark:bg-[#252F28]'}`}>{c.nameBengali}</button>)}</div></div>
+   {loading?<div className="p-12 text-center"><Loader2 className="w-7 h-7 animate-spin mx-auto text-[#176B4D]"/></div>:error?<div className="p-8 text-center rounded-3xl border border-red-200 bg-red-50 dark:bg-red-950/20"><p className="text-sm font-bold">দোয়া API পাওয়া যাচ্ছে না</p><button onClick={()=>location.reload()} className="mt-3 px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold"><RefreshCw className="w-3.5 h-3.5 inline mr-1"/>আবার চেষ্টা করুন</button></div>:<>{filtered.map(d=><DuaCard key={d.id} dua={d} isBookmarked={bookmarks.includes(d.id)} onToggleBookmark={toggle}/>)}</>}
+   <p className="text-[10px] text-[#717A74]">সূত্র: <a href={DUA_SOURCE_URL} target="_blank" rel="noreferrer" className="underline">{DUA_SOURCE_LABEL}</a> • কনটেন্ট অনলাইনে লোড হয়</p>
+  </div>}
+ </div>;
 };
