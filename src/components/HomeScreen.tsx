@@ -278,136 +278,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         </div>
       </div>
 
-      {/* Daily Quran Ayah */}
+      {/* Online Islamic content entry points */}
       <div className="space-y-3">
-        <SectionHeader title="দৈনিক আয়াত" />
-        <div className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-3">
-          <div
-            dir="rtl"
-            className="text-lg sm:text-xl font-serif text-[#176B4D] dark:text-[#9DD6B9] leading-loose text-right"
-            style={{ fontFamily: "'Amiri', serif" }}
-          >
-            فَإِنَّ مَعَ الْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ الْعُسْرِ يُسْرًا
-          </div>
-          <div className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed border-t border-black/5 dark:border-white/5 pt-2">
-            "নিশ্চয় কষ্টের সঙ্গেই রয়েছে স্বস্তি। নিশ্চয় কষ্টের সঙ্গেই রয়েছে স্বস্তি।"
-          </div>
-          <div className="flex items-center justify-between text-[11px] text-[#717A74] dark:text-[#8B958E] pt-1">
-            <span className="font-semibold text-[#176B4D] dark:text-[#9DD6B9]">
-              সূরা আল-ইনশিরাহ (আয়াত: ৫-৬)
-            </span>
-            <span>উৎস: কুরআনুল কারীম</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Daily Dua Feature */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <SectionHeader title="দৈনিক নির্বাচিত দোয়া" />
-          <button
-            type="button"
-            onClick={() => onQuickActionClick('DUA')}
-            className="text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] hover:underline"
-          >
-            সব দোয়া দেখুন
+        <SectionHeader title="অনলাইন ইসলামিক কনটেন্ট" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button type="button" onClick={() => onQuickActionClick('QURAN')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
+            <h4 className="font-bold text-sm">কুরআন</h4><p className="text-xs text-[#717A74] mt-1">অনলাইন উৎস থেকে কুরআন পড়ুন</p>
           </button>
-        </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={() => onQuickActionClick('DUA')}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              onQuickActionClick('DUA');
-            }
-          }}
-          className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-3 cursor-pointer hover:border-[#176B4D]/30 transition-all text-left"
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#176B4D] dark:text-[#9DD6B9] bg-[#D4F2E2]/60 dark:bg-[#005236]/40 px-2.5 py-0.5 rounded-full">
-              ক্ষমা প্রার্থনার শ্রেষ্ঠ দোয়া
-            </span>
-            <span className="text-[11px] text-[#717A74] dark:text-[#8B958E]">
-              সহীহ বুখারী: ৬৩০৬
-            </span>
-          </div>
-
-          <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
-            সাইয়্যিদুল ইস্তিগফার
-          </h4>
-
-          <div
-            dir="rtl"
-            className="text-base sm:text-lg font-serif text-[#176B4D] dark:text-[#9DD6B9] leading-loose text-right"
-            style={{ fontFamily: "'Amiri', serif" }}
-          >
-            اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ...
-          </div>
-
-          <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed line-clamp-2">
-            "হে আল্লাহ! আপনি আমার রব, আপনি ছাড়া কোনো সত্য উপাস্য নেই। আপনি আমাকে সৃষ্টি করেছেন এবং আমি আপনার বান্দা..."
-          </p>
-
-          <div className="pt-1 flex items-center justify-between text-[11px] text-[#176B4D] dark:text-[#9DD6B9] font-semibold">
-            <span>ফজিলত: দিনে বা রাতে পাঠকারী জান্নাতবাসী হবে</span>
-            <span>আমল করুন →</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Daily Hadith Feature */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <SectionHeader title="দৈনিক নির্বাচিত হাদিস" />
-          <button
-            type="button"
-            onClick={() => onQuickActionClick('HADITH')}
-            className="text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] hover:underline"
-          >
-            সব হাদিস দেখুন
+          <button type="button" onClick={() => onQuickActionClick('HADITH')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
+            <h4 className="font-bold text-sm">হাদিস</h4><p className="text-xs text-[#717A74] mt-1">উৎস ও মানসহ অনলাইন হাদিস</p>
           </button>
-        </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={() => onQuickActionClick('HADITH')}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              onQuickActionClick('HADITH');
-            }
-          }}
-          className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-3 cursor-pointer hover:border-[#176B4D]/30 transition-all text-left"
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#176B4D] dark:text-[#9DD6B9] bg-[#D4F2E2]/60 dark:bg-[#005236]/40 px-2.5 py-0.5 rounded-full">
-              সহীহুল বুখারী : ১
-            </span>
-            <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
-              মুত্তাফাক্ব আলাইহি
-            </span>
-          </div>
-
-          <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
-            নিয়তের বিশুদ্ধতা ও কাজের প্রতিদান
-          </h4>
-
-          <div
-            dir="rtl"
-            className="text-base sm:text-lg font-serif text-[#176B4D] dark:text-[#9DD6B9] leading-loose text-right"
-            style={{ fontFamily: "'Amiri', serif" }}
-          >
-            إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى...
-          </div>
-
-          <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed line-clamp-2">
-            "নিশ্চয়ই সমস্ত কাজ নিয়তের ওপর নির্ভরশীল। আর প্রত্যেক ব্যক্তি যা নিয়ত করে কেবল তা-ই পায়..."
-          </p>
-
-          <div className="pt-1 flex items-center justify-between text-[11px] text-[#176B4D] dark:text-[#9DD6B9] font-semibold">
-            <span>বর্ণনায়: উমর ইবনুল খাত্তাব (রা.)</span>
-            <span>বিস্তারিত পড়ুন →</span>
-          </div>
+          <button type="button" onClick={() => onQuickActionClick('DUA')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
+            <h4 className="font-bold text-sm">দোয়া ও যিকর</h4><p className="text-xs text-[#717A74] mt-1">অনলাইন উৎস থেকে দোয়া ও যিকর</p>
+          </button>
         </div>
       </div>
     </div>
