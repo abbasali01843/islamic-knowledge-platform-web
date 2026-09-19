@@ -38,9 +38,6 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
   const [content, setContent] = useState<ZakatContent | null>(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState('');
-  const [content, setContent] = useState<ZakatContent | null>(null);
-  const [contentLoading, setContentLoading] = useState(true);
-  const [contentError, setContentError] = useState('');
 
   useEffect(() => {
     let active = true;
