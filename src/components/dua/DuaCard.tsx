@@ -18,7 +18,8 @@ export const DuaCard: React.FC<DuaCardProps> = ({
   const [currentRepeats, setCurrentRepeats] = useState(0);
 
   const handleCopy = async () => {
-    const textToCopy = `${dua.titleBengali}\n\n${dua.arabicText}\n\nউচ্চারণ: ${dua.bengaliTransliteration}\n\nঅর্থ: ${dua.bengaliMeaning}\n\nউৎস: ${dua.reference}`;
+    const pronunciation = dua.bengaliTransliteration.trim();
+    const textToCopy = `${dua.titleBengali}\n\n${dua.arabicText}${pronunciation ? `\n\nউচ্চারণ: ${pronunciation}` : ''}\n\nঅর্থ: ${dua.bengaliMeaning}\n\nউৎস: ${dua.reference}`;
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
@@ -97,14 +98,16 @@ export const DuaCard: React.FC<DuaCardProps> = ({
       </div>
 
       {/* Bengali Pronunciation */}
-      <div className="space-y-1 text-xs">
-        <span className="text-[11px] font-bold text-[#717A74] dark:text-[#8B958E] block uppercase tracking-wider">
-          উচ্চারণ:
-        </span>
-        <p className="text-[#181D19] dark:text-[#E1E5E1] font-medium leading-relaxed">
-          {dua.bengaliTransliteration}
-        </p>
-      </div>
+      {dua.bengaliTransliteration.trim() && (
+        <div className="space-y-1 text-xs">
+          <span className="text-[11px] font-bold text-[#717A74] dark:text-[#8B958E] block uppercase tracking-wider">
+            উচ্চারণ:
+          </span>
+          <p className="text-[#181D19] dark:text-[#E1E5E1] font-medium leading-relaxed">
+            {dua.bengaliTransliteration}
+          </p>
+        </div>
+      )}
 
       {/* Bengali Meaning */}
       <div className="space-y-1 text-xs border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 pt-2.5">
