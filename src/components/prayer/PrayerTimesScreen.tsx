@@ -20,6 +20,7 @@ import {
   PrayerKey,
 } from '../../types/prayer';
 import { DEFAULT_LOCATION } from '../../data/bangladeshDistricts';
+import { requestGrantedBrowserLocation } from '../../utils/browserLocation';
 import {
   calculatePrayerTimes,
   formatTimeBengali,
@@ -41,6 +42,16 @@ export const PrayerTimesScreen: React.FC = () => {
 
   const [madhab, setMadhab] = useState<Madhab>('HANAFI');
   const [calcMethod, setCalcMethod] = useState<CalculationMethod>('IFB');
+
+  useEffect(() => {
+    let cancelled = false;
+    requestGrantedBrowserLocation().then((detectedLocation) => {
+      if (!cancelled && detectedLocation) setLocation(detectedLocation);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Real-time second ticker for live countdown
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
