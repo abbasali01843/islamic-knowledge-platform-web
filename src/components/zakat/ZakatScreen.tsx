@@ -38,7 +38,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
   const [liveNisab, setLiveNisab] = useState<{ goldNisabValueBdt:number; silverNisabValueBdt:number; updatedAt:string; standard:string } | null>(null);
   const [nisabLoading, setNisabLoading] = useState(true);
   const [nisabError, setNisabError] = useState('');
-  const [showPriceSettings, setShowPriceSettings] = useState<boolean>(false);
+  const [showPriceSettings, setShowPriceSettings] = useState<boolean>(false);\n  const [content, setContent] = useState<ZakatContent | null>(null);\n  const [contentLoading, setContentLoading] = useState(true);\n  const [contentError, setContentError] = useState('');
 
   useEffect(() => {
     let active = true;
@@ -507,7 +507,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            {ZAKAT_RECIPIENTS.map((rec) => (
+            {content?.recipients.map((rec) => (
               <div
                 key={rec.id}
                 className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-2"
@@ -536,7 +536,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
       {/* TAB 3: FAQ & FIQH RULES */}
       {activeTab === 'faq' && (
         <div className="space-y-4">
-          {ZAKAT_FAQS.map((faq, idx) => (
+          {content?.faqs.map((faq, idx) => (
             <div
               key={faq.question}
               className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-2"
