@@ -13,6 +13,7 @@ import {ZakatScreen} from './components/zakat/ZakatScreen';
 import {CalendarScreen} from './components/calendar/CalendarScreen';
 import {Navbar} from './components/Navbar';
 import {WebModulesScreen} from './components/WebModulesScreen';
+import {PwaInstallPrompt} from './components/PwaInstallPrompt';
 
 type Special='LEARN_SALAH'|'ZAKAT'|'CALENDAR'|null;
 type WebModule='QIBLA'|'RAMADAN'|'HAJJ'|'SEERAH'|'QUIZ';
