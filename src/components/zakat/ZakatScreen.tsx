@@ -13,12 +13,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import {
-  NISAB_GOLD_GRAMS,
-  NISAB_SILVER_GRAMS,
-  ZAKAT_RECIPIENTS,
-  ZAKAT_FAQS,
-} from '../../data/zakatData';
+import { ZakatContent } from '../../services/zakatContentApi';
+import { fetchZakatContent } from '../../services/zakatContentApi';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
 import { fetchLiveNisab, NISAB_SOURCE_LABEL, NISAB_SOURCE_URL } from '../../services/nisabApi';
 
@@ -38,10 +34,17 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
   const [liveNisab, setLiveNisab] = useState<{ goldNisabValueBdt:number; silverNisabValueBdt:number; updatedAt:string; standard:string } | null>(null);
   const [nisabLoading, setNisabLoading] = useState(true);
   const [nisabError, setNisabError] = useState('');
-  const [showPriceSettings, setShowPriceSettings] = useState<boolean>(false);\n  const [content, setContent] = useState<ZakatContent | null>(null);\n  const [contentLoading, setContentLoading] = useState(true);\n  const [contentError, setContentError] = useState('');
+  const [showPriceSettings, setShowPriceSettings] = useState<boolean>(false);
+  const [content, setContent] = useState<ZakatContent | null>(null);
+  const [contentLoading, setContentLoading] = useState(true);
+  const [contentError, setContentError] = useState('');
+  const [content, setContent] = useState<ZakatContent | null>(null);
+  const [contentLoading, setContentLoading] = useState(true);
+  const [contentError, setContentError] = useState('');
 
   useEffect(() => {
     let active = true;
+    fetchZakatContent().then((data) => { if (active) setContent(data); }).catch(() => { if (active) setContentError('অনলাইন যাকাত কনটেন্ট পাওয়া যায়নি।'); }).finally(() => { if (active) setContentLoading(false); });
     fetchLiveNisab('BDT', 'hanafi').then((data) => {
       if (!active) return;
       setGoldGramPrice(data.goldGramPriceBdt);
@@ -104,11 +107,9 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
   const netWealth = Math.max(0, totalAssets - totalLiabilities);
 
-  const silverNisabValue = liveNisab?.silverNisabValueBdt ?? NISAB_SILVER_GRAMS * silverGramPrice;
-  const goldNisabValue = liveNisab?.goldNisabValueBdt ?? NISAB_GOLD_GRAMS * goldGramPrice;
-
-  // By default, for mixed assets, the silver nisab is preferred to benefit the poor
-  const isEligible = netWealth >= silverNisabValue;
+  const silverNisabValue = liveNisab?.silverNisabValueBdt ?? 0;
+  const goldNisabValue = liveNisab?.goldNisabValueBdt ?? 0;
+  const isEligible = liveNisab != null && netWealth >= silverNisabValue;
   const zakatPayable = isEligible ? netWealth * 0.025 : 0;
 
   const handleReset = () => {
@@ -524,9 +525,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                     {rec.nameArabic}
                   </span>
                 </div>
-                <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">
-                  {rec.descriptionBengali}
-                </p>
+                <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">{rec.descriptionBengali}</p>
+              <p className="text-[11px] text-[#717A74]">উৎস: {rec.source}</p>
               </div>
             ))}
           </div>
@@ -547,9 +547,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 </span>
                 <span>{faq.question}</span>
               </h4>
-              <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed pl-7">
-                {faq.answer}
-              </p>
+              <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed pl-7">{faq.answer}</p>
+              <p className="text-[11px] text-[#717A74] pl-7">উৎস: {faq.source}</p>
             </div>
           ))}
         </div>
