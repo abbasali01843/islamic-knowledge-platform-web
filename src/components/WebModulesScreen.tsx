@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import {ArrowLeft,CheckCircle2,Compass,Flame,GraduationCap,MapPin,ScrollText,RefreshCw} from 'lucide-react';
-import {fetchWebModulesContent,GuideItem,QuizItem,WebModulesContent} from '../services/webModulesApi';
+import {fetchWebModulesContent} from '../services/webModulesApi';
+import type {GuideItem,QuizItem,WebModulesContent} from '../services/webModulesApi';
 
 type ModuleId='QIBLA'|'RAMADAN'|'HAJJ'|'SEERAH'|'QUIZ';
 const modules=[
