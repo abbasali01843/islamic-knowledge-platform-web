@@ -6,9 +6,9 @@ The Web/PWA edition of Islamic Knowledge Platform.
 
 ## Principles
 
-- Online-first and internet-dependent Islamic content.
+- Online-only and internet-dependent Islamic content.
 - Bengali-first, responsive, accessible UI.
-- Installable PWA experience without an offline content cache.
+- Installable PWA experience with no offline Islamic-content cache.
 - Source-backed Quran and Hadith integrations.
 - Mobile and desktop layouts.
 
