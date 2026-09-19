@@ -330,21 +330,6 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
           />
         </div>
 
-        {/* Bismillah Header (except Surah 9 At-Tawbah) */}
-        {surah.number !== 9 && (
-          <div className="text-center py-5 px-4 bg-white/60 dark:bg-[#1E2620]/60 rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/40">
-            <div
-              className="font-arabic text-2xl sm:text-3xl text-[#176B4D] dark:text-[#9DD6B9] leading-relaxed"
-              dir="rtl"
-            >
-              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ
-            </div>
-            <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] mt-1">
-              পরম করুণাময় অতি দয়ালু আল্লাহর নামে শুরু করছি
-            </p>
-          </div>
-        )}
-
         {/* Ayahs List */}
         {loadState === 'loading' ? (
           <div className="text-center py-20 px-4 space-y-3">
