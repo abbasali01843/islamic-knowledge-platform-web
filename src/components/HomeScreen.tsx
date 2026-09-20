@@ -23,9 +23,12 @@ import {
   formatTimeBengali,
   formatCountdownBengali,
 } from '../utils/prayerCalculation';
+import { QuranPreferences } from '../utils/preferences';
+import { findQuranSurah } from '../data/quranCatalog';
 
 interface HomeScreenProps {
   onQuickActionClick: (destination: HomeDestination) => void;
+  onContinueReading?: (surahNumber: number, ayahNumber: number) => void;
 }
 
 interface QuickAction {
@@ -100,13 +103,21 @@ function saveCheckedAmals(checked: Record<string, boolean>) {
   }
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({
+  onQuickActionClick,
+  onContinueReading,
+}) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [location, setLocation] = useState<LocationConfig>(DEFAULT_LOCATION);
-  const [checkedAmals, setCheckedAmals] = useState<Record<string, boolean>>(() => loadCheckedAmals());
+  const [checkedAmals, setCheckedAmals] = useState<Record<string, boolean>>(() =>
+    loadCheckedAmals()
+  );
 
   const madhab: Madhab = 'HANAFI';
   const calcMethod: CalculationMethod = 'IFB';
+
+  const lastRead = QuranPreferences.getLastRead();
+  const resumeSurah = lastRead ? findQuranSurah(lastRead.surahNumber) : null;
 
   useEffect(() => {
     let cancelled = false;
@@ -130,7 +141,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
 
   const inspiration = useMemo(() => {
     const dayOfYear = Math.floor(
-      (currentTime.getTime() - new Date(currentTime.getFullYear(), 0, 0).getTime()) /
+      (currentTime.getTime() -
+        new Date(currentTime.getFullYear(), 0, 0).getTime()) /
         (1000 * 60 * 60 * 24)
     );
     return INSPIRATION[dayOfYear % INSPIRATION.length];
@@ -155,7 +167,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-24">
-      {/* Greeting */}
       <div className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#181D19] dark:text-[#E1E5E1]">
@@ -181,7 +192,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         </button>
       </div>
 
-      {/* Next Prayer — primary focus */}
+      {/* Next Prayer */}
       <div
         role="button"
         tabIndex={0}
@@ -252,7 +263,36 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         </div>
       </div>
 
-      {/* Today's Amal Checklist */}
+      {/* Continue reading Quran */}
+      {resumeSurah && lastRead && onContinueReading && (
+        <button
+          type="button"
+          onClick={() => onContinueReading(lastRead.surahNumber, lastRead.ayahNumber)}
+          className="w-full text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#176B4D]/25 dark:border-[#9DD6B9]/30 shadow-xs active:scale-[0.99] transition-transform"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-start gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[#D4F2E2] dark:bg-[#005236] flex items-center justify-center shrink-0 text-[#176B4D] dark:text-[#9DD6B9]">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[11px] font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+                  কুরআন চালিয়ে পড়ুন
+                </span>
+                <div className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1] truncate mt-0.5">
+                  {resumeSurah.nameBengali}
+                </div>
+                <div className="text-xs text-[#717A74] dark:text-[#8B958E]">
+                  আয়াত {lastRead.ayahNumber} • {resumeSurah.nameArabic}
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
+          </div>
+        </button>
+      )}
+
+      {/* Today's Amal */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <SectionHeader title="আজকের আমল" />
@@ -265,10 +305,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
           {DAILY_AMALS.map((amal) => {
             const done = !!checkedAmals[amal.id];
             return (
-              <div
-                key={amal.id}
-                className="flex items-center gap-3 px-4 py-3"
-              >
+              <div key={amal.id} className="flex items-center gap-3 px-4 py-3">
                 <button
                   type="button"
                   onClick={() => toggleAmal(amal.id)}
@@ -307,7 +344,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
           <Sparkles className="w-3.5 h-3.5" />
           <span>আজকের আয়াত</span>
         </div>
-        <p className="text-right text-lg leading-relaxed font-serif text-[#0A3D2B] dark:text-[#C8E6D4]" dir="rtl">
+        <p
+          className="text-right text-lg leading-relaxed font-serif text-[#0A3D2B] dark:text-[#C8E6D4]"
+          dir="rtl"
+        >
           {inspiration.arabic}
         </p>
         <p className="text-sm leading-relaxed text-[#414A45] dark:text-[#C1CAC4]">
