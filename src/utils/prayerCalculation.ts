@@ -139,7 +139,8 @@ export function calculatePrayerTimes(
   date: Date,
   location: LocationConfig,
   madhab: Madhab = 'HANAFI',
-  method: CalculationMethod = 'IFB'
+  method: CalculationMethod = 'IFB',
+  overrides: PrayerTimeOverrides = {}
 ): CalculatedPrayerTimes {
   const locationDate = new Date(date.getTime() + location.timezone * 60 * 60 * 1000);
   const year = locationDate.getUTCFullYear();
@@ -189,18 +190,27 @@ export function calculatePrayerTimes(
   const dhuhr = hoursToDate(year, month, day, dhuhrDecimal, location.timezone);
   const asr = hoursToDate(year, month, day, asrDecimal, location.timezone);
   const maghrib = hoursToDate(year, month, day, maghribDecimal, location.timezone);
-  const isha = hoursToDate(year, month, day, ishaDecimal, location.timezone);\n\n  // Prefer authoritative API timings when supplied; retain the local calculation\n  // as a deterministic fallback if the network/API is unavailable.\n  const finalFajr = overrides.fajr ?? fajr;\n  const finalSunrise = overrides.sunrise ?? sunrise;\n  const finalDhuhr = overrides.dhuhr ?? dhuhr;\n  const finalAsr = overrides.asr ?? asr;\n  const finalMaghrib = overrides.maghrib ?? maghrib;\n  const finalIsha = overrides.isha ?? isha;
+  const isha = hoursToDate(year, month, day, ishaDecimal, location.timezone);
+
+  // Prefer authoritative API timings when supplied; retain the local calculation
+  // as a deterministic fallback if the network/API is unavailable.
+  const finalFajr = overrides.fajr ?? fajr;
+  const finalSunrise = overrides.sunrise ?? sunrise;
+  const finalDhuhr = overrides.dhuhr ?? dhuhr;
+  const finalAsr = overrides.asr ?? asr;
+  const finalMaghrib = overrides.maghrib ?? maghrib;
+  const finalIsha = overrides.isha ?? isha;
 
   // Sehri End: 10 minutes before Fajr as recommended precautionary buffer
-  const sehriEnd = new Date(fajr.getTime() - 10 * 60 * 1000);
-  const iftar = new Date(maghrib.getTime());
+  const sehriEnd = new Date(finalFajr.getTime() - 10 * 60 * 1000);
+  const iftar = new Date(finalMaghrib.getTime());
 
   // Night calculation: from Maghrib today to Fajr next day
-  const tomorrowFajr = new Date(fajr.getTime() + 24 * 60 * 60 * 1000);
-  const nightDurationMs = tomorrowFajr.getTime() - maghrib.getTime();
-  const midnight = new Date(maghrib.getTime() + nightDurationMs / 2);
-  const lastThirdNight = new Date(maghrib.getTime() + (nightDurationMs * 2) / 3);
-  const tahajjudEnd = new Date(fajr.getTime());
+  const tomorrowFajr = new Date(finalFajr.getTime() + 24 * 60 * 60 * 1000);
+  const nightDurationMs = tomorrowFajr.getTime() - finalMaghrib.getTime();
+  const midnight = new Date(finalMaghrib.getTime() + nightDurationMs / 2);
+  const lastThirdNight = new Date(finalMaghrib.getTime() + (nightDurationMs * 2) / 3);
+  const tahajjudEnd = new Date(finalFajr.getTime());
 
   // Determine current & next prayer
   const now = date;
