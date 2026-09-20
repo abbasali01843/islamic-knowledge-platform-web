@@ -37,7 +37,7 @@ function apiDate(date: Date, timezone: number): string {
 
 function parseLocalClock(value: string | undefined, date: Date, timezone: number): Date | undefined {
   if (!value) return undefined;
-  const match = value.match(/^(\\d{1,2}):(\\d{2})/);
+  const match = value.match(/^(\d{1,2}):(\d{2})/);
   if (!match) return undefined;
 
   const hours = Number(match[1]);
