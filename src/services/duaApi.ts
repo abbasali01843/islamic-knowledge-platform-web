@@ -1,6 +1,7 @@
 import type { DuaCategory, DuaCategoryKey, DuaItem } from '../types/dua';
 
 const API_ROOT = 'https://dua-api.hisnul.workers.dev/api';
+const REQUEST_TIMEOUT_MS = 10000;
 export const DUA_SOURCE_LABEL = 'ThelightHub Hisnul Muslim Dua API';
 export const DUA_SOURCE_URL = 'https://github.com/ThelightHub/dua-api';
 
@@ -34,10 +35,10 @@ function mapCategory(name:string): DuaCategoryKey {
 }
 
 async function getPage(page:number):Promise<{items:ApiDua[];pages:number}> {
- const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=100',{headers:{Accept:'application/json'}});
+ const controller=new AbortController(); const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS); try { const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=100',{headers:{Accept:'application/json'},signal:controller.signal});
  if(!res.ok) throw new Error('Dua API '+res.status);
  const json=(await res.json()) as ApiResponse;
- return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))};
+ return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))}; } finally { window.clearTimeout(timeoutId); }
 }
 
 export async function fetchLiveDuas():Promise<DuaItem[]> {
