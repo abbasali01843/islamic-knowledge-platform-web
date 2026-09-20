@@ -111,15 +111,16 @@ function getMethodParams(method: CalculationMethod): MethodParams {
 /**
  * Converts decimal hours to a Date object on the specified calendar day
  */
-function hoursToDate(calendarDate: Date, decimalHours: number): Date {
-  const d = new Date(calendarDate);
+function hoursToDate(year: number, month: number, day: number, decimalHours: number, timezone: number): Date {
   const totalSeconds = Math.round(fixHour(decimalHours) * 3600);
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  d.setHours(hours, minutes, seconds, 0);
-  return d;
+  // The calculation is expressed in the selected location's local clock.
+  // Convert that local wall-clock time to a real instant so countdowns remain
+  // correct even when the browser timezone differs from the selected location.
+  return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds) - timezone * 60 * 60 * 1000);
 }
 
 /**
@@ -131,9 +132,10 @@ export function calculatePrayerTimes(
   madhab: Madhab = 'HANAFI',
   method: CalculationMethod = 'IFB'
 ): CalculatedPrayerTimes {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+  const locationDate = new Date(date.getTime() + location.timezone * 60 * 60 * 1000);
+  const year = locationDate.getUTCFullYear();
+  const month = locationDate.getUTCMonth() + 1;
+  const day = locationDate.getUTCDate();
 
   const jd = getJulianDay(year, month, day);
   const { declination, eqTime } = getSunPosition(jd);
@@ -173,12 +175,12 @@ export function calculatePrayerTimes(
     ishaDecimal = dhuhrDecimal + hIsha / 15.0;
   }
 
-  const fajr = hoursToDate(date, fajrDecimal);
-  const sunrise = hoursToDate(date, sunriseDecimal);
-  const dhuhr = hoursToDate(date, dhuhrDecimal);
-  const asr = hoursToDate(date, asrDecimal);
-  const maghrib = hoursToDate(date, maghribDecimal);
-  const isha = hoursToDate(date, ishaDecimal);
+  const fajr = hoursToDate(year, month, day, fajrDecimal, location.timezone);
+  const sunrise = hoursToDate(year, month, day, sunriseDecimal, location.timezone);
+  const dhuhr = hoursToDate(year, month, day, dhuhrDecimal, location.timezone);
+  const asr = hoursToDate(year, month, day, asrDecimal, location.timezone);
+  const maghrib = hoursToDate(year, month, day, maghribDecimal, location.timezone);
+  const isha = hoursToDate(year, month, day, ishaDecimal, location.timezone);
 
   // Sehri End: 10 minutes before Fajr as recommended precautionary buffer
   const sehriEnd = new Date(fajr.getTime() - 10 * 60 * 1000);
@@ -192,7 +194,7 @@ export function calculatePrayerTimes(
   const tahajjudEnd = new Date(fajr.getTime());
 
   // Determine current & next prayer
-  const now = new Date();
+  const now = date;
   const prayerSequence: Array<{ key: PrayerKey; nameBengali: string; nameArabic: string; time: Date }> = [
     { key: 'fajr', nameBengali: 'ফজর', nameArabic: 'الفجر', time: fajr },
     { key: 'sunrise', nameBengali: 'সূর্যোদয়', nameArabic: 'الشروق', time: sunrise },
@@ -366,9 +368,15 @@ export function toBengaliNumerals(value: number | string): string {
 /**
  * Formats a Date object into Bengali 12-hour time (e.g., ০৫:৪৫ ভোর / ০৪:১৫ বিকাল)
  */
-export function formatTimeBengali(date: Date, showPeriod: boolean = true): string {
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
+export function formatTimeBengali(date: Date, showPeriod: boolean = true, timezone?: number): string {
+  const parts = timezone === undefined
+    ? { hours: date.getHours(), minutes: date.getMinutes() }
+    : (() => {
+        const shifted = new Date(date.getTime() + timezone * 60 * 60 * 1000);
+        return { hours: shifted.getUTCHours(), minutes: shifted.getUTCMinutes() };
+      })();
+  let hours = parts.hours;
+  const minutes = parts.minutes;
 
   // Specific Bengali time periods
   let bengaliPeriod = 'সকাল';
