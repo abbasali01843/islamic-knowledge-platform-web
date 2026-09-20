@@ -104,6 +104,7 @@ export const App: React.FC = () => {
   const [activeWebModule, setActiveWebModule] = useState<WebModule | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [searchCategory, setSearchCategory] = useState<'ALL' | SearchModule['category']>('ALL');
   const [activeSpecialModule, setActiveSpecialModule] = useState<Special>(null);
   const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
   const [isDarkMode, setIsDarkMode] = useState(
@@ -175,9 +176,10 @@ export const App: React.FC = () => {
   const searchTerm = search.trim().toLowerCase();
   const searchSurahs = useMemo(() => (searchTerm ? findQuranSurahs(searchTerm).slice(0, 12) : []), [searchTerm]);
   const searchModules = useMemo(() => {
-    if (!searchTerm) return SEARCH_MODULES;
-    return SEARCH_MODULES.filter((m) => `${m.titleBn} ${m.titleEn} ${m.keywords}`.toLowerCase().includes(searchTerm));
-  }, [searchTerm]);
+    const modules = searchCategory === 'ALL' ? SEARCH_MODULES : SEARCH_MODULES.filter((m) => m.category === searchCategory);
+    if (!searchTerm) return modules;
+    return modules.filter((m) => `${m.titleBn} ${m.titleEn} ${m.keywords}`.toLowerCase().includes(searchTerm));
+  }, [searchTerm, searchCategory]);
   const hasResults = searchSurahs.length > 0 || searchModules.length > 0;
 
   const openSurah = (surah: Surah, ayahNumber: number | null) => {
@@ -210,7 +212,7 @@ export const App: React.FC = () => {
     if (surah) openSurah(surah, ayahNumber);
   };
 
-  const closeSearch = () => { setSearchOpen(false); setSearch(''); };
+  const closeSearch = () => { setSearchOpen(false); setSearch(''); setSearchCategory('ALL'); };
 
   useEffect(() => {
     if (!searchOpen) return;
@@ -246,13 +248,18 @@ export const App: React.FC = () => {
             <div className="flex items-center gap-2 p-3 border-b border-[var(--ikp-border)]">
               <Search className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
               <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') closeSearch(); }} placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..." className="flex-1 bg-transparent outline-none text-sm text-[var(--ikp-text)]" />
-              <button type="button" onClick={closeSearch} aria-label="অনুসন্ধান বন্ধ করুন"><X className="w-5 h-5 text-[#717A74]" /></button>
+              <button type="button" onClick={closeSearch} className="ikp-focus-ring rounded-xl p-1" aria-label="অনুসন্ধান বন্ধ করুন"><X className="w-5 h-5 text-[#717A74]" /></button>
             </div>
             <div className="max-h-[70vh] overflow-y-auto p-3 space-y-4">
               {!searchTerm && (
                 <div className="space-y-3">
                   <p className="text-xs font-bold text-[var(--ikp-text-muted)] px-1">দ্রুত অ্যাকসেস</p>
-                  <div className="flex flex-wrap gap-2">{QUICK_SUGGESTIONS.map((s) => (<button key={s.path} type="button" onClick={() => goFromSearch(s.path)} className="px-3 py-1.5 rounded-full text-xs font-bold bg-[var(--ikp-surface-muted)] text-[var(--ikp-primary)]">{s.label}</button>))}</div>
+                  <div className="flex flex-wrap gap-2">{QUICK_SUGGESTIONS.map((s) => (<button key={s.path} type="button" onClick={() => goFromSearch(s.path)} className="ikp-focus-ring px-3 py-1.5 rounded-full text-xs font-bold bg-[var(--ikp-surface-muted)] text-[var(--ikp-primary)]">{s.label}</button>))}</div>
+                  <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1" aria-label="অনুসন্ধান বিভাগ">
+                    {[['ALL','সব'],['ibadah','ইবাদত'],['ilm','ইলম'],['tools','টুলস']].map(([id,label]) => (
+                      <button key={id} type="button" onClick={() => setSearchCategory(id as typeof searchCategory)} className={`ikp-focus-ring shrink-0 px-3 py-1.5 rounded-full text-xs font-bold ${searchCategory === id ? 'bg-[var(--ikp-primary)] text-white' : 'bg-[var(--ikp-surface-muted)] text-[var(--ikp-text-muted)]'}`}>{label}</button>
+                    ))}
+                  </div>
                   <p className="text-[11px] text-[var(--ikp-text-muted)] px-1 pt-1">সূরার নাম (বাংলা/ইংরেজি/আরবি) বা ফিচারের নাম লিখে খুঁজুন।</p>
                 </div>
               )}
@@ -260,7 +267,7 @@ export const App: React.FC = () => {
                 <div className="space-y-1.5">
                   <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">কুরআনের সূরা</p>
                   {searchSurahs.map((s) => (
-                    <button key={s.number} type="button" onClick={() => { closeSearch(); openSurah(s, null); }} className="w-full text-left p-3 rounded-2xl hover:bg-[var(--ikp-surface-muted)] flex items-center justify-between gap-3">
+                    <button key={s.number} type="button" onClick={() => { closeSearch(); openSurah(s, null); }} className="ikp-focus-ring w-full text-left p-3 rounded-2xl hover:bg-[var(--ikp-surface-muted)] flex items-center justify-between gap-3">
                       <div className="min-w-0"><div className="font-bold text-sm">{s.nameBengali}</div><div className="text-[11px] text-[var(--ikp-text-muted)]">সূরা {s.number} • {s.nameEnglish} • {s.ayahCount} আয়াত</div></div>
                       <span className="text-lg font-serif text-[#176B4D] dark:text-[#9DD6B9] shrink-0" dir="rtl">{s.nameArabic}</span>
                     </button>
@@ -273,7 +280,7 @@ export const App: React.FC = () => {
                   {searchModules.map((m) => {
                     const Icon = m.icon;
                     return (
-                      <button key={m.path} type="button" onClick={() => goFromSearch(m.path)} className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25] flex items-center gap-3">
+                      <button key={m.path} type="button" onClick={() => goFromSearch(m.path)} className="ikp-focus-ring w-full text-left p-3 rounded-2xl hover:bg-[var(--ikp-surface-muted)] flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-[var(--ikp-primary-soft)] flex items-center justify-center text-[var(--ikp-primary)] shrink-0"><Icon className="w-4 h-4" /></div>
                         <div className="min-w-0"><div className="font-bold text-sm">{m.titleBn}</div><div className="text-[11px] text-[var(--ikp-text-muted)]">{m.titleEn}</div></div>
                       </button>
