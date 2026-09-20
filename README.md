@@ -18,18 +18,19 @@ The current `main` branch is the active Release Candidate. Core typecheck/build 
 - Qibla compass handling: ✅
 - Quran, Hadith, Dua, Zakat and Hijri integrations: ✅
 - Global Islamic search: ✅
-- Accessibility/navigation pass: ✅
-- Performance optimization pass: ✅
-- Basic crawler/Open Graph metadata: ✅
+- Accessibility/navigation pass: ⚠️ implemented; real-device/accessibility-tool verification pending
+- Performance optimization pass: ⚠️ implemented; production measurement pending
+- Basic crawler/Open Graph metadata: ⚠️ basic metadata only; route-specific metadata/SSR is not implemented
 
-**Latest accessibility commit:** `564bf1c6f684f1ebe81b89d7911e1c26829b4693`  
+**Latest audited main commit:** `e34f28230c3cb8d3bd124d316d617bb2d200ac2c`  
 **Vercel deployment:** ✅ verified for the latest accessibility commit
 
 Production hosting is deployed on Vercel; real-device QA is still pending.
 
 ## Product principles
 
-- Online-only Islamic content; no localStorage, sessionStorage, IndexedDB or service-worker content cache.
+- Online-only Islamic content; no local content cache or service-worker content cache.
+- Device preferences and salah tracker use browser `localStorage`; Islamic content is not persisted locally.
 - Bengali-first, Arabic-friendly, responsive UI.
 - Guest-first experience.
 - Source attribution and Hadith grading where available.
@@ -46,7 +47,7 @@ Production hosting is deployed on Vercel; real-device QA is still pending.
 - Hadith: progressive online API loading, grading, search/filtering, Nawawi 40 and books views, with a capped rendered list.
 - Dua: online Hisnul Muslim content, categories, search and session-only Tasbeeh.
 - Zakat: online Nisab data with Hanafi-oriented calculation flow.
-- Hijri Calendar: online AlAdhan calendar with location-aware month handling.
+- Hijri Calendar: online AlAdhan calendar with location-aware month handling and timezone-aware date conversion.
 - Salah/Wudu, Ramadan, Hajj, Seerah and Quiz learning modules.
 - Global Islamic Search across platform modules and Quran metadata.
 - Light/dark mode, accessibility labels/navigation semantics and PWA install guidance.
@@ -83,9 +84,9 @@ The project is a Vite SPA.
 
 ## Next release steps
 
-1. Deploy the `main` branch to a production host.
-2. Run Android Chrome/PWA real-device QA.
-3. Test GPS, prayer times, Qibla, APIs, deep links, install flow and offline/error states.
+1. Run Android Chrome/PWA real-device QA.
+2. Test GPS, prayer times, timezone/method/madhab, Qibla, APIs, deep links, install flow and offline/error states.
+3. Add automated regression tests for prayer calculations, Hijri timezone boundaries, API parsing and critical UI flows.
 4. Fix any production QA findings.
 5. Continue with route-level code splitting and full-content Islamic search.
 6. Add optional account/cloud sync only after the public web experience is stable.
