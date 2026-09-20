@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Trash2, BookOpen } from 'lucide-react';
+import { Search, Trash2 } from 'lucide-react';
 import type { QuranLibraryTab, Surah, BookmarkEntry, NoteListItem } from '../types';
 import { quranSurahs, findQuranSurah } from '../data/quranCatalog';
 import { QuranReaderRepository } from '../data/quranRepository';
