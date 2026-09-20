@@ -49,7 +49,7 @@ export const MonthlyTimetable: React.FC<MonthlyTimetableProps> = ({
   const monthSchedule = useMemo(() => {
     const days = [];
     for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(year, month, d);
+      const date = new Date(Date.UTC(year, month, d, 12));
       const times = calculatePrayerTimes(date, location, madhab, method);
       days.push({
         dayNumber: d,
@@ -153,25 +153,25 @@ export const MonthlyTimetable: React.FC<MonthlyTimetableProps> = ({
                       </span>
                     </td>
                     <td className="py-2.5 px-2 text-rose-700 dark:text-rose-400 font-medium">
-                      {formatTimeBengali(times.sehriEnd, false)}
+                      {formatTimeBengali(times.sehriEnd, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2">
-                      {formatTimeBengali(times.fajr, false)}
+                      {formatTimeBengali(times.fajr, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2 text-[#717A74] dark:text-[#8B958E]">
-                      {formatTimeBengali(times.sunrise, false)}
+                      {formatTimeBengali(times.sunrise, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2">
-                      {formatTimeBengali(times.dhuhr, false)}
+                      {formatTimeBengali(times.dhuhr, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2">
-                      {formatTimeBengali(times.asr, false)}
+                      {formatTimeBengali(times.asr, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2 text-emerald-700 dark:text-emerald-400 font-bold">
-                      {formatTimeBengali(times.maghrib, false)}
+                      {formatTimeBengali(times.maghrib, false, location.timezone)}
                     </td>
                     <td className="py-2.5 px-2">
-                      {formatTimeBengali(times.isha, false)}
+                      {formatTimeBengali(times.isha, false, location.timezone)}
                     </td>
                   </tr>
                 );
