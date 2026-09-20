@@ -23,7 +23,7 @@ import { HadithCard } from './HadithCard';
 import { NawawiFortyView } from './NawawiFortyView';
 import { HadithBooksView } from './HadithBooksView';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
-import { fetchHadithSection, fetchLiveHadiths } from '../../services/hadithApi';
+import { fetchHadithBatch, fetchLiveHadiths } from '../../services/hadithApi';
 
 type HadithTab = 'topics' | 'nawawi' | 'books' | 'bookmarks';
 
@@ -37,7 +37,8 @@ export const HadithScreen: React.FC = () => {
   const [dailyHadithCopied, setDailyHadithCopied] = useState(false);
   const [liveHadiths, setLiveHadiths] = useState<HadithItem[]>([]);
   const [apiState, setApiState] = useState<'loading' | 'online' | 'error'>('loading');
-  const [nextSection, setNextSection] = useState(2);
+  const [nextSection, setNextSection] = useState(1);
+  const [nextBookIndex, setNextBookIndex] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const [visibleCount, setVisibleCount] = useState(40);
 
@@ -56,18 +57,22 @@ export const HadithScreen: React.FC = () => {
     setLoadingMore(true);
     const section = nextSection;
     try {
-      const results = await Promise.allSettled(
-        ['bukhari', 'muslim', 'tirmidhi', 'abudawud', 'nasai', 'ibnmajah'].map((bookId) =>
-          fetchHadithSection(bookId, section)
-        )
-      );
-      const items = results.flatMap((result) => result.status === 'fulfilled' ? result.value : []);
+      const bookIds = ['bukhari', 'muslim', 'tirmidhi', 'abudawud', 'nasai', 'ibnmajah'];
+      const batchBookIds = nextSection === 1 ? bookIds.slice(nextBookIndex, nextBookIndex + 2) : bookIds;
+      const items = await fetchHadithBatch(batchBookIds, nextSection);
       if (items.length) {
         setLiveHadiths((prev) => {
           const ids = new Set(prev.map((item) => item.id));
           return [...prev, ...items.filter((item) => !ids.has(item.id))];
         });
-        setNextSection((value) => value + 1);
+        if (nextSection === 1 && nextBookIndex + batchBookIds.length < bookIds.length) {
+          setNextBookIndex((value) => value + batchBookIds.length);
+        } else if (nextSection === 1) {
+          setNextBookIndex(bookIds.length);
+          setNextSection(2);
+        } else {
+          setNextSection((value) => value + 1);
+        }
         setApiState('online');
       }
     } finally {
@@ -390,7 +395,9 @@ export const HadithScreen: React.FC = () => {
               disabled={loadingMore}
               className="px-5 py-2.5 rounded-2xl bg-[#176B4D] text-white text-xs font-bold disabled:opacity-60"
             >
-              {loadingMore ? 'আরও হাদিস লোড হচ্ছে...' : `আরও হাদিস লোড করুন • সেকশন ${toBengaliNumerals(nextSection)}`}
+              {loadingMore ? 'আরও হাদিস লোড হচ্ছে...' : nextSection === 1
+                ? 'আরও গ্রন্থ লোড করুন • ' + toBengaliNumerals(Math.min(2, 6 - nextBookIndex)) + 'টি'
+                : 'আরও হাদিস লোড করুন • সেকশন ' + toBengaliNumerals(nextSection)}
             </button>
           </div>
 
