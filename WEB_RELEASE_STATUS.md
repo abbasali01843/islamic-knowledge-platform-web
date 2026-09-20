@@ -8,8 +8,8 @@
 
 | Area | Status |
 |---|---|
-| Typecheck | ✅ Vercel deployment passed |
-| Production build | ✅ Vercel deployment passed |
+| Typecheck | ⏳ GitHub Actions run not exposed for latest commit; not independently verified |
+| Production build | ⏳ Latest Vercel deployment succeeded, but build log is not exposed here |
 | CI artifact upload | ⚠️ GitHub Actions status not exposed by connected check; Vercel build is successful |
 | Online-only Islamic content policy | ✅ Audited; device preferences use localStorage, Islamic content is not persisted locally |
 | PWA install flow | ✅ Implemented |
@@ -21,14 +21,14 @@
 | Hijri calendar | ✅ Implemented; selected-location timezone is used for date conversion |
 | Quran live reader | ✅ Implemented; API requests now have a 10s timeout |
 | Hadith live API | ✅ Implemented |
-| Dua live API | ⚠️ Implemented; first-page load currently makes multiple detail requests |
+| Dua live API | ✅ Implemented; detail requests are concurrency-limited |
 | Zakat/Nisab | ✅ Implemented |
 | Qibla compass | ⚠️ Implemented; real-device verification pending |
 | Global Islamic Search | ⚠️ Implemented; does not search all live content |
-| Navigation/accessibility pass | ⚠️ Implemented; automated accessibility verification pending |
+| Navigation/accessibility pass | ⚠️ Code-level focus/ARIA/reduced-motion improvements implemented; browser/device verification pending |
 | Performance pass | ⚠️ Implemented; production measurement pending |
 | SEO metadata pass | ⚠️ Basic metadata only; route-specific metadata/SSR remains future work |
-| Production deployment | ✅ Vercel deployment passed for latest audited commit |
+| Production deployment | ✅ Vercel deployment passed for latest UI commit (`3192811`) |
 | Real-device QA | ⏳ Pending |
 
 ## Current audit findings
@@ -62,4 +62,4 @@
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest audited commit: `daf0a956b3c3317bc6b22dbc9b1e5b3237c0d8d8`
+Latest audited UI commit: `3192811c7a933ad0df5aa2c4fa140f3b742af77b`
