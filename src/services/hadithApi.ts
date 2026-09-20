@@ -88,8 +88,14 @@ export async function fetchHadithSection(bookId: string, section: number): Promi
 }
 
 export async function fetchLiveHadiths(): Promise<{ items: HadithItem[]; fromCache: boolean }> {
-  const results = await Promise.allSettled(BOOKS.map(book => fetchSection(book, 1)));
-  const items = results.flatMap(result => result.status === 'fulfilled' ? result.value : []);
+  // Start with one book only; additional books/sections are loaded progressively by the UI.
+  const firstBook = BOOKS[0];
+  const items = await fetchSection(firstBook, 1);
   if (!items.length) throw new Error('Hadith API unavailable');
   return { items, fromCache: false };
+}
+
+export async function fetchHadithBatch(bookIds: string[], section: number): Promise<HadithItem[]> {
+  const results = await Promise.allSettled(bookIds.map((bookId) => fetchHadithSection(bookId, section)));
+  return results.flatMap((result) => result.status === 'fulfilled' ? result.value : []);
 }
