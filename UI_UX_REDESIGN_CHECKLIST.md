@@ -41,15 +41,15 @@
 
 ## Phase 2 — Home dashboard
 
-- [ ] Redesign greeting/date area.
-- [ ] Redesign next-prayer hero.
-- [ ] Make current/next prayer state visually obvious.
-- [ ] Improve countdown presentation.
-- [ ] Improve location indicator.
+- [x] Redesign greeting/date area.
+- [x] Redesign next-prayer hero.
+- [x] Make current/next prayer state visually obvious.
+- [x] Improve countdown presentation.
+- [x] Improve location indicator.
 - [ ] Improve Sehri/Iftar presentation without implying Ramadan status outside Ramadan.
-- [ ] Redesign Continue Quran card.
-- [ ] Redesign Daily Amal tracker and progress.
-- [ ] Improve quick actions.
+- [x] Redesign Continue Quran card.
+- [x] Redesign Daily Amal tracker and progress.
+- [x] Improve quick actions.
 - [ ] Review daily inspiration section using only existing verified content.
 - [ ] Acceptance: all existing Home interactions continue to work.
 
