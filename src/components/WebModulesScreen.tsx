@@ -195,11 +195,11 @@ export const WebModulesScreen: React.FC<{
   const progressPct = quiz.length ? Math.round(((q + (answered ? 1 : 0)) / quiz.length) * 100) : 0;
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-6 space-y-5 pb-28">
+    <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:py-7 space-y-5 pb-28">
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-2 text-sm font-bold text-[#176B4D] dark:text-[#9DD6B9]"
+        className="flex items-center gap-2 text-sm font-bold text-[var(--ikp-primary)]"
       >
         <ArrowLeft className="w-4 h-4" />
         ফিরে যান
@@ -221,15 +221,15 @@ export const WebModulesScreen: React.FC<{
                   key={m.id}
                   type="button"
                   onClick={() => select(m.id)}
-                  className="text-left p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 active:scale-[0.99] transition-transform"
+                  className="text-left p-5 rounded-3xl ikp-surface border border-[var(--ikp-border)] active:scale-[0.99] transition-transform"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#D4F2E2] dark:bg-[#005236] flex items-center justify-center text-[#176B4D] dark:text-[#9DD6B9]">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--ikp-primary-soft)] flex items-center justify-center text-[var(--ikp-primary)]">
                     <I className="w-5 h-5" />
                   </div>
-                  <h2 className="mt-3 font-black text-[#181D19] dark:text-[#E1E5E1]">
+                  <h2 className="mt-3 font-black text-[var(--ikp-text)]">
                     {m.title}
                   </h2>
-                  <p className="mt-1 text-xs text-[#717A74] dark:text-[#8B958E]">{m.desc}</p>
+                  <p className="mt-1 text-xs text-[var(--ikp-text-muted)]">{m.desc}</p>
                 </button>
               );
             })}
@@ -240,20 +240,20 @@ export const WebModulesScreen: React.FC<{
           <button
             type="button"
             onClick={() => setActive(null)}
-            className="text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]"
+            className="text-xs font-bold text-[var(--ikp-primary)]"
           >
             ← সব মডিউল
           </button>
 
           {active === 'QIBLA' && (
-            <div className="text-center py-8 space-y-5 max-w-xl mx-auto rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 p-6">
+            <div className="text-center py-8 space-y-5 max-w-xl mx-auto rounded-3xl ikp-surface border border-[var(--ikp-border)] p-6">
               <Compass
-                className="w-24 h-24 mx-auto text-[#176B4D] dark:text-[#9DD6B9] transition-transform duration-200"
+                className="w-24 h-24 mx-auto text-[var(--ikp-primary)] transition-transform duration-200"
                 style={{
                   transform: `rotate(${(qibla ?? 0) - heading}deg)`,
                 }}
               />
-              <h2 className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1]">
+              <h2 className="text-xl font-black text-[var(--ikp-text)]">
                 কিবলা কম্পাস
               </h2>
               <p className="text-xs text-[#717A74]">
@@ -263,7 +263,7 @@ export const WebModulesScreen: React.FC<{
                 <button
                   type="button"
                   onClick={locate}
-                  className="px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold"
+                  className="px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold"
                 >
                   GPS অবস্থান
                 </button>
@@ -277,7 +277,7 @@ export const WebModulesScreen: React.FC<{
               </div>
               <p className="text-xs text-[#717A74]">{geo}</p>
               {qibla != null && (
-                <p className="text-sm font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+                <p className="text-sm font-bold text-[var(--ikp-primary)]">
                   কিবলা বিয়ারিং: {qibla.toFixed(1)}°
                 </p>
               )}
@@ -331,11 +331,11 @@ export const WebModulesScreen: React.FC<{
                       <span>
                         প্রশ্ন {q + 1}/{quiz.length}
                       </span>
-                      <span className="text-[#176B4D] dark:text-[#9DD6B9]">
+                      <span className="text-[var(--ikp-primary)]">
                         স্কোর: {score}
                       </span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-[#E8EFEA] dark:bg-[#252F28] overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-[var(--ikp-surface-muted)] overflow-hidden">
                       <div
                         className="h-full bg-[#176B4D] transition-all duration-300"
                         style={{ width: `${progressPct}%` }}
@@ -343,7 +343,7 @@ export const WebModulesScreen: React.FC<{
                     </div>
                   </div>
 
-                  <h2 className="text-lg font-black text-[#181D19] dark:text-[#E1E5E1] leading-snug">
+                  <h2 className="text-lg font-black text-[var(--ikp-text)] leading-snug">
                     {quiz[q].question}
                   </h2>
 
@@ -400,18 +400,18 @@ export const WebModulesScreen: React.FC<{
                           setAnswered(false);
                           setSelectedAnswer(null);
                         }}
-                        className="w-full py-3 rounded-2xl bg-[#176B4D] text-white text-sm font-bold"
+                        className="w-full py-3 rounded-2xl bg-[var(--ikp-primary)] text-white text-sm font-bold"
                       >
                         পরের প্রশ্ন
                       </button>
                     ) : (
-                      <div className="p-5 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] text-center space-y-3">
-                        <p className="font-black text-[#181D19] dark:text-[#E1E5E1]">
+                      <div className="p-5 rounded-2xl bg-[var(--ikp-surface-muted)] text-center space-y-3">
+                        <p className="font-black text-[var(--ikp-text)]">
                           কুইজ শেষ — স্কোর {score}/{quiz.length}
                         </p>
                         <button
                           type="button"
-                          className="px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold"
+                          className="px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold"
                           onClick={() => {
                             setQ(0);
                             setScore(0);
@@ -441,19 +441,19 @@ export const WebModulesScreen: React.FC<{
 
 const Guide: React.FC<{ title: string; items: GuideItem[] }> = ({ title, items }) => (
   <div className="space-y-4">
-    <h2 className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1]">{title}</h2>
+    <h2 className="text-xl font-black text-[var(--ikp-text)]">{title}</h2>
     {items.map((x, i) => (
       <div
         key={x.title}
-        className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60"
+        className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)]"
       >
         <div className="flex gap-3">
-          <CheckCircle2 className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0 mt-0.5" />
+          <CheckCircle2 className="w-5 h-5 text-[var(--ikp-primary)] shrink-0 mt-0.5" />
           <div className="min-w-0">
-            <div className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+            <div className="font-bold text-sm text-[var(--ikp-text)]">
               {i + 1}. {x.title}
             </div>
-            <p className="mt-1 text-sm leading-relaxed text-[#414A45] dark:text-[#C1CAC4]">
+            <p className="mt-1 text-sm leading-relaxed text-[var(--ikp-text-muted)]">
               {x.text}
             </p>
             <p className="mt-2 text-[11px] text-[#717A74]">উৎস: {x.source}</p>
