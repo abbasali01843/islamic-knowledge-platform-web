@@ -5,7 +5,7 @@ const REQUEST_TIMEOUT_MS = 10000;
 export const DUA_SOURCE_LABEL = 'ThelightHub Hisnul Muslim Dua API';
 export const DUA_SOURCE_URL = 'https://github.com/ThelightHub/dua-api';
 
-type ApiDua = { dua_global_id:number; duaname:string; categories?:Array<{id:number;name:string}>; segments?:Array<{arabic?:string;translations?:string;reference?:string}> };
+type ApiDua = { dua_global_id:number; duaname:string; categories?:Array<{id:number;name:string}>; segments?:Array<{arabic?:string;transliteration?:string;translations?:string;reference?:string}> };
 type ApiResponse = { success?:boolean; data?:ApiDua[]; pagination?:{pages:number} };
 
 export const DUA_CATEGORIES: DuaCategory[] = [
@@ -35,7 +35,7 @@ function mapCategory(name:string): DuaCategoryKey {
 }
 
 async function getPage(page:number):Promise<{items:ApiDua[];pages:number}> {
- const controller=new AbortController(); const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS); try { const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=100',{headers:{Accept:'application/json'},signal:controller.signal});
+ const controller=new AbortController(); const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS); try { const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=20',{headers:{Accept:'application/json'},signal:controller.signal});
  if(!res.ok) throw new Error('Dua API '+res.status);
  const json=(await res.json()) as ApiResponse;
  return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))}; } finally { window.clearTimeout(timeoutId); }
