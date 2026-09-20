@@ -24,7 +24,12 @@ const checks = [
   ['Prayer API supports cancellation', 'src/services/prayerTimesApi.ts', 'AbortSignal'],
   ['Quran API has timeout protection', 'src/data/quranRepository.ts', 'REQUEST_TIMEOUT_MS'],
   ['Dua detail requests are concurrency limited', 'src/services/duaApi.ts', 'DETAIL_CONCURRENCY'],
-  ['PWA manifest exists', 'public/manifest.webmanifest', 'name']
+  ['PWA manifest exists', 'public/manifest.webmanifest', 'name'],
+  ['Global visible focus styling exists', 'src/index.css', ':focus-visible'],
+  ['Reduced-motion preference is handled', 'src/index.css', 'prefers-reduced-motion'],
+  ['Primary navigation has an accessible label', 'src/components/Navbar.tsx', 'aria-label="প্রধান নেভিগেশন"'],
+  ['Primary navigation exposes active state', 'src/components/Navbar.tsx', 'aria-current'],
+  ['Search dialog has an accessible name', 'src/App.tsx', 'aria-labelledby="ikp-search-title"']
 ];
 for (const [label, file, needle] of checks) {
   const content = readFileSync(join(root, file), 'utf8');
