@@ -28,7 +28,7 @@
 | Navigation/accessibility pass | ⚠️ Code-level focus/ARIA/reduced-motion improvements implemented; browser/device verification pending |
 | Performance pass | ⚠️ Implemented; production measurement pending |
 | SEO metadata pass | ⚠️ Basic metadata only; route-specific metadata/SSR remains future work |
-| Production deployment | ✅ Vercel deployment passed for latest UI commit (`3192811`) |
+| Production deployment | ✅ Vercel deployment passed for latest audited commit (`856b875b`) |
 | Real-device QA | ⏳ Pending |
 
 ## Current audit findings
@@ -62,4 +62,4 @@
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest audited UI commit: `3192811c7a933ad0df5aa2c4fa140f3b742af77b`
+Latest audited commit: `856b875b42150647522447384ff5e8dbfe9e0ce1`
