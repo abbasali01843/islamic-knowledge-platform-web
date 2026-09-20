@@ -64,7 +64,8 @@ export async function fetchPrayerTimeOverrides(
   const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   const abortFromCaller = () => controller.abort();
 
-  signal?.addEventListener('abort', abortFromCaller, { once: true });
+  if (signal?.aborted) controller.abort();
+  else signal?.addEventListener('abort', abortFromCaller, { once: true });
 
   try {
     const response = await fetch(
