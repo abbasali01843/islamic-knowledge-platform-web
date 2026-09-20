@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   ChevronDown,
   ChevronUp,
+  FileText,
 } from 'lucide-react';
 import { fetchZakatContent } from '../../services/zakatContentApi';
 import type { ZakatContent } from '../../services/zakatContentApi';
