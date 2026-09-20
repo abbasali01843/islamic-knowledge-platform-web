@@ -38,7 +38,7 @@ export const App:React.FC=()=>{
  };
  const navigate=(path:string)=>{window.history.pushState({},'',path);applyRoute()};
  const navLink=(path:string)=>({href:path,onClick:(e:React.MouseEvent<HTMLAnchorElement>)=>{if(e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();navigate(path)}}});
- useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[]);
+ useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[applyRoute]);
  const selectedSurah=findQuranSurah(selectedSurahNumber),isReaderOpen=selectedTab===1&&!!selectedSurah;
  const searchTerm=search.trim().toLowerCase();
  const searchSurahs=searchTerm?Array.from({length:114},(_,i)=>findQuranSurah(i+1)).filter((s):s is Surah=>!!s&&(`${s.number} ${s.nameBengali} ${s.nameEnglish}`.toLowerCase().includes(searchTerm))).slice(0,8):[];
