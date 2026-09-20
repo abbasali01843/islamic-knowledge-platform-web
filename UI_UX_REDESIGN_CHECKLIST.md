@@ -110,17 +110,17 @@
 
 ## Phase 8 — Accessibility and responsive QA
 
-- [ ] Keyboard navigation.
-- [ ] Visible focus states.
-- [ ] Dialog focus management.
-- [ ] Screen-reader labels.
-- [ ] Color contrast.
-- [ ] Touch target sizing.
-- [ ] Reduced-motion behavior where appropriate.
-- [ ] Android Chrome narrow viewport.
-- [ ] iOS Safari narrow viewport.
-- [ ] Tablet/desktop layout.
-- [ ] Dark mode.
+- [x] Keyboard navigation.
+- [x] Visible focus states.
+- [x] Dialog focus management.
+- [x] Screen-reader labels.
+- [x] Color contrast.
+- [x] Touch target sizing.
+- [x] Reduced-motion behavior where appropriate.
+- [x] Android Chrome narrow viewport.
+- [x] iOS Safari narrow viewport.
+- [x] Tablet/desktop layout.
+- [x] Dark mode.
 
 ## Phase 9 — Verification gate
 
