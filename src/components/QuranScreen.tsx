@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Trash2 } from 'lucide-react';
+import { Search, Trash2, BookOpen, ArrowRight } from 'lucide-react';
 import type { QuranLibraryTab, Surah, BookmarkEntry, NoteListItem } from '../types';
 import { quranSurahs, findQuranSurah } from '../data/quranCatalog';
 import { QuranReaderRepository } from '../data/quranRepository';
@@ -41,8 +41,8 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
     libraryVersion;
     const items: BookmarkEntry[] = [];
     const set = QuranPreferences.getBookmarks();
-    set.forEach((key) => {
-      const parts = key.split(':');
+    set.forEach((entryKey) => {
+      const parts = entryKey.split(':');
       if (parts.length !== 2) return;
       const s = parseInt(parts[0], 10);
       const a = parseInt(parts[1], 10);
@@ -102,7 +102,39 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-4 pb-24">
       <SectionHeader title="কুরআন" />
 
-      {/* Filter Tabs matching Material 3 FilterChips */}
+      {/* Resume — most important action when user has history */}
+      {resumeSurah && lastRead && selectedTab === 'SURAHS' && (
+        <button
+          type="button"
+          onClick={() => onSurahClick(resumeSurah, lastRead.ayahNumber)}
+          className="w-full text-left p-4 rounded-2xl bg-gradient-to-r from-[#176B4D] to-[#0E4933] text-white shadow-md active:scale-[0.99] transition-transform"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-start gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                <BookOpen className="w-5 h-5 text-[#9DD6B9]" />
+              </div>
+              <div className="min-w-0 space-y-0.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#9DD6B9]">
+                  যেখান থেকে থেমেছিলেন
+                </span>
+                <div className="font-bold text-base truncate">
+                  {resumeSurah.nameBengali}
+                </div>
+                <div className="text-xs text-white/80">
+                  আয়াত {lastRead.ayahNumber} • {resumeSurah.nameArabic}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 text-sm font-bold shrink-0">
+              <span>চালিয়ে পড়ুন</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+        </button>
+      )}
+
+      {/* Filter Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         {tabs.map((tab) => {
           const isSelected = selectedTab === tab.id;
@@ -137,28 +169,6 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
       {/* SURAHS TAB */}
       {selectedTab === 'SURAHS' && (
         <div className="space-y-4">
-          {/* Resume Card if Last Read is present */}
-          {resumeSurah && lastRead && (
-            <div className="p-4 rounded-2xl bg-[#E8EFEA] dark:bg-[#3F4943] flex items-center justify-between border border-black/5 dark:border-white/5">
-              <div className="space-y-1">
-                <span className="text-xs font-medium text-[#414A45] dark:text-[#C1CAC4]">
-                  যেখান থেকে পড়া বন্ধ করেছিলেন
-                </span>
-                <div className="text-base font-semibold text-[#181D19] dark:text-[#E1E5E1]">
-                  {resumeSurah.nameBengali} • আয়াত {lastRead.ayahNumber}
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => onSurahClick(resumeSurah, lastRead.ayahNumber)}
-                className="px-4 py-2 rounded-xl bg-[#176B4D] text-white dark:bg-[#9DD6B9] dark:text-[#003824] text-sm font-semibold hover:opacity-90 active:scale-95 transition"
-              >
-                Resume
-              </button>
-            </div>
-          )}
-
-          {/* Search Box */}
           <div className="relative">
             <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#717A74] dark:text-[#8B958E]" />
             <input
@@ -174,7 +184,6 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
             ১১৪টি সূরা • {filteredSurahs.length}টি ফলাফল
           </div>
 
-          {/* Surahs List */}
           <div className="space-y-2">
             {filteredSurahs.map((surah) => (
               <button
@@ -213,28 +222,25 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
       {/* JUZ TAB */}
       {selectedTab === 'JUZ' && (
         <div className="space-y-3">
-          <div className="space-y-2">
-            <p className="text-xs text-[#717A74] dark:text-[#8B958E]">প্রতিটি পারার সূচি অনলাইন API থেকে খোলা হবে।</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {juzNumbers.map((juz) => {
-                const sub = 'অনলাইন সূচি খুলতে ট্যাপ করুন';
-                return (
-                  <button
-                    key={juz}
-                    type="button"
-                    onClick={() => openJuz(juz)}
-                    className="p-4 rounded-2xl bg-white dark:bg-[#1E2620] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] text-left border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs transition-colors"
-                  >
-                    <div className="font-semibold text-base text-[#181D19] dark:text-[#E1E5E1]">
-                      পারা {juz}
-                    </div>
-                    <div className="text-xs text-[#414A45] dark:text-[#C1CAC4] mt-1">
-                      {sub}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
+            প্রতিটি পারার সূচি অনলাইন API থেকে খোলা হবে।
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {juzNumbers.map((juz) => (
+              <button
+                key={juz}
+                type="button"
+                onClick={() => openJuz(juz)}
+                className="p-4 rounded-2xl bg-white dark:bg-[#1E2620] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] text-left border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs transition-colors"
+              >
+                <div className="font-semibold text-base text-[#181D19] dark:text-[#E1E5E1]">
+                  পারা {juz}
+                </div>
+                <div className="text-xs text-[#414A45] dark:text-[#C1CAC4] mt-1">
+                  অনলাইন সূচি খুলতে ট্যাপ করুন
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -242,28 +248,25 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
       {/* PAGES TAB */}
       {selectedTab === 'PAGES' && (
         <div className="space-y-3">
-          <div className="space-y-2">
-            <p className="text-xs text-[#717A74] dark:text-[#8B958E]">প্রতিটি মুশহাফ পৃষ্ঠা অনলাইন API থেকে খোলা হবে।</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-              {pageNumbers.map((page) => {
-                const sub = 'অনলাইন সূচি খুলতে ট্যাপ করুন';
-                return (
-                  <button
-                    key={page}
-                    type="button"
-                    onClick={() => openPage(page)}
-                    className="p-3.5 rounded-2xl bg-white dark:bg-[#1E2620] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] text-left border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs transition-colors"
-                  >
-                    <div className="font-semibold text-sm text-[#181D19] dark:text-[#E1E5E1]">
-                      পৃষ্ঠা {page}
-                    </div>
-                    <div className="text-xs text-[#414A45] dark:text-[#C1CAC4] mt-0.5 truncate">
-                      {sub}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
+            প্রতিটি মুশহাফ পৃষ্ঠা অনলাইন API থেকে খোলা হবে।
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            {pageNumbers.map((page) => (
+              <button
+                key={page}
+                type="button"
+                onClick={() => openPage(page)}
+                className="p-3.5 rounded-2xl bg-white dark:bg-[#1E2620] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] text-left border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs transition-colors"
+              >
+                <div className="font-semibold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                  পৃষ্ঠা {page}
+                </div>
+                <div className="text-xs text-[#414A45] dark:text-[#C1CAC4] mt-0.5 truncate">
+                  ট্যাপ করে খুলুন
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -296,7 +299,7 @@ export const QuranScreen: React.FC<QuranScreenProps> = ({ onSurahClick }) => {
                       {item.surah.number}. {item.surah.nameBengali} • আয়াত {item.ayahNumber}
                     </div>
                     <p className="text-sm text-[#181D19] dark:text-[#E1E5E1] line-clamp-2 leading-relaxed">
-                      {item.ayah?.bengali || 'আয়াত খুলতে ট্যাপ করুন'}
+                      আয়াত খুলতে ট্যাপ করুন
                     </p>
                   </button>
                   <button
