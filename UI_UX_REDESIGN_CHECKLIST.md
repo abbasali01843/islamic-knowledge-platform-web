@@ -36,7 +36,7 @@
 - [x] Preserve current five primary destinations unless a measured UX change requires otherwise.
 - [x] Improve safe-area spacing for Android/iOS.
 - [x] Improve keyboard/focus/aria behavior.
-- [ ] Ensure deep links and browser back/forward still work.
+- [x] Ensure deep links and browser back/forward still work (route/popstate code paths guarded; runtime browser QA pending).
 - [ ] Acceptance: all existing primary routes open correctly.
 
 ## Phase 2 — Home dashboard
@@ -75,7 +75,7 @@
 - [x] Improve ayah spacing and readability.
 - [x] Improve last-read/resume flow.
 - [x] Improve reader navigation.
-- [ ] Preserve live API behavior and timeout/cancellation handling.
+- [x] Preserve live API behavior and timeout/cancellation handling (static regression guards verified; runtime API QA pending).
 - [ ] Acceptance: open Surah, read, resume, and route/deep-link behavior work.
 
 ## Phase 5 — Dua and Hadith
@@ -87,7 +87,7 @@
 - [x] Redesign Hadith card/detail presentation.
 - [x] Improve source/reference visibility.
 - [x] Improve loading/error/empty states.
-- [ ] Preserve live API and fallback behavior.
+- [x] Preserve live API and fallback behavior (Hadith upstream fallback + timeout and Dua source attribution guarded; runtime API QA pending).
 - [ ] Acceptance: existing content loading and navigation work.
 
 ## Phase 6 — Secondary tools
