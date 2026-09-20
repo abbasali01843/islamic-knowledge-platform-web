@@ -14,6 +14,7 @@ function qiblaBearing(latitude, longitude) {
   const phi = d2r(latitude);
   const lambda = d2r(longitude);
   const deltaLambda = lambdaK - lambda;
+  if (Math.abs(latitude - KAABA_LATITUDE) < 1e-9 && Math.abs(longitude - KAABA_LONGITUDE) < 1e-9) return 0;
   const y = Math.sin(deltaLambda);
   const x = Math.cos(phi) * Math.tan(phiK) - Math.sin(phi) * Math.cos(deltaLambda);
   return Math.round((r2d(Math.atan2(y, x)) + 360) % 360);
