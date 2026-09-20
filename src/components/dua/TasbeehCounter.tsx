@@ -131,7 +131,7 @@ export const TasbeehCounter: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8EFEA] dark:bg-[#252F28] hover:bg-[#dce7e0] text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] transition-colors"
+            className="ikp-focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8EFEA] dark:bg-[#252F28] hover:bg-[#dce7e0] text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] transition-colors"
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>জিকির পরিবর্তন</span>
@@ -205,7 +205,7 @@ export const TasbeehCounter: React.FC = () => {
                 setTarget(num);
                 setCount(0);
               }}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+              className={`ikp-focus-ring px-2.5 py-1 rounded-lg font-bold transition-all ${
                 target === num
                   ? 'bg-[#176B4D] text-white'
                   : 'bg-white dark:bg-[#1A221C] text-[#414A45] dark:text-[#C1CAC4]'
@@ -221,7 +221,7 @@ export const TasbeehCounter: React.FC = () => {
           <button
             type="button"
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className={`p-2 rounded-xl transition-colors ${
+            className={`ikp-focus-ring p-2 rounded-xl transition-colors ${
               soundEnabled
                 ? 'bg-[#176B4D] text-white'
                 : 'bg-white dark:bg-[#1A221C] text-[#717A74]'
@@ -233,7 +233,7 @@ export const TasbeehCounter: React.FC = () => {
           <button
             type="button"
             onClick={() => setVibrationEnabled(!vibrationEnabled)}
-            className={`p-2 rounded-xl transition-colors ${
+            className={`ikp-focus-ring p-2 rounded-xl transition-colors ${
               vibrationEnabled
                 ? 'bg-[#176B4D] text-white'
                 : 'bg-white dark:bg-[#1A221C] text-[#717A74]'
