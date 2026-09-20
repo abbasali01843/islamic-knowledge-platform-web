@@ -14,15 +14,15 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`flex items-center justify-between ${className}`}>
-      <h2 className="text-lg font-semibold text-[#181D19] dark:text-[#E1E5E1]">
+    <div className={`flex items-end justify-between gap-4 ${className}`}>
+      <h2 className="text-[17px] sm:text-lg font-bold tracking-tight text-[var(--ikp-text)]">
         {title}
       </h2>
       {actionLabel && onAction && (
         <button
           type="button"
           onClick={onAction}
-          className="text-sm font-semibold text-[#176B4D] dark:text-[#9DD6B9] hover:underline px-2 py-1 rounded transition-colors"
+          className="ikp-focus-ring shrink-0 rounded-lg px-2 py-1 text-xs sm:text-sm font-semibold text-[var(--ikp-primary)] transition-colors hover:bg-[var(--ikp-primary-soft)]"
         >
           {actionLabel}
         </button>
