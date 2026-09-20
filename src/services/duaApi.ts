@@ -2,6 +2,7 @@ import type { DuaCategory, DuaCategoryKey, DuaItem } from '../types/dua';
 
 const API_ROOT = 'https://dua-api.hisnul.workers.dev/api';
 const REQUEST_TIMEOUT_MS = 10000;
+const DETAIL_CONCURRENCY = 4;
 export const DUA_SOURCE_LABEL = 'ThelightHub Hisnul Muslim Dua API';
 export const DUA_SOURCE_URL = 'https://github.com/ThelightHub/dua-api';
 
@@ -34,30 +35,56 @@ function mapCategory(name:string): DuaCategoryKey {
  return 'ALL';
 }
 
-async function getPage(page:number):Promise<{items:ApiDua[];pages:number}> {
- const controller=new AbortController(); const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS); try { const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=20',{headers:{Accept:'application/json'},signal:controller.signal});
- if(!res.ok) throw new Error('Dua API '+res.status);
- const json=(await res.json()) as ApiResponse;
- return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))}; } finally { window.clearTimeout(timeoutId); }
-}
-
-async function getDuaDetail(id:number):Promise<ApiDua> {
+function withTimeout(signal?:AbortSignal): {signal:AbortSignal; cleanup:()=>void} {
  const controller=new AbortController();
  const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+ const abort=()=>controller.abort();
+ if(signal){
+  if(signal.aborted) controller.abort();
+  else signal.addEventListener('abort',abort,{once:true});
+ }
+ return {signal:controller.signal,cleanup:()=>{window.clearTimeout(timeoutId);signal?.removeEventListener('abort',abort);}};
+}
+
+async function getPage(page:number,signal?:AbortSignal):Promise<{items:ApiDua[];pages:number}> {
+ const request=withTimeout(signal);
  try {
-  const res=await fetch(API_ROOT+'/duas/'+id,{headers:{Accept:'application/json'},signal:controller.signal});
+  const res=await fetch(API_ROOT+'/books/1/duas?page='+page+'&limit=20',{headers:{Accept:'application/json'},signal:request.signal});
+  if(!res.ok) throw new Error('Dua API '+res.status);
+  const json=(await res.json()) as ApiResponse;
+  return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))};
+ } finally { request.cleanup(); }
+}
+
+async function getDuaDetail(id:number,signal?:AbortSignal):Promise<ApiDua> {
+ const request=withTimeout(signal);
+ try {
+  const res=await fetch(API_ROOT+'/duas/'+id,{headers:{Accept:'application/json'},signal:request.signal});
   if(!res.ok) throw new Error('Dua API '+res.status);
   const json=(await res.json()) as {data?:ApiDua};
   if(!json.data) throw new Error('Dua detail unavailable');
   return json.data;
- } finally {
-  window.clearTimeout(timeoutId);
- }
+ } finally { request.cleanup(); }
 }
 
-export async function fetchLiveDuas():Promise<DuaItem[]> {
- const first=await getPage(1);
- const detailed=await Promise.all(first.items.map(item=>getDuaDetail(item.dua_global_id)));
+async function getDetailsWithConcurrency(items:ApiDua[],signal?:AbortSignal):Promise<ApiDua[]> {
+ const output:Array<ApiDua|undefined>=new Array(items.length);
+ let cursor=0;
+ async function worker(){
+  while(true){
+   if(signal?.aborted) throw new DOMException('Aborted','AbortError');
+   const index=cursor++;
+   if(index>=items.length) return;
+   output[index]=await getDuaDetail(items[index].dua_global_id,signal);
+  }
+ }
+ await Promise.all(Array.from({length:Math.min(DETAIL_CONCURRENCY,items.length)},()=>worker()));
+ return output.filter((item):item is ApiDua=>Boolean(item));
+}
+
+export async function fetchLiveDuas(signal?:AbortSignal):Promise<DuaItem[]> {
+ const first=await getPage(1,signal);
+ const detailed=await getDetailsWithConcurrency(first.items,signal);
  return detailed.map((d):DuaItem=> {
    const segment=d.segments?.[0]||{};
    const category=mapCategory(d.categories?.[0]?.name||'');
