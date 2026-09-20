@@ -217,7 +217,7 @@ export const HadithScreen: React.FC = () => {
           <span className="text-[#717A74]">{toBengaliNumerals(liveHadiths.length)} অনলাইন</span>
         </div>
 
-      {/* Main Tabs Navigation */
+      {/* Main Tabs Navigation */}
       <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#E8EFEA] dark:bg-[#222C25] overflow-x-auto no-scrollbar">
         <button
           type="button"
