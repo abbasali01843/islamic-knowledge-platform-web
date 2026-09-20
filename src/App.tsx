@@ -39,7 +39,6 @@ export const App:React.FC=()=>{
  const navigate=(path:string)=>{window.history.pushState({},'',path);applyRoute()};
  useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[]);
  const selectedSurah=findQuranSurah(selectedSurahNumber),isReaderOpen=selectedTab===1&&!!selectedSurah;
- const openQuran=()=>navigate('/quran');
  const openSurah=(surah:Surah,ayahNumber:number|null)=>{navigate('/quran/'+surah.number);setSelectedSurahNumber(surah.number);setSelectedAyah(ayahNumber||0)};
  const handleQuickAction=(dest:HomeDestination)=>{const paths:Partial<Record<HomeDestination,string>>={QURAN:'/quran',PRAYER:'/prayer',DUA:'/dua',HADITH:'/hadith',LEARN_SALAH:'/learn/salah',ZAKAT:'/zakat',CALENDAR:'/calendar'};const p=paths[dest];if(p)navigate(p)};
  return <div className="min-h-screen bg-[#F7FAF7] dark:bg-[#101511] text-[#181D19] dark:text-[#E1E5E1] transition-colors flex flex-col">
