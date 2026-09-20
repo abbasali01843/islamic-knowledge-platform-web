@@ -142,35 +142,35 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6 animate-in fade-in duration-300 pb-24">
+    <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:py-7 space-y-5 animate-in fade-in duration-300 pb-28">
       {/* Top Header with Back Button */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onBack}
-          className="p-2.5 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 text-[#176B4D] dark:text-[#9DD6B9] hover:bg-[#D4F2E2]/30 transition-colors shadow-xs"
+          className="ikp-focus-ring p-2.5 rounded-2xl ikp-surface border border-[var(--ikp-border)] text-[var(--ikp-primary)] hover:bg-[#D4F2E2]/30 transition-colors shadow-xs"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-[#181D19] dark:text-[#E1E5E1]">
+          <h1 className="text-xl sm:text-2xl font-black text-[var(--ikp-text)]">
             যাকাত ক্যালকুলেটর
           </h1>
-          <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
+          <p className="text-xs text-[var(--ikp-text-muted)]">
             স্বর্ণ, রৌপ্য, নগদ অর্থ ও ব্যবসায়ের সম্পদের নিসাব এবং ২.৫% হিসাব
           </p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#E8EFEA] dark:bg-[#222C25]">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--ikp-surface-muted)] border border-[var(--ikp-border)]">
         <button
           type="button"
           onClick={() => setActiveTab('calculator')}
           className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === 'calculator'
-              ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-              : 'text-[#414A45] dark:text-[#C1CAC4] hover:text-[#181D19]'
+              ? 'bg-white dark:bg-[#1A221C] text-[var(--ikp-primary)] shadow-xs'
+              : 'text-[var(--ikp-text-muted)] hover:text-[#181D19]'
           }`}
         >
           <Calculator className="w-4 h-4" />
@@ -182,8 +182,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           onClick={() => setActiveTab('recipients')}
           className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === 'recipients'
-              ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-              : 'text-[#414A45] dark:text-[#C1CAC4] hover:text-[#181D19]'
+              ? 'bg-white dark:bg-[#1A221C] text-[var(--ikp-primary)] shadow-xs'
+              : 'text-[var(--ikp-text-muted)] hover:text-[#181D19]'
           }`}
         >
           <Coins className="w-4 h-4" />
@@ -195,8 +195,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           onClick={() => setActiveTab('faq')}
           className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === 'faq'
-              ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-              : 'text-[#414A45] dark:text-[#C1CAC4] hover:text-[#181D19]'
+              ? 'bg-white dark:bg-[#1A221C] text-[var(--ikp-primary)] shadow-xs'
+              : 'text-[var(--ikp-text-muted)] hover:text-[#181D19]'
           }`}
         >
           <HelpCircle className="w-4 h-4" />
@@ -273,17 +273,17 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
           {nisabLoading && <div className="text-xs text-[#717A74]">লাইভ নিসাবের মূল্য লোড হচ্ছে…</div>}
       {nisabError && <div className="text-xs text-amber-700 dark:text-amber-300">{nisabError}</div>}
-      {liveNisab && <div className="text-[11px] text-[#717A74] dark:text-[#8B958E]">নিসাব উৎস: <a className="underline" href={NISAB_SOURCE_URL} target="_blank" rel="noreferrer">{NISAB_SOURCE_LABEL}</a> · ফিকহ স্ট্যান্ডার্ড: হানাফি · আপডেট: {new Date(liveNisab.updatedAt).toLocaleString('bn-BD')}</div>}
+      {liveNisab && <div className="text-[11px] text-[var(--ikp-text-muted)]">নিসাব উৎস: <a className="underline" href={NISAB_SOURCE_URL} target="_blank" rel="noreferrer">{NISAB_SOURCE_LABEL}</a> · ফিকহ স্ট্যান্ডার্ড: হানাফি · আপডেট: {new Date(liveNisab.updatedAt).toLocaleString('bn-BD')}</div>}
 
       {/* Price Settings Accordion */}
           <div className="rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-white dark:bg-[#1A221C] overflow-hidden">
             <button
               type="button"
               onClick={() => setShowPriceSettings(!showPriceSettings)}
-              className="w-full px-5 py-3.5 flex items-center justify-between text-xs font-bold text-[#181D19] dark:text-[#E1E5E1] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              className="w-full px-5 py-3.5 flex items-center justify-between text-xs font-bold text-[var(--ikp-text)] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <Coins className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
+                <Coins className="w-4 h-4 text-[var(--ikp-primary)]" />
                 <span>বর্তমান স্বর্ণ ও রূপার বাজার দর সেটিং (প্রতি গ্রাম)</span>
               </div>
               {showPriceSettings ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -293,7 +293,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
               <div className="p-5 border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="font-semibold block mb-1 text-[#414A45] dark:text-[#C1CAC4]">
+                    <label className="font-semibold block mb-1 text-[var(--ikp-text-muted)]">
                       স্বর্ণের গ্রাম মূল্য (টাকা):
                     </label>
                     <input
@@ -309,7 +309,7 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                   </div>
 
                   <div>
-                    <label className="font-semibold block mb-1 text-[#414A45] dark:text-[#C1CAC4]">
+                    <label className="font-semibold block mb-1 text-[var(--ikp-text-muted)]">
                       রূপার গ্রাম মূল্য (টাকা):
                     </label>
                     <input
@@ -331,14 +331,14 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           {/* Asset Inputs */}
           <div className="space-y-4">
             <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200">যাকাতের কিছু মাসআলায় মাজহাবভেদে মতভেদ আছে। এই ক্যালকুলেটরটি হানাফি স্ট্যান্ডার্ডের নিসাব ব্যবহার করছে; ব্যক্তিগত ফতোয়ার জন্য যোগ্য আলেমের পরামর্শ নিন।</div>
-            <h3 className="text-sm font-extrabold text-[#181D19] dark:text-[#E1E5E1] flex items-center gap-2">
-              <Coins className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
+            <h3 className="text-sm font-extrabold text-[var(--ikp-text)] flex items-center gap-2">
+              <Coins className="w-4 h-4 text-[var(--ikp-primary)]" />
               <span>১. যাকাতযোগ্য সম্পদের বিবরণ (টাকায়)</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   নগদ টাকা (হাতে বা লকারে)
                 </label>
                 <input
@@ -350,8 +350,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   ব্যাংক ব্যালেন্স ও সঞ্চয়পত্র
                 </label>
                 <input
@@ -363,12 +363,12 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+                  <label className="text-xs font-bold text-[var(--ikp-text)]">
                     স্বর্ণের পরিমাণ (গ্রাম)
                   </label>
-                  <span className="text-[11px] text-[#176B4D] dark:text-[#9DD6B9] font-bold">
+                  <span className="text-[11px] text-[var(--ikp-primary)] font-bold">
                     = ৳{toBengaliNumerals(Math.round(goldValue).toLocaleString('en-US'))}
                   </span>
                 </div>
@@ -382,12 +382,12 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 <span className="text-[10px] text-[#717A74] block">১ ভরি = ১১.৬৬৪ গ্রাম</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+                  <label className="text-xs font-bold text-[var(--ikp-text)]">
                     রূপার পরিমাণ (গ্রাম)
                   </label>
-                  <span className="text-[11px] text-[#176B4D] dark:text-[#9DD6B9] font-bold">
+                  <span className="text-[11px] text-[var(--ikp-primary)] font-bold">
                     = ৳{toBengaliNumerals(Math.round(silverValue).toLocaleString('en-US'))}
                   </span>
                 </div>
@@ -400,8 +400,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   ব্যবসায়ের পণ্য ও বিক্রয়যোগ্য স্টক
                 </label>
                 <input
@@ -413,8 +413,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   শেয়ার বাজার, বন্ড ও প্রভিডেন্ট ফান্ড
                 </label>
                 <input
@@ -426,8 +426,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   পাওনা টাকা (যা ফেরত পাওয়ার সম্ভাবনা আছে)
                 </label>
                 <input
@@ -439,8 +439,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   অন্যান্য যাকাতযোগ্য সম্পদ
                 </label>
                 <input
@@ -456,14 +456,14 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
 
           {/* Liabilities Inputs */}
           <div className="space-y-4">
-            <h3 className="text-sm font-extrabold text-[#181D19] dark:text-[#E1E5E1] flex items-center gap-2">
+            <h3 className="text-sm font-extrabold text-[var(--ikp-text)] flex items-center gap-2">
               <FileText className="w-4 h-4 text-rose-500" />
               <span>২. দেনা ও ঋণ (সম্পদ থেকে কর্তনযোগ্য)</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   তাৎক্ষণিক পরিশোধযোগ্য ঋণ
                 </label>
                 <input
@@ -475,8 +475,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-1.5">
-                <label className="text-xs font-bold text-[#181D19] dark:text-[#E1E5E1]">
+              <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-1.5">
+                <label className="text-xs font-bold text-[var(--ikp-text)]">
                   বকেয়া বিল, বেতন ও ব্যবসার চলতি দেনা
                 </label>
                 <input
@@ -498,8 +498,8 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           {contentLoading && <div className="mb-3 p-3 rounded-xl border text-xs">অনলাইন কনটেন্ট লোড হচ্ছে…</div>}
           {contentError && <div className="mb-3 p-3 rounded-xl border border-amber-300 text-xs">{contentError}</div>}
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-[#005236]/30 border border-emerald-500/30 text-xs text-[#181D19] dark:text-[#E1E5E1]">
-            <strong className="font-bold block mb-1 text-[#176B4D] dark:text-[#9DD6B9]">যাকাতের প্রাপকের তথ্য</strong>
+          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-[#005236]/30 border border-emerald-500/30 text-xs text-[var(--ikp-text)]">
+            <strong className="font-bold block mb-1 text-[var(--ikp-primary)]">যাকাতের প্রাপকের তথ্য</strong>
             <p>প্রতিটি শ্রেণির বিবরণ অনলাইন উৎস থেকে লোড করা হচ্ছে এবং নিচে সংশ্লিষ্ট উৎস দেখানো হয়েছে।</p>
           </div>
 
@@ -507,21 +507,21 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
             {content?.recipients.map((rec) => (
               <div
                 key={rec.id}
-                className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-2"
+                className="p-5 rounded-3xl ikp-surface border border-[var(--ikp-border)] shadow-xs space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="font-extrabold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                  <h4 className="font-extrabold text-sm text-[var(--ikp-text)]">
                     {rec.nameBengali}
                   </h4>
                   <span
                     dir="rtl"
-                    className="text-xs font-serif text-[#176B4D] dark:text-[#9DD6B9]"
+                    className="text-xs font-serif text-[var(--ikp-primary)]"
                     style={{ fontFamily: "'Amiri', serif" }}
                   >
                     {rec.nameArabic}
                   </span>
                 </div>
-                <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">{rec.descriptionBengali}</p>
+                <p className="text-xs text-[var(--ikp-text-muted)] leading-relaxed">{rec.descriptionBengali}</p>
               <p className="text-[11px] text-[#717A74]">উৎস: {rec.source}</p>
               </div>
             ))}
@@ -539,15 +539,15 @@ export const ZakatScreen: React.FC<ZakatScreenProps> = ({ onBack }) => {
           {content?.faqs.map((faq, idx) => (
             <div
               key={faq.question}
-              className="p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-2"
+              className="p-5 rounded-3xl ikp-surface border border-[var(--ikp-border)] shadow-xs space-y-2"
             >
-              <h4 className="font-bold text-sm text-[#176B4D] dark:text-[#9DD6B9] flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#176B4D] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+              <h4 className="font-bold text-sm text-[var(--ikp-primary)] flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-[var(--ikp-primary)] text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">
                   {toBengaliNumerals(idx + 1)}
                 </span>
                 <span>{faq.question}</span>
               </h4>
-              <p className="text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed pl-7">{faq.answer}</p>
+              <p className="text-xs text-[var(--ikp-text-muted)] leading-relaxed pl-7">{faq.answer}</p>
               <p className="text-[11px] text-[#717A74] pl-7">উৎস: {faq.source}</p>
             </div>
           ))}
