@@ -221,15 +221,15 @@ export const HadithScreen: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6 pb-28 animate-in fade-in duration-300">
+    <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:py-7 space-y-5 pb-28 animate-in fade-in duration-300">
       {/* Hero */}
-      <div className="rounded-3xl p-6 bg-gradient-to-r from-[#176B4D] via-[#12583e] to-[#0A3D2B] text-white shadow-md space-y-4">
+      <div className="rounded-[28px] p-5 sm:p-7 bg-gradient-to-r from-[#176B4D] via-[#12583e] to-[#0A3D2B] shadow-lg shadow-emerald-950/10 text-white shadow-md space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-xs font-bold text-[#9DD6B9] uppercase tracking-wider">
               সহীহ হাদিস ভাণ্ডার
             </span>
-            <h1 className="text-2xl font-black">হাদিস ও সুন্নাহ</h1>
+            <h1 className="text-[26px] sm:text-3xl font-black tracking-tight">হাদিস ও সুন্নাহ</h1>
             <p className="text-xs text-white/80">
               সিহাহ সিত্তাহ ও ইমাম নববীর ৪০ হাদিস
             </p>
@@ -240,7 +240,7 @@ export const HadithScreen: React.FC = () => {
         </div>
 
         {dailyHadith && (
-          <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-2">
+          <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 space-y-2">
             <div className="flex items-center justify-between text-xs gap-2">
               <span className="font-extrabold text-[#9DD6B9] flex items-center gap-1.5 min-w-0">
                 <Sparkles className="w-3.5 h-3.5 shrink-0" />
@@ -285,7 +285,7 @@ export const HadithScreen: React.FC = () => {
       </div>
 
       {/* API status */}
-      <div className="flex items-center justify-between rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-white dark:bg-[#1A221C] px-4 py-3 text-xs">
+      <div className="flex items-center justify-between ikp-surface rounded-2xl px-4 py-3 text-xs">
         <div className="flex items-center gap-2 font-semibold">
           <span
             className={
@@ -321,7 +321,7 @@ export const HadithScreen: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#E8EFEA] dark:bg-[#222C25] overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[var(--ikp-surface-muted)] border border-[var(--ikp-border)] overflow-x-auto no-scrollbar">
         {(
           [
             { id: 'topics' as HadithTab, label: 'বিষয়ভিত্তিক', icon: Layers },
@@ -340,8 +340,8 @@ export const HadithScreen: React.FC = () => {
             onClick={() => setActiveTab(id)}
             className={`flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === id
-                ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-                : 'text-[#414A45] dark:text-[#C1CAC4]'
+                ? 'bg-[var(--ikp-surface)] text-[var(--ikp-primary)] shadow-sm'
+                : 'text-[var(--ikp-text-muted)]'
             }`}
           >
             <Icon className="w-4 h-4" />
@@ -364,7 +364,7 @@ export const HadithScreen: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="হাদিস, বর্ণনাকারী বা বিষয় খুঁজুন..."
-                className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 text-xs font-medium text-[#181D19] dark:text-[#E1E5E1] placeholder:text-[#717A74] focus:outline-none focus:ring-2 focus:ring-[#176B4D]"
+                className="w-full pl-10 pr-10 py-3 rounded-2xl ikp-surface text-sm font-medium text-[var(--ikp-text)] placeholder:text-[var(--ikp-text-muted)] ikp-focus-ring"
               />
               {searchQuery && (
                 <button
@@ -377,7 +377,7 @@ export const HadithScreen: React.FC = () => {
               )}
             </div>
 
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] self-start sm:self-auto shrink-0 text-xs">
+            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[var(--ikp-surface-muted)] self-start sm:self-auto shrink-0 text-xs">
               <span className="text-[11px] font-bold text-[#717A74] px-2">মান:</span>
               {(['ALL', 'SAHIH', 'HASAN'] as const).map((g) => (
                 <button
@@ -390,8 +390,8 @@ export const HadithScreen: React.FC = () => {
                         ? 'bg-emerald-600 text-white shadow-xs'
                         : g === 'HASAN'
                         ? 'bg-teal-600 text-white shadow-xs'
-                        : 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-                      : 'text-[#414A45] dark:text-[#C1CAC4]'
+                        : 'bg-[var(--ikp-surface)] text-[var(--ikp-primary)] shadow-sm'
+                      : 'text-[var(--ikp-text-muted)]'
                   }`}
                 >
                   {g === 'ALL' ? 'সকল' : g === 'SAHIH' ? 'সহীহ' : 'হাসান'}
@@ -415,8 +415,8 @@ export const HadithScreen: React.FC = () => {
                     onClick={() => setSelectedTopicId(topic.id)}
                     className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
                       isSelected
-                        ? 'bg-[#176B4D] text-white shadow-xs'
-                        : 'bg-white dark:bg-[#1A221C] text-[#414A45] dark:text-[#C1CAC4] border border-[#E8EFEA] dark:border-[#3A4D43]/60'
+                        ? 'bg-[var(--ikp-primary)] text-white shadow-xs'
+                        : 'bg-white dark:bg-[#1A221C] text-[var(--ikp-text-muted)] border border-[#E8EFEA] dark:border-[#3A4D43]/60'
                     }`}
                   >
                     {renderTopicIcon(topic.iconName)}
@@ -447,7 +447,7 @@ export const HadithScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={reloadHadiths}
-                className="px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold inline-flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold inline-flex items-center gap-1.5"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 আবার চেষ্টা করুন
@@ -460,7 +460,7 @@ export const HadithScreen: React.FC = () => {
                   type="button"
                   onClick={loadNextSection}
                   disabled={loadingMore}
-                  className="px-5 py-2.5 rounded-2xl bg-[#176B4D] text-white text-xs font-bold disabled:opacity-60"
+                  className="px-5 py-2.5 rounded-2xl bg-[var(--ikp-primary)] text-white text-xs font-bold disabled:opacity-60"
                 >
                   {loadingMore
                     ? 'আরও হাদিস লোড হচ্ছে…'
@@ -470,7 +470,7 @@ export const HadithScreen: React.FC = () => {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[var(--ikp-text-muted)] px-1">
                 <span>
                   {activeTab === 'bookmarks'
                     ? `সংরক্ষিত: ${toBengaliNumerals(filteredHadiths.length)} টি`
@@ -496,7 +496,7 @@ export const HadithScreen: React.FC = () => {
                         ? 'এখনো কোনো হাদিস বুকমার্ক করা হয়নি'
                         : 'কোনো হাদিস মেলেনি'}
                     </h4>
-                    <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
+                    <p className="text-xs text-[var(--ikp-text-muted)]">
                       {activeTab === 'bookmarks'
                         ? 'হাদিসের পাশে বুকমার্ক আইকনে চাপ দিয়ে সংরক্ষণ করুন।'
                         : 'অন্য শব্দ বা মান ফিল্টার দিয়ে চেষ্টা করুন।'}
