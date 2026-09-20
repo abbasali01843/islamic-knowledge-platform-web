@@ -8,37 +8,36 @@
 
 | Area | Status |
 |---|---|
-| Typecheck | ✅ Passed |
-| Production build | ✅ Passed |
-| CI artifact upload | ✅ Passed |
-| Online-only content policy | ✅ Audited |
+| Typecheck | ⏳ Re-run required after audit fixes |
+| Production build | ⏳ Re-run required after audit fixes |
+| CI artifact upload | ⏳ Re-run required after audit fixes |
+| Online-only Islamic content policy | ✅ Audited; device preferences use localStorage, Islamic content is not persisted locally |
 | PWA install flow | ✅ Implemented |
 | SPA deep links | ✅ Implemented |
 | Geolocation | ✅ Implemented |
 | Prayer API + fallback | ✅ Implemented |
+| Prayer preference persistence | ✅ All declared calculation methods supported |
 | Monthly prayer timetable | ✅ Implemented |
-| Hijri calendar | ✅ Implemented |
-| Quran live reader | ✅ Implemented |
+| Hijri calendar | ✅ Implemented; selected-location timezone is used for date conversion |
+| Quran live reader | ✅ Implemented; API requests now have a 10s timeout |
 | Hadith live API | ✅ Implemented |
-| Dua live API | ✅ Implemented |
+| Dua live API | ⚠️ Implemented; first-page load currently makes multiple detail requests |
 | Zakat/Nisab | ✅ Implemented |
-| Qibla compass | ✅ Implemented |
-| Global Islamic Search | ✅ Implemented |
-| Navigation/accessibility pass | ✅ Completed |
-| Performance pass | ✅ Completed |
-| SEO metadata pass | ✅ Completed |
-| Production deployment | ✅ Vercel deployment verified |
+| Qibla compass | ⚠️ Implemented; real-device verification pending |
+| Global Islamic Search | ⚠️ Implemented; does not search all live content |
+| Navigation/accessibility pass | ⚠️ Implemented; automated accessibility verification pending |
+| Performance pass | ⚠️ Implemented; production measurement pending |
+| SEO metadata pass | ⚠️ Basic metadata only; route-specific metadata/SSR remains future work |
+| Production deployment | ⏳ Vercel status must be re-verified after new commits |
 | Real-device QA | ⏳ Pending |
 
-## Known limitations
+## Current audit findings
 
-- Global search currently covers Quran metadata and platform modules, not full live Quran/Hadith/Dua content.
-- Route-specific metadata/SSR is a future enhancement.
-- Qibla orientation behavior varies by device/browser and needs real-device verification.
-- Hadith rendering is capped and API loading is progressive; full virtualization remains a future optimization if larger result sets are introduced.
-- External APIs may change or become unavailable.
-- Fiqh-sensitive guidance requires careful source attribution.
-- Account/cloud synchronization is intentionally deferred.
+- Hijri date conversion now uses the selected location timezone instead of browser-local calendar fields.
+- Quran API requests now abort after 10 seconds and support caller cancellation.
+- Prayer preferences now preserve IFB, MWL, ISNA, Umm al-Qura and Egypt selections.
+- Documentation now reflects actual localStorage use for device preferences and the salah tracker.
+- No meaningful automated regression test suite is present yet.
 
 ## Production QA checklist
 
@@ -59,10 +58,8 @@
 
 ## Next milestone
 
-**Real-device QA on the deployed Release Candidate**
+**Automated regression tests + real-device QA**
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest accessibility commit: `564bf1c6f684f1ebe81b89d7911e1c26829b4693`  
-Vercel status for latest commit: **SUCCESS**  
-GitHub Actions for latest accessibility commits: **not independently verified**.
+Latest audited commit: `e34f28230c3cb8d3bd124d316d617bb2d200ac2c`
