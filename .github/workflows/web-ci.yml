@@ -1,6 +1,5 @@
 name: Web CI
-# CI runs typecheck and production build on every Web/PWA source change.
-# Verification trigger: final typecheck and production build.
+# CI runs typecheck, production build, and lightweight regression smoke checks.
 
 on:
   push:
@@ -16,6 +15,7 @@ on:
       - 'web/**'
       - 'public/**'
       - 'content/**'
+      - 'scripts/**'
       - '.github/workflows/web-ci.yml'
   pull_request:
     branches: [ main ]
@@ -29,6 +29,8 @@ on:
       - 'tsconfig.json'
       - 'web/**'
       - 'public/**'
+      - 'content/**'
+      - 'scripts/**'
       - '.github/workflows/web-ci.yml'
   workflow_dispatch:
 
@@ -41,7 +43,7 @@ concurrency:
 
 jobs:
   build:
-    name: Lint and build Web app
+    name: Lint, build and smoke-test Web app
     runs-on: ubuntu-latest
 
     steps:
@@ -63,12 +65,11 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Regression smoke test
+        run: npm run test:smoke
+
       - name: Upload web dist
         uses: actions/upload-artifact@v4
         with:
           name: islamic-knowledge-platform-web
           path: dist
-
-
-
-
