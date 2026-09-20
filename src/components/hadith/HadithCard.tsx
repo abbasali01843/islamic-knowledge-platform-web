@@ -145,7 +145,7 @@ export const HadithCard: React.FC<HadithCardProps> = ({
           <button
             type="button"
             onClick={() => setShowExplanation(!showExplanation)}
-            className="flex items-center gap-1 font-semibold text-[var(--ikp-primary)] hover:underline"
+            className="ikp-focus-ring flex items-center gap-1 font-semibold text-[var(--ikp-primary)] hover:underline rounded-lg px-2 py-1"
           >
             <BookOpen className="w-3.5 h-3.5" />
             <span>{showExplanation ? 'তাৎপর্য লুকান' : 'হাদিসের শিক্ষা ও তাৎপর্য'}</span>
