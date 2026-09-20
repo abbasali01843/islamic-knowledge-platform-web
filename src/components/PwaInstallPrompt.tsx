@@ -54,13 +54,15 @@ export const PwaInstallPrompt: React.FC = () => {
       <>
         <button
           type="button"
+          aria-expanded={showIosHelp}
+          aria-controls="ios-install-help"
           onClick={() => setShowIosHelp((value) => !value)}
           className="fixed bottom-20 right-4 z-40 px-4 py-3 rounded-2xl bg-[#176B4D] text-white shadow-lg text-xs font-bold hover:opacity-95"
         >
           iPhone-এ ইনস্টল
         </button>
         {showIosHelp && (
-          <div className="fixed bottom-36 right-4 z-40 w-[min(320px,calc(100vw-2rem))] p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43] shadow-xl text-xs leading-relaxed">
+          <div id="ios-install-help" role="dialog" aria-label="iPhone-এ ইনস্টল নির্দেশনা" className="fixed bottom-36 right-4 z-40 w-[min(320px,calc(100vw-2rem))] p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43] shadow-xl text-xs leading-relaxed">
             Safari-তে এই পেজের <strong>Share</strong> বাটনে চাপুন, তারপর <strong>Add to Home Screen</strong> নির্বাচন করুন।
             <button type="button" onClick={() => setShowIosHelp(false)} className="block mt-3 text-[#176B4D] dark:text-[#9DD6B9] font-bold">
               বন্ধ করুন
