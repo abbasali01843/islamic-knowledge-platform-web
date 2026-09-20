@@ -39,6 +39,7 @@ export const HadithScreen: React.FC = () => {
   const [apiState, setApiState] = useState<'loading' | 'online' | 'error'>('loading');
   const [nextSection, setNextSection] = useState(2);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(40);
 
   useEffect(() => {
     let cancelled = false;
@@ -133,6 +134,13 @@ export const HadithScreen: React.FC = () => {
 
     return list;
   }, [activeTab, selectedTopicId, gradeFilter, searchQuery, bookmarks, availableHadiths]);
+
+  useEffect(() => {
+    setVisibleCount(40);
+  }, [activeTab, selectedTopicId, gradeFilter, searchQuery]);
+
+  const renderedHadiths = filteredHadiths.slice(0, visibleCount);
+  const hasMoreVisibleHadiths = renderedHadiths.length < filteredHadiths.length;
 
   const renderTopicIcon = (iconName: string) => {
     switch (iconName) {
@@ -421,7 +429,7 @@ export const HadithScreen: React.FC = () => {
                 </p>
               </div>
             ) : (
-              filteredHadiths.map((hadith) => (
+              renderedHadiths.map((hadith) => (
                 <HadithCard
                   key={hadith.id}
                   hadith={hadith}
@@ -431,6 +439,17 @@ export const HadithScreen: React.FC = () => {
               ))
             )}
           </div>
+            <div className="flex justify-center pt-1">
+              {hasMoreVisibleHadiths && (
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((count) => Math.min(count + 40, filteredHadiths.length))}
+                  className="px-5 py-2.5 rounded-2xl border border-[#176B4D]/30 bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] text-xs font-bold"
+                >
+                  আরও {toBengaliNumerals(Math.min(40, filteredHadiths.length - renderedHadiths.length))}টি দেখুন
+                </button>
+              )}
+            </div>
         </div>
       )}
     </div>
