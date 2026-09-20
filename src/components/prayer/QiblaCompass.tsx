@@ -18,6 +18,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
   const [manualHeading, setManualHeading] = useState<number>(0);
   const [isManualMode, setIsManualMode] = useState<boolean>(false);
   const hasVibratedRef = useRef(false);
+  const orientationCleanupRef = useRef<(() => void) | null>(null);
 
   const qiblaBearing = calculateQiblaBearing(location.latitude, location.longitude);
   const distanceKm = calculateKaabaDistanceKm(location.latitude, location.longitude);
@@ -75,6 +76,9 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
   };
 
   const attachOrientationListener = () => {
+    // Prevent duplicate listeners when permission is requested more than once.
+    orientationCleanupRef.current?.();
+
     const handleOrientation = (e: DeviceOrientationEvent) => {
       let heading: number | null = null;
 
@@ -96,10 +100,13 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
     window.addEventListener('deviceorientation', handleOrientation, true);
     window.addEventListener('deviceorientationabsolute' as unknown as keyof WindowEventMap, handleOrientation as unknown as EventListener, true);
 
-    return () => {
+    orientationCleanupRef.current = () => {
       window.removeEventListener('deviceorientation', handleOrientation, true);
       window.removeEventListener('deviceorientationabsolute' as unknown as keyof WindowEventMap, handleOrientation as unknown as EventListener, true);
+      orientationCleanupRef.current = null;
     };
+
+    return orientationCleanupRef.current;
   };
 
   useEffect(() => {
@@ -113,6 +120,10 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
     } else {
       attachOrientationListener();
     }
+
+    return () => {
+      orientationCleanupRef.current?.();
+    };
   }, []);
 
   return (
@@ -210,10 +221,9 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
                 : 'border-[#176B4D]/20 dark:border-[#3A4D43] bg-white dark:bg-[#1A231D]'
             }`}
             style={{
-              transform: `rotate(${-currentHeading}deg)`,
+              transform: `rotate(-${currentHeading}deg)`,
             }}
           >
-            {/* Cardinal Marks: N, E, S, W */}
             <div className="absolute top-2 text-center font-bold text-sm text-rose-600">
               N<span className="block text-[9px] font-normal text-[#717A74]">উত্তর (০°)</span>
             </div>
@@ -227,7 +237,6 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
               W<span className="block text-[9px] font-normal text-[#717A74]">পশ্চিম (২৭০°)</span>
             </div>
 
-            {/* Degree ticks */}
             {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
               <div
                 key={deg}
@@ -241,7 +250,6 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
               />
             ))}
 
-            {/* Kaaba Marker on the outer ring at exact Qibla Bearing */}
             <div
               className="absolute w-full h-full flex flex-col items-center pointer-events-none"
               style={{
@@ -249,7 +257,6 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
               }}
             >
               <div className="mt-1 flex flex-col items-center">
-                {/* Kaaba Cube Icon */}
                 <div className="w-8 h-8 rounded-lg bg-black text-[#D4AF37] border-2 border-[#D4AF37] flex items-center justify-center shadow-lg font-bold text-[10px] transform -rotate-45">
                   <span className="transform rotate-45">🕋</span>
                 </div>
@@ -259,7 +266,6 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
               </div>
             </div>
 
-            {/* Inner Center Circle with Subtle Arabesque Ring */}
             <div className="w-36 h-36 rounded-full border border-dashed border-[#176B4D]/30 dark:border-[#9DD6B9]/30 flex flex-col items-center justify-center p-2 text-center">
               <span className="text-xs text-[#717A74] dark:text-[#8B958E]">
                 {location.nameBengali}
@@ -273,14 +279,12 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             </div>
           </div>
 
-          {/* Top Device Target Pointer (Fixed at top of screen) */}
           <div className="absolute -top-3 w-6 h-6 flex items-center justify-center pointer-events-none z-20">
             <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[14px] border-t-rose-600 drop-shadow-md" />
           </div>
         </div>
       </div>
 
-      {/* Manual Compass Heading Slider (For desktop or testing) */}
       {isManualMode && (
         <div className="p-4 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] space-y-3">
           <div className="flex items-center justify-between text-xs">
@@ -309,7 +313,6 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
         </div>
       )}
 
-      {/* Practical Guide for Bangladesh */}
       <div className="p-4 rounded-2xl bg-[#F0F5F1] dark:bg-[#1E2721] border border-black/5 dark:border-white/5 space-y-2 text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">
         <div className="flex items-center gap-1.5 font-bold text-[#176B4D] dark:text-[#9DD6B9]">
           <AlertCircle className="w-4 h-4" />
