@@ -29,7 +29,12 @@ const checks = [
   ['Reduced-motion preference is handled', 'src/index.css', 'prefers-reduced-motion'],
   ['Primary navigation has an accessible label', 'src/components/Navbar.tsx', 'aria-label="প্রধান নেভিগেশন"'],
   ['Primary navigation exposes active state', 'src/components/Navbar.tsx', 'aria-current'],
-  ['Search dialog has an accessible name', 'src/App.tsx', 'aria-labelledby="ikp-search-title"']
+  ['Search dialog has an accessible name', 'src/App.tsx', 'aria-labelledby="ikp-search-title"'],
+  ['Deep-link route handling is present', 'src/App.tsx', "window.location.pathname"],
+  ['Browser back/forward handling is present', 'src/App.tsx', "popstate"],
+  ['Hadith API has upstream fallback candidates', 'src/services/hadithApi.ts', 'raw.githubusercontent.com'],
+  ['Hadith API has timeout protection', 'src/services/hadithApi.ts', 'REQUEST_TIMEOUT_MS'],
+  ['Dua API preserves source attribution', 'src/services/duaApi.ts', 'DUA_SOURCE_URL']
 ];
 for (const [label, file, needle] of checks) {
   const content = readFileSync(join(root, file), 'utf8');
