@@ -186,7 +186,7 @@ export const DuaScreen: React.FC = () => {
           {loading ? (
             <div className="p-14 text-center">
               <Loader2 className="w-7 h-7 animate-spin mx-auto text-[var(--ikp-primary)]" />
-              <p className="text-xs text-[#717A74] mt-3">দোয়া লোড হচ্ছে…</p>
+              <p className="text-xs text-[var(--ikp-text-muted)] mt-3">দোয়া লোড হচ্ছে…</p>
             </div>
           ) : error ? (
             <div className="p-8 text-center rounded-3xl border border-red-200 bg-red-50 dark:bg-red-950/20">
@@ -204,7 +204,7 @@ export const DuaScreen: React.FC = () => {
             </div>
           ) : morningEvening.length === 0 ? (
             <div className="p-10 text-center rounded-2xl ikp-surface">
-              <p className="text-sm text-[#717A74]">
+              <p className="text-sm text-[var(--ikp-text-muted)]">
                 সকাল-সন্ধ্যার দোয়া এখনো লোড হয়নি। "সব দোয়া" ট্যাব থেকে দেখুন।
               </p>
             </div>
@@ -225,7 +225,7 @@ export const DuaScreen: React.FC = () => {
         <div className="space-y-5">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#717A74]" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ikp-text-muted)]" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -278,7 +278,7 @@ export const DuaScreen: React.FC = () => {
             </div>
           ) : filtered.length === 0 ? (
             <div className="p-10 text-center rounded-2xl ikp-surface">
-              <p className="text-sm text-[#717A74]">
+              <p className="text-sm text-[var(--ikp-text-muted)]">
                 {category === 'FAVORITES'
                   ? 'এখনো কোনো দোয়া বুকমার্ক করা হয়নি।'
                   : 'কোনো দোয়া মেলেনি।'}
