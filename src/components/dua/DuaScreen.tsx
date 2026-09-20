@@ -135,27 +135,27 @@ export const DuaScreen: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 space-y-6 pb-28">
+    <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:py-7 space-y-5 pb-28">
       <div>
-        <h1 className="text-2xl font-bold text-[#181D19] dark:text-[#E1E5E1]">
+        <h1 className="text-[26px] sm:text-3xl font-extrabold tracking-tight text-[var(--ikp-text)]">
           দোয়া ও যিকির
         </h1>
-        <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-1">
+        <p className="mt-1 text-sm text-[var(--ikp-text-muted)]">
           হিসনুল মুসলিম থেকে বাংলা অনুবাদসহ মাসনূন দোয়া
         </p>
       </div>
 
       {/* Primary tabs — morning-evening first for daily habit */}
-      <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#E8EFEA] dark:bg-[#222C25] rounded-2xl">
+      <div className="grid grid-cols-3 gap-1.5 p-1 bg-[var(--ikp-surface-muted)] border border-[var(--ikp-border)] rounded-2xl">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             type="button"
             onClick={() => setTab(id)}
-            className={`py-2.5 rounded-xl text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 transition-colors ${
+            className={`ikp-focus-ring py-2.5 rounded-xl text-xs font-bold flex flex-col sm:flex-row items-center justify-center gap-1 transition-colors ${
               tab === id
-                ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-                : 'text-[#717A74] dark:text-[#8B958E]'
+                ? 'bg-[var(--ikp-surface)] text-[var(--ikp-primary)] shadow-sm'
+                : 'text-[var(--ikp-text-muted)]'
             }`}
           >
             <Icon className="w-4 h-4" />
@@ -168,7 +168,7 @@ export const DuaScreen: React.FC = () => {
 
       {tab === 'MORNING_EVENING' && (
         <div className="space-y-4">
-          <div className="rounded-2xl p-4 bg-gradient-to-br from-[#176B4D] to-[#0E4933] text-white space-y-2">
+          <div className="rounded-[26px] p-5 bg-gradient-to-br from-[#176B4D] to-[#0B4A34] shadow-lg shadow-emerald-950/10 text-white space-y-2">
             <div className="flex items-center gap-2">
               {timeInfo.isMorning ? (
                 <Sun className="w-5 h-5 text-amber-200" />
@@ -184,8 +184,8 @@ export const DuaScreen: React.FC = () => {
           </div>
 
           {loading ? (
-            <div className="p-12 text-center">
-              <Loader2 className="w-7 h-7 animate-spin mx-auto text-[#176B4D]" />
+            <div className="p-14 text-center">
+              <Loader2 className="w-7 h-7 animate-spin mx-auto text-[var(--ikp-primary)]" />
               <p className="text-xs text-[#717A74] mt-3">দোয়া লোড হচ্ছে…</p>
             </div>
           ) : error ? (
@@ -196,14 +196,14 @@ export const DuaScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => window.location.reload()}
-                className="mt-3 px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold inline-flex items-center gap-1.5"
+                className="mt-3 px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold inline-flex items-center gap-1.5"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 আবার চেষ্টা করুন
               </button>
             </div>
           ) : morningEvening.length === 0 ? (
-            <div className="p-10 text-center rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60">
+            <div className="p-10 text-center rounded-2xl ikp-surface">
               <p className="text-sm text-[#717A74]">
                 সকাল-সন্ধ্যার দোয়া এখনো লোড হয়নি। "সব দোয়া" ট্যাব থেকে দেখুন।
               </p>
@@ -230,7 +230,7 @@ export const DuaScreen: React.FC = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="দোয়া, অর্থ বা বিষয় খুঁজুন..."
-                className="w-full pl-9 pr-3 py-3 rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43]/60 bg-white dark:bg-[#1A221C] text-xs text-[#181D19] dark:text-[#E1E5E1] focus:outline-none focus:ring-2 focus:ring-[#176B4D]"
+                className="w-full pl-9 pr-3 py-3 rounded-2xl ikp-surface text-sm text-[var(--ikp-text)] ikp-focus-ring"
               />
             </div>
           </div>
@@ -243,8 +243,8 @@ export const DuaScreen: React.FC = () => {
                 onClick={() => setCategory(c.id)}
                 className={`shrink-0 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
                   category === c.id
-                    ? 'bg-[#176B4D] text-white'
-                    : 'bg-[#E8EFEA] dark:bg-[#252F28] text-[#414A45] dark:text-[#C1CAC4]'
+                    ? 'bg-[var(--ikp-primary)] text-white'
+                    : 'bg-[var(--ikp-surface-muted)] text-[var(--ikp-text-muted)]'
                 }`}
               >
                 {c.id === 'FAVORITES' ? (
@@ -261,8 +261,8 @@ export const DuaScreen: React.FC = () => {
           </div>
 
           {loading ? (
-            <div className="p-12 text-center">
-              <Loader2 className="w-7 h-7 animate-spin mx-auto text-[#176B4D]" />
+            <div className="p-14 text-center">
+              <Loader2 className="w-7 h-7 animate-spin mx-auto text-[var(--ikp-primary)]" />
             </div>
           ) : error ? (
             <div className="p-8 text-center rounded-3xl border border-red-200 bg-red-50 dark:bg-red-950/20">
@@ -270,14 +270,14 @@ export const DuaScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={() => window.location.reload()}
-                className="mt-3 px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold inline-flex items-center gap-1.5"
+                className="mt-3 px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold inline-flex items-center gap-1.5"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 আবার চেষ্টা করুন
               </button>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="p-10 text-center rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60">
+            <div className="p-10 text-center rounded-2xl ikp-surface">
               <p className="text-sm text-[#717A74]">
                 {category === 'FAVORITES'
                   ? 'এখনো কোনো দোয়া বুকমার্ক করা হয়নি।'
@@ -295,7 +295,7 @@ export const DuaScreen: React.FC = () => {
             ))
           )}
 
-          <p className="text-[10px] text-[#717A74] dark:text-[#8B958E]">
+          <p className="text-[10px] text-[var(--ikp-text-muted)]">
             সূত্র:{' '}
             <a
               href={DUA_SOURCE_URL}
