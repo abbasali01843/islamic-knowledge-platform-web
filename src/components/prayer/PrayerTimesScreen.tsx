@@ -265,7 +265,7 @@ export const PrayerTimesScreen: React.FC = () => {
                   : 'text-[#414A45] dark:text-[#C1CAC4]'
               }`}
             >
-              IFB (১৮°)
+              ১৮°/১৮° (Karachi)
             </button>
             <button
               type="button"
