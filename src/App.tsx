@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Search, X } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Sun, Moon, Search, X, BookOpen, Clock, Compass, Calendar, Calculator, Sparkles, BookMarked, Moon as MoonIcon } from 'lucide-react';
 import type { Surah, HomeDestination } from './types';
 import { findQuranSurah } from './data/quranCatalog';
 import { HomeScreen } from './components/HomeScreen';
@@ -18,10 +18,133 @@ import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 type Special = 'LEARN_SALAH' | 'ZAKAT' | 'CALENDAR' | null;
 type WebModule = 'QIBLA' | 'RAMADAN' | 'HAJJ' | 'SEERAH' | 'QUIZ';
 
-const findQuranSurahs = (term: string) =>
-  Array.from({ length: 114 }, (_, i) => findQuranSurah(i + 1)).filter(
-    (s): s is Surah => !!s && `${s.number} ${s.nameBengali} ${s.nameEnglish}`.toLowerCase().includes(term)
-  );
+type SearchModule = {
+  path: string;
+  titleBn: string;
+  titleEn: string;
+  keywords: string;
+  category: 'ibadah' | 'ilm' | 'tools';
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+const SEARCH_MODULES: SearchModule[] = [
+  {
+    path: '/prayer',
+    titleBn: 'নামাজের সময় ও কিবলা',
+    titleEn: 'Prayer',
+    keywords: 'নামাজ সালাত ওয়াক্ত ফজর যোহর আসর মাগরিব এশা সেহরি ইফতার prayer salah',
+    category: 'ibadah',
+    icon: Clock,
+  },
+  {
+    path: '/qibla',
+    titleBn: 'কিবলা কম্পাস',
+    titleEn: 'Qibla',
+    keywords: 'কিবলা কাবা দিকনির্ণয় compass qibla',
+    category: 'ibadah',
+    icon: Compass,
+  },
+  {
+    path: '/dua',
+    titleBn: 'দোয়া ও যিকির',
+    titleEn: 'Dua',
+    keywords: 'দোয়া যিকির সকাল সন্ধ্যা তাসবীহ হিসনুল dua dhikr zikr',
+    category: 'ibadah',
+    icon: MoonIcon,
+  },
+  {
+    path: '/hadith',
+    titleBn: 'হাদিস ও সুন্নাহ',
+    titleEn: 'Hadith',
+    keywords: 'হাদিস বুখারী মুসলিম নববী সুন্নাহ hadith bukhari muslim',
+    category: 'ilm',
+    icon: BookMarked,
+  },
+  {
+    path: '/quran',
+    titleBn: 'কুরআন',
+    titleEn: 'Quran',
+    keywords: 'কুরআন কোরআন তিলাওয়াত সূরা আয়াত quran surah',
+    category: 'ilm',
+    icon: BookOpen,
+  },
+  {
+    path: '/learn/salah',
+    titleBn: 'সালাত ও অজু শিক্ষা',
+    titleEn: 'Salah guide',
+    keywords: 'অজু ওজু নামাজ শিক্ষা রাকাত wudu salah learn',
+    category: 'ilm',
+    icon: Sparkles,
+  },
+  {
+    path: '/zakat',
+    titleBn: 'যাকাত ক্যালকুলেটর',
+    titleEn: 'Zakat',
+    keywords: 'যাকাত নিসাব হিসাব zakat',
+    category: 'tools',
+    icon: Calculator,
+  },
+  {
+    path: '/calendar',
+    titleBn: 'হিজরি ক্যালেন্ডার',
+    titleEn: 'Calendar',
+    keywords: 'হিজরি চাঁদ ক্যালেন্ডার তারিখ hijri calendar',
+    category: 'tools',
+    icon: Calendar,
+  },
+  {
+    path: '/ramadan',
+    titleBn: 'রমজান',
+    titleEn: 'Ramadan',
+    keywords: 'রমজান রোজা সেহরি ইফতার ramadan',
+    category: 'ibadah',
+    icon: MoonIcon,
+  },
+  {
+    path: '/hajj',
+    titleBn: 'হজ ও উমরাহ',
+    titleEn: 'Hajj',
+    keywords: 'হজ উমরাহ hajj umrah',
+    category: 'ilm',
+    icon: Compass,
+  },
+  {
+    path: '/seerah',
+    titleBn: 'সীরাহ',
+    titleEn: 'Seerah',
+    keywords: 'সীরাহ রাসূল জীবনী seerah',
+    category: 'ilm',
+    icon: BookOpen,
+  },
+  {
+    path: '/quiz',
+    titleBn: 'ইসলামিক কুইজ',
+    titleEn: 'Quiz',
+    keywords: 'কুইজ প্রশ্ন quiz',
+    category: 'ilm',
+    icon: Sparkles,
+  },
+];
+
+const QUICK_SUGGESTIONS = [
+  { path: '/prayer', label: 'নামাজের সময়' },
+  { path: '/quran', label: 'কুরআন' },
+  { path: '/dua', label: 'সকাল-সন্ধ্যার দোয়া' },
+  { path: '/hadith', label: 'হাদিস' },
+  { path: '/qibla', label: 'কিবলা' },
+  { path: '/zakat', label: 'যাকাত' },
+];
+
+const findQuranSurahs = (term: string) => {
+  const q = term.trim().toLowerCase();
+  if (!q) return [];
+  return Array.from({ length: 114 }, (_, i) => findQuranSurah(i + 1)).filter((s): s is Surah => {
+    if (!s) return false;
+    const hay = `${s.number} ${s.nameBengali} ${s.nameEnglish} ${s.nameArabic}`.
+      toLowerCase();
+    return hay.includes(q);
+  });
+};
 
 const moduleByPath: Record<string, WebModule> = {
   '/qibla': 'QIBLA',
@@ -141,20 +264,20 @@ export const App: React.FC = () => {
   const selectedSurah = findQuranSurah(selectedSurahNumber);
   const isReaderOpen = selectedTab === 1 && !!selectedSurah;
   const searchTerm = search.trim().toLowerCase();
-  const searchSurahs = searchTerm ? findQuranSurahs(searchTerm).slice(0, 8) : [];
-  const searchModules = [
-    ['/prayer', 'নামাজের সময়', 'Prayer'],
-    ['/dua', 'দোয়া', 'Dua'],
-    ['/hadith', 'হাদিস', 'Hadith'],
-    ['/qibla', 'কিবলা', 'Qibla'],
-    ['/calendar', 'হিজরি ক্যালেন্ডার', 'Calendar'],
-    ['/zakat', 'যাকাত', 'Zakat'],
-    ['/learn/salah', 'সালাত শিক্ষা', 'Salah'],
-    ['/ramadan', 'রমজান', 'Ramadan'],
-    ['/hajj', 'হজ', 'Hajj'],
-    ['/seerah', 'সীরাহ', 'Seerah'],
-    ['/quiz', 'কুইজ', 'Quiz'],
-  ].filter(([, bn, en]) => !searchTerm || `${bn} ${en}`.toLowerCase().includes(searchTerm));
+
+  const searchSurahs = useMemo(
+    () => (searchTerm ? findQuranSurahs(searchTerm).slice(0, 12) : []),
+    [searchTerm]
+  );
+
+  const searchModules = useMemo(() => {
+    if (!searchTerm) return SEARCH_MODULES;
+    return SEARCH_MODULES.filter((m) =>
+      `${m.titleBn} ${m.titleEn} ${m.keywords}`.toLowerCase().includes(searchTerm)
+    );
+  }, [searchTerm]);
+
+  const hasResults = searchSurahs.length > 0 || searchModules.length > 0;
 
   const openSurah = (surah: Surah, ayahNumber: number | null) => {
     window.history.pushState({}, '', '/quran/' + surah.number);
@@ -183,6 +306,16 @@ export const App: React.FC = () => {
   const handleContinueReading = (surahNumber: number, ayahNumber: number) => {
     const surah = findQuranSurah(surahNumber);
     if (surah) openSurah(surah, ayahNumber);
+  };
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearch('');
+  };
+
+  const goFromSearch = (path: string) => {
+    closeSearch();
+    navigate(path);
   };
 
   return (
@@ -233,62 +366,116 @@ export const App: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-label="ইসলামিক অনুসন্ধান"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeSearch();
+          }}
         >
           <div className="max-w-2xl mx-auto mt-4 rounded-3xl bg-white dark:bg-[#1A221C] shadow-2xl border border-[#E8EFEA] dark:border-[#3A4D43] overflow-hidden">
             <div className="flex items-center gap-2 p-3 border-b border-[#E8EFEA] dark:border-[#3A4D43]">
-              <Search className="w-5 h-5 text-[#176B4D]" />
+              <Search className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
               <input
                 autoFocus
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Escape') setSearchOpen(false);
+                  if (e.key === 'Escape') closeSearch();
                 }}
-                placeholder="কুরআন, দোয়া, হাদিস, কিবলা... খুঁজুন"
-                className="flex-1 bg-transparent outline-none text-sm"
+                placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..."
+                className="flex-1 bg-transparent outline-none text-sm text-[#181D19] dark:text-[#E1E5E1]"
               />
-              <button type="button" onClick={() => setSearchOpen(false)} aria-label="অনুসন্ধান বন্ধ করুন">
-                <X className="w-5 h-5" />
+              <button type="button" onClick={closeSearch} aria-label="অনুসন্ধান বন্ধ করুন">
+                <X className="w-5 h-5 text-[#717A74]" />
               </button>
             </div>
-            <div className="max-h-[70vh] overflow-y-auto p-3 space-y-2">
+
+            <div className="max-h-[70vh] overflow-y-auto p-3 space-y-4">
               {!searchTerm && (
-                <p className="text-xs text-[#717A74] px-2 py-3">
-                  সূরা, ইসলামিক ফিচার বা মডিউলের নাম দিয়ে খুঁজুন।
-                </p>
-              )}
-              {searchSurahs.map((s) => (
-                <button
-                  key={s.number}
-                  type="button"
-                  onClick={() => {
-                    setSearchOpen(false);
-                    openSurah(s, null);
-                  }}
-                  className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25]"
-                >
-                  <div className="font-bold text-sm">{s.nameBengali}</div>
-                  <div className="text-[11px] text-[#717A74]">
-                    সূরা {s.number} • {s.nameEnglish}
+                <div className="space-y-3">
+                  <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">
+                    দ্রুত অ্যাকসেস
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {QUICK_SUGGESTIONS.map((s) => (
+                      <button
+                        key={s.path}
+                        type="button"
+                        onClick={() => goFromSearch(s.path)}
+                        className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#E8EFEA] dark:bg-[#252F28] text-[#176B4D] dark:text-[#9DD6B9]"
+                      >
+                        {s.label}
+                      </button>
+                    ))}
                   </div>
-                </button>
-              ))}
-              {searchModules.map(([path, bn, en]) => (
-                <button
-                  key={path}
-                  type="button"
-                  onClick={() => {
-                    setSearchOpen(false);
-                    navigate(path);
-                  }}
-                  className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25]"
-                >
-                  <div className="font-bold text-sm">{bn}</div>
-                  <div className="text-[11px] text-[#717A74]">{en}</div>
-                </button>
-              ))}
-              {searchTerm && !searchSurahs.length && !searchModules.length && (
-                <p className="text-sm text-center text-[#717A74] py-8">কোনো ফল পাওয়া যায়নি।</p>
+                  <p className="text-[11px] text-[#717A74] px-1 pt-1">
+                    সূরার নাম (বাংলা/ইংরেজি/আরবি) বা ফিচারের নাম লিখে খুঁজুন।
+                  </p>
+                </div>
+              )}
+
+              {searchTerm && searchSurahs.length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">
+                    কুরআনের সূরা
+                  </p>
+                  {searchSurahs.map((s) => (
+                    <button
+                      key={s.number}
+                      type="button"
+                      onClick={() => {
+                        closeSearch();
+                        openSurah(s, null);
+                      }}
+                      className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25] flex items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                          {s.nameBengali}
+                        </div>
+                        <div className="text-[11px] text-[#717A74]">
+                          সূরা {s.number} • {s.nameEnglish} • {s.ayahCount} আয়াত
+                        </div>
+                      </div>
+                      <span className="text-lg font-serif text-[#176B4D] dark:text-[#9DD6B9] shrink-0" dir="rtl">
+                        {s.nameArabic}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {searchModules.length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">
+                    {searchTerm ? 'ফিচার ও টুলস' : 'সব ফিচার'}
+                  </p>
+                  {searchModules.map((m) => {
+                    const Icon = m.icon;
+                    return (
+                      <button
+                        key={m.path}
+                        type="button"
+                        onClick={() => goFromSearch(m.path)}
+                        className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25] flex items-center gap-3"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-[#D4F2E2] dark:bg-[#005236] flex items-center justify-center text-[#176B4D] dark:text-[#9DD6B9] shrink-0">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                            {m.titleBn}
+                          </div>
+                          <div className="text-[11px] text-[#717A74]">{m.titleEn}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {searchTerm && !hasResults && (
+                <p className="text-sm text-center text-[#717A74] py-10">
+                  কোনো ফল পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।
+                </p>
               )}
             </div>
           </div>
