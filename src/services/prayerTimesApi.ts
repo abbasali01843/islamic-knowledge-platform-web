@@ -116,7 +116,7 @@ interface AlAdhanCalendarResponse {
 
 function parseCalendarDate(value: string | undefined, timezone: number): Date | undefined {
   if (!value) return undefined;
-  const match = value.match(/^(\\d{2})-(\\d{2})-(\\d{4})$/);
+  const match = value.match(/^(\d{2})-(\d{2})-(\d{4})$/);
   if (!match) return undefined;
   const day = Number(match[1]);
   const month = Number(match[2]);
