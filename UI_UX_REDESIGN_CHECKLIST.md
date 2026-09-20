@@ -68,13 +68,13 @@
 
 ## Phase 4 — Quran
 
-- [ ] Redesign Surah browsing/list UI.
-- [ ] Improve search/filter presentation.
-- [ ] Redesign reader header and controls.
-- [ ] Improve Arabic/Bengali reading hierarchy.
+- [x] Redesign Surah browsing/list UI.
+- [x] Improve search/filter presentation.
+- [x] Redesign reader header and controls.
+- [x] Improve Arabic/Bengali reading hierarchy.
 - [ ] Improve ayah spacing and readability.
-- [ ] Improve last-read/resume flow.
-- [ ] Improve reader navigation.
+- [x] Improve last-read/resume flow.
+- [x] Improve reader navigation.
 - [ ] Preserve live API behavior and timeout/cancellation handling.
 - [ ] Acceptance: open Surah, read, resume, and route/deep-link behavior work.
 
