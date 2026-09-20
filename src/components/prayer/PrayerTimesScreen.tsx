@@ -117,7 +117,7 @@ export const PrayerTimesScreen: React.FC = () => {
 
   const locationDayKey = useMemo(() => {
     const shifted = new Date(currentTime.getTime() + location.timezone * 60 * 60 * 1000);
-    return \`${shifted.getUTCFullYear()}-${shifted.getUTCMonth() + 1}-${shifted.getUTCDate()}\`;
+    return `${shifted.getUTCFullYear()}-${shifted.getUTCMonth() + 1}-${shifted.getUTCDate()}`;
   }, [currentTime, location.timezone]);
 
   // Use AlAdhan as the primary timing source. The local astronomical calculation
@@ -284,7 +284,7 @@ export const PrayerTimesScreen: React.FC = () => {
 
       <div className="flex items-center justify-between px-1 text-[11px] text-[#717A74] dark:text-[#8B958E]">
         <span>সময় গণনা: {timingSource === 'api' ? 'AlAdhan লাইভ API' : 'স্থানীয় গণনা (fallback)'}</span>
-        <span>{location.country === 'বাংলাদেশ' ? 'UTC+৬' : \`UTC${location.timezone >= 0 ? '+' : ''}${location.timezone}\`}</span>
+        <span>{location.country === 'বাংলাদেশ' ? 'UTC+৬' : `UTC${location.timezone >= 0 ? '+' : ''}${location.timezone}`}</span>
       </div>
 
       {/* Navigation Sub-Tabs */}
