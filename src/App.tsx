@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Suspense, lazy } from 'react';
 import { Sun, Moon, Search, X, BookOpen, Clock, Compass, Calendar, Calculator, Sparkles, BookMarked, Moon as MoonIcon, Loader2 } from 'lucide-react';
 import type { Surah, HomeDestination } from './types';
 import { findQuranSurah } from './data/quranCatalog';
@@ -107,6 +107,7 @@ export const App: React.FC = () => {
   const [searchCategory, setSearchCategory] = useState<'ALL' | SearchModule['category']>('ALL');
   const [activeSpecialModule, setActiveSpecialModule] = useState<Special>(null);
   const [isOnline, setIsOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
   );
@@ -212,7 +213,12 @@ export const App: React.FC = () => {
     if (surah) openSurah(surah, ayahNumber);
   };
 
-  const closeSearch = () => { setSearchOpen(false); setSearch(''); setSearchCategory('ALL'); };
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearch('');
+    setSearchCategory('ALL');
+    window.requestAnimationFrame(() => searchTriggerRef.current?.focus());
+  };
 
   useEffect(() => {
     if (!searchOpen) return;
@@ -234,16 +240,16 @@ export const App: React.FC = () => {
               <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-[var(--ikp-primary-soft)] text-[var(--ikp-primary-strong)] font-semibold">Web</span>
             </div>
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setSearchOpen(true)} aria-label="ইসলামিক অনুসন্ধান খুলুন" className="p-2 rounded-xl text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"><Search className="w-5 h-5" /></button>
-              <a {...navLink('/qibla')} aria-label="কিবলা খুলুন" className="px-3 py-2 rounded-xl bg-[var(--ikp-primary-soft)] text-[var(--ikp-primary)] text-xs font-bold">কিবলা</a>
-              <button type="button" onClick={() => setIsDarkMode((v) => !v)} aria-label={isDarkMode ? 'লাইট মোড' : 'ডার্ক মোড'} className="p-2 rounded-xl text-[#414A45] dark:text-[#C1CAC4] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors">{isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
+              <button ref={searchTriggerRef} type="button" onClick={() => setSearchOpen(true)} aria-label="ইসলামিক অনুসন্ধান খুলুন" className="ikp-focus-ring p-2 rounded-xl text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"><Search className="w-5 h-5" /></button>
+              <a {...navLink('/qibla')} aria-label="কিবলা খুলুন" className="ikp-focus-ring px-3 py-2 rounded-xl bg-[var(--ikp-primary-soft)] text-[var(--ikp-primary)] text-xs font-bold">কিবলা</a>
+              <button type="button" onClick={() => setIsDarkMode((v) => !v)} aria-label={isDarkMode ? 'লাইট মোড' : 'ডার্ক মোড'} className="ikp-focus-ring p-2 rounded-xl text-[var(--ikp-text-muted)] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors">{isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
             </div>
           </div>
         </header>
       )}
 
       {searchOpen && (
-        <div className="fixed inset-0 z-50 bg-black/35 backdrop-blur-md p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="ইসলামিক অনুসন্ধান" onClick={(e) => { if (e.target === e.currentTarget) closeSearch(); }}>
+        <div className="fixed inset-0 z-50 bg-black/35 backdrop-blur-md p-4 sm:p-8" id="ikp-search-dialog" role="dialog" aria-modal="true" aria-labelledby="ikp-search-title" onClick={(e) => { if (e.target === e.currentTarget) closeSearch(); }}>
           <div className="max-w-2xl mx-auto mt-4 rounded-3xl ikp-surface shadow-2xl overflow-hidden">
             <div className="flex items-center gap-2 p-3 border-b border-[var(--ikp-border)]">
               <Search className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
