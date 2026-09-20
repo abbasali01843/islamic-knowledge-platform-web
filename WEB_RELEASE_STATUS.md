@@ -8,9 +8,9 @@
 
 | Area | Status |
 |---|---|
-| Typecheck | ⏳ GitHub Actions run not exposed for latest commit; not independently verified |
-| Production build | ⏳ Latest Vercel deployment succeeded, but build log is not exposed here |
-| CI artifact upload | ⚠️ GitHub Actions status not exposed by connected check; Vercel build is successful |
+| Typecheck | ✅ GitHub Actions passed on `dc1bb955` |
+| Production build | ✅ GitHub Actions production build passed on `dc1bb955` |
+| CI artifact upload | ⏳ Not completed on `dc1bb955` because the prayer regression step failed first |
 | Online-only Islamic content policy | ✅ Audited; device preferences use localStorage, Islamic content is not persisted locally |
 | PWA install flow | ✅ Implemented |
 | SPA deep links | ✅ Implemented |
@@ -42,6 +42,7 @@
 ## Verification snapshot
 
 - Vercel deployment for `856b875b` reports **Success**.
+- GitHub Actions run `35522728008` exposed the exact failure: the prayer regression helper returned `180°` for the exact Kaaba coordinate; typecheck, production build, and smoke test all passed.
 - Connected GitHub interface exposes **no workflow run** for `856b875b`; CI execution is therefore not independently verified here.
 - Browser/device QA remains pending and is not being represented as complete.
 
@@ -68,4 +69,4 @@
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest audited commit: `856b875b42150647522447384ff5e8dbfe9e0ce1`
+Latest audited commit: `ad2b04e5085bde9644872c45006a277136e49931`
