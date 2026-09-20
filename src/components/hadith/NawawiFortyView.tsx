@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BookOpen, Sparkles, ChevronRight, Copy, Check, Loader2 } from 'lucide-react';
+import { Sparkles, ChevronRight, Copy, Check, Loader2 } from 'lucide-react';
 import { HadithItem } from '../../types/hadith';
 import { fetchHadithSection } from '../../services/hadithApi';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
