@@ -250,10 +250,10 @@ export const App: React.FC = () => {
 
       {searchOpen && (
         <div className="fixed inset-0 z-50 bg-black/35 backdrop-blur-md p-4 sm:p-8" id="ikp-search-dialog" role="dialog" aria-modal="true" aria-labelledby="ikp-search-title" onClick={(e) => { if (e.target === e.currentTarget) closeSearch(); }}>
-          <div className="max-w-2xl mx-auto mt-4 rounded-3xl ikp-surface shadow-2xl overflow-hidden">
+          <div className="max-w-2xl mx-auto mt-4 rounded-3xl ikp-surface shadow-2xl overflow-hidden">\n            <h2 id="ikp-search-title" className="sr-only">ইসলামিক অনুসন্ধান</h2>
             <div className="flex items-center gap-2 p-3 border-b border-[var(--ikp-border)]">
               <Search className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
-              <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') closeSearch(); }} placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..." className="flex-1 bg-transparent outline-none text-sm text-[var(--ikp-text)]" />
+              <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') closeSearch(); }} placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..." className="ikp-focus-ring flex-1 bg-transparent outline-none text-sm text-[var(--ikp-text)] rounded-lg px-1 py-1" />
               <button type="button" onClick={closeSearch} className="ikp-focus-ring rounded-xl p-1" aria-label="অনুসন্ধান বন্ধ করুন"><X className="w-5 h-5 text-[#717A74]" /></button>
             </div>
             <div className="max-h-[70vh] overflow-y-auto p-3 space-y-4">
