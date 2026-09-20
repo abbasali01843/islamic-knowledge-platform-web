@@ -9,8 +9,8 @@ import {
   Flame,
   ChevronDown,
 } from 'lucide-react';
-import { TasbeehPreset } from '../../types/dua';
-import { TASBEEH_PRESETS } from '../../data/duaData';
+import type { TasbeehPreset } from '../../types/dua';
+import { TASBEEH_PRESETS } from '../../data/tasbeehPresets';
 import { toBengaliNumerals } from '../../utils/prayerCalculation';
 
 export const TasbeehCounter: React.FC = () => {
@@ -22,13 +22,7 @@ export const TasbeehCounter: React.FC = () => {
   const [vibrationEnabled, setVibrationEnabled] = useState<boolean>(true);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isPressing, setIsPressing] = useState<boolean>(false);
-  const [lifetimeTotal, setLifetimeTotal] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('tasbeeh_lifetime_total');
-      if (saved) return parseInt(saved, 10) || 0;
-    }
-    return 0;
-  });
+  const [lifetimeTotal, setLifetimeTotal] = useState<number>(0);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
 
@@ -325,7 +319,7 @@ export const TasbeehCounter: React.FC = () => {
               সর্বমোট জিকির সংখ্যা
             </h4>
             <span className="text-[10px] text-[#717A74] dark:text-[#8B958E]">
-              ডিভাইসে সংরক্ষিত মোট তাসবীহ
+              এই সেশনে মোট তাসবীহ
             </span>
           </div>
         </div>
