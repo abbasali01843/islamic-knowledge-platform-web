@@ -3,6 +3,7 @@ export interface HijriDate {
   monthNameBn:string; monthNameAr:string; weekdayBn:string;
 }
 const ROOT='https://api.aladhan.com/v1';
+const REQUEST_TIMEOUT_MS=10000;
 const MONTHS=[
  ['মুহররম','مُحَرَّم'],['সফর','صَفَر'],['রবিউল আউয়াল','رَبِيع الأَوَّل'],['রবিউস সানি','رَبِيع الآخِر'],
  ['জমাদিউল আউয়াল','جُمَادَى الأُولَى'],['জমাদিউস সানি','جُمَادَى الآخِرَة'],['রজব','رَجَب'],['শাবান','شَعْبَان'],
@@ -30,17 +31,29 @@ const parse=(x:any):HijriDate=>{
   };
 };
 
-export async function fetchHijriDate(date=new Date(),timezone?:number):Promise<HijriDate>{
+export async function fetchHijriDate(date=new Date(),timezone?:number,signal?:AbortSignal):Promise<HijriDate>{
   const parts=datePartsInTimezone(date,timezone);
-  const dd=String(parts.day).padStart(2,'0'),mm=String(parts.month).padStart(2,'0'),yy=parts.year;
-  const r=await fetch(`${ROOT}/gToH/${dd}-${mm}-${yy}`,{cache:'no-store'});
-  if(!r.ok)throw Error('Hijri date unavailable');
-  const j=await r.json();
-  return parse(j.data);
+  const dd=String(parts.day).padStart(2,'0'),mm=String(parts.month+0).padStart(2,'0'),yy=parts.year;
+  const controller=new AbortController();
+  const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+  const abort=()=>controller.abort();
+  if(signal?.aborted) controller.abort(); else signal?.addEventListener('abort',abort,{once:true});
+  try{
+    const r=await fetch(`${ROOT}/gToH/${dd}-${mm}-${yy}`,{cache:'no-store',signal:controller.signal});
+    if(!r.ok)throw Error('Hijri date unavailable');
+    const j=await r.json();
+    return parse(j.data);
+  }finally{window.clearTimeout(timeoutId);signal?.removeEventListener('abort',abort);}
 }
-export async function fetchHijriMonth(year:number,month:number,latitude=22.3569,longitude=91.7832,method=1){
-  const r=await fetch(`${ROOT}/hijriCalendar/${year}/${month}?latitude=${latitude}&longitude=${longitude}&method=${method}`,{cache:'no-store'});
-  if(!r.ok)throw Error('Hijri calendar unavailable');
-  return (await r.json()).data;
+export async function fetchHijriMonth(year:number,month:number,latitude=22.3569,longitude=91.7832,method=1,signal?:AbortSignal){
+  const controller=new AbortController();
+  const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+  const abort=()=>controller.abort();
+  if(signal?.aborted) controller.abort(); else signal?.addEventListener('abort',abort,{once:true});
+  try{
+    const r=await fetch(`${ROOT}/hijriCalendar/${year}/${month}?latitude=${latitude}&longitude=${longitude}&method=${method}`,{cache:'no-store',signal:controller.signal});
+    if(!r.ok)throw Error('Hijri calendar unavailable');
+    return (await r.json()).data;
+  }finally{window.clearTimeout(timeoutId);signal?.removeEventListener('abort',abort);}
 }
 export {MONTHS};
