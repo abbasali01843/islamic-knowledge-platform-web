@@ -27,7 +27,7 @@
 | Navigation/accessibility pass | ✅ Completed |
 | Performance pass | ✅ Completed |
 | SEO metadata pass | ✅ Completed |
-| Production deployment | ⏳ Pending |
+| Production deployment | ✅ Vercel deployment verified |
 | Real-device QA | ⏳ Pending |
 
 ## Known limitations
@@ -35,6 +35,7 @@
 - Global search currently covers Quran metadata and platform modules, not full live Quran/Hadith/Dua content.
 - Route-specific metadata/SSR is a future enhancement.
 - Qibla orientation behavior varies by device/browser and needs real-device verification.
+- Hadith rendering is capped and API loading is progressive; full virtualization remains a future optimization if larger result sets are introduced.
 - External APIs may change or become unavailable.
 - Fiqh-sensitive guidance requires careful source attribution.
 - Account/cloud synchronization is intentionally deferred.
@@ -58,8 +59,10 @@
 
 ## Next milestone
 
-**Production Release + Real-device QA**
+**Real-device QA on the deployed Release Candidate**
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest verified pre-documentation commit: `92542ac8b9d35f8479612b9cbd2706ce711851a1`.
+Latest accessibility commit: `564bf1c6f684f1ebe81b89d7911e1c26829b4693`  
+Vercel status for latest commit: **SUCCESS**  
+GitHub Actions for latest accessibility commits: **not independently verified**.
