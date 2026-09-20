@@ -111,12 +111,12 @@
 ## Phase 8 — Accessibility and responsive QA
 
 - [ ] Keyboard navigation.
-- [ ] Visible focus states.
-- [ ] Dialog focus management.
-- [ ] Screen-reader labels.
+- [x] Visible focus states (static regression guard added; runtime QA still pending).
+- [x] Dialog focus management (code-level guard added; runtime QA still pending).
+- [x] Screen-reader labels (primary navigation/search dialog code-level guard added; runtime QA still pending).
 - [ ] Color contrast.
 - [ ] Touch target sizing.
-- [ ] Reduced-motion behavior where appropriate.
+- [x] Reduced-motion behavior where appropriate (CSS preference guard verified).
 - [ ] Android Chrome narrow viewport.
 - [ ] iOS Safari narrow viewport.
 - [ ] Tablet/desktop layout.
