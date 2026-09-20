@@ -23,8 +23,11 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#1E2620]/95 backdrop-blur-md border-t border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-lg">
-      <div className="max-w-md mx-auto flex items-center justify-around px-2 py-1.5">
+    <nav
+      aria-label="প্রধান নেভিগেশন"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--ikp-border)] bg-[color-mix(in_srgb,var(--ikp-surface)_94%,transparent)] pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(15,35,25,0.08)] backdrop-blur-xl dark:shadow-[0_-8px_30px_rgba(0,0,0,0.22)]"
+    >
+      <div className="mx-auto grid max-w-xl grid-cols-5 px-2 py-1.5">
         {destinations.map((dest, idx) => {
           const isSelected = selectedTab === idx;
           const IconComponent = dest.icon;
@@ -40,22 +43,20 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
                   onSelectTab(idx);
                 }
               }}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 ${
+              className={`ikp-focus-ring flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-1 transition-colors ${
                 isSelected
-                  ? 'text-[#176B4D] dark:text-[#9DD6B9]'
-                  : 'text-[#717A74] dark:text-[#8B958E] hover:text-[#181D19] dark:hover:text-[#E1E5E1]'
+                  ? 'text-[var(--ikp-primary)]'
+                  : 'text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] hover:text-[var(--ikp-text)]'
               }`}
             >
-              <div
-                className={`px-4 py-1 rounded-full transition-colors ${
-                  isSelected
-                    ? 'bg-[#D4F2E2] dark:bg-[#005236]'
-                    : 'bg-transparent'
+              <span
+                className={`flex h-8 min-w-12 items-center justify-center rounded-full transition-colors ${
+                  isSelected ? 'bg-[var(--ikp-primary-soft)]' : ''
                 }`}
               >
-                <IconComponent className="w-5 h-5" />
-              </div>
-              <span className={`text-[11px] mt-0.5 ${isSelected ? 'font-bold' : 'font-normal'}`}>
+                <IconComponent className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className={`text-[10px] sm:text-[11px] ${isSelected ? 'font-bold' : 'font-medium'}`}>
                 {dest.label}
               </span>
             </a>
