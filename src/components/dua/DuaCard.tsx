@@ -47,16 +47,16 @@ export const DuaCard: React.FC<DuaCardProps> = ({
   const isCompleted = dua.repeatTarget ? currentRepeats >= dua.repeatTarget : false;
 
   return (
-    <div className="rounded-3xl p-5 bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs space-y-4 transition-colors">
+    <div className="rounded-[26px] ikp-surface p-5 shadow-sm space-y-4 transition-colors">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
           {dua.subCategory && (
-            <span className="text-[11px] font-semibold text-[#176B4D] dark:text-[#9DD6B9] bg-[#D4F2E2]/60 dark:bg-[#005236]/40 px-2.5 py-0.5 rounded-full inline-block mb-1">
+            <span className="text-[11px] font-semibold text-[var(--ikp-primary)] bg-[var(--ikp-primary-soft)] px-2.5 py-0.5 rounded-full inline-block mb-1">
               {dua.subCategory}
             </span>
           )}
-          <h3 className="font-bold text-base text-[#181D19] dark:text-[#E1E5E1]">
+          <h3 className="font-bold text-base text-[var(--ikp-text)]">
             {dua.titleBengali}
           </h3>
         </div>
@@ -67,7 +67,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
             type="button"
             onClick={handleCopy}
             title="দোয়া কপি করুন"
-            className="p-2 rounded-xl text-[#717A74] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+            className="ikp-focus-ring p-2 rounded-xl text-[#717A74] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -75,7 +75,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
             type="button"
             onClick={() => onToggleBookmark(dua.id)}
             title={isBookmarked ? 'বুকমার্ক সরান' : 'বুকমার্ক করুন'}
-            className="p-2 rounded-xl text-[#176B4D] dark:text-[#9DD6B9] hover:bg-[#D4F2E2]/40 transition-colors"
+            className="ikp-focus-ring p-2 rounded-xl text-[var(--ikp-primary)] hover:bg-[#D4F2E2]/40 transition-colors"
           >
             {isBookmarked ? (
               <BookmarkCheck className="w-4 h-4 fill-[#176B4D] dark:fill-[#9DD6B9]" />
@@ -87,10 +87,10 @@ export const DuaCard: React.FC<DuaCardProps> = ({
       </div>
 
       {/* Arabic Script */}
-      <div className="p-4 rounded-2xl bg-[#F4F8F5] dark:bg-[#1E2821] border border-[#176B4D]/15 dark:border-[#9DD6B9]/15 text-right space-y-3">
+      <div className="rounded-2xl bg-[var(--ikp-primary-soft)]/35 border border-[var(--ikp-primary)]/15 p-4 text-right space-y-3">
         <div
           dir="rtl"
-          className="text-xl sm:text-2xl font-serif text-[#176B4D] dark:text-[#9DD6B9] font-normal leading-loose"
+          className="text-xl sm:text-2xl font-serif text-[var(--ikp-primary)] font-normal leading-loose"
           style={{ fontFamily: "'Amiri', serif" }}
         >
           {dua.arabicText}
@@ -100,10 +100,10 @@ export const DuaCard: React.FC<DuaCardProps> = ({
       {/* Bengali Pronunciation */}
       {dua.bengaliTransliteration.trim() && (
         <div className="space-y-1 text-xs">
-          <span className="text-[11px] font-bold text-[#717A74] dark:text-[#8B958E] block uppercase tracking-wider">
+          <span className="text-[11px] font-bold text-[var(--ikp-text-muted)] block uppercase tracking-wider">
             উচ্চারণ:
           </span>
-          <p className="text-[#181D19] dark:text-[#E1E5E1] font-medium leading-relaxed">
+          <p className="text-[var(--ikp-text)] font-medium leading-relaxed">
             {dua.bengaliTransliteration}
           </p>
         </div>
@@ -111,10 +111,10 @@ export const DuaCard: React.FC<DuaCardProps> = ({
 
       {/* Bengali Meaning */}
       <div className="space-y-1 text-xs border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 pt-2.5">
-        <span className="text-[11px] font-bold text-[#717A74] dark:text-[#8B958E] block uppercase tracking-wider">
+        <span className="text-[11px] font-bold text-[var(--ikp-text-muted)] block uppercase tracking-wider">
           অর্থ:
         </span>
-        <p className="text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">
+        <p className="text-[var(--ikp-text-muted)] leading-relaxed">
           {dua.bengaliMeaning}
         </p>
       </div>
@@ -132,7 +132,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
 
       {/* Footer: Source reference & Repeat Counter */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 text-xs">
-        <div className="flex items-center gap-1.5 font-semibold text-[#176B4D] dark:text-[#9DD6B9] bg-[#E8EFEA] dark:bg-[#252F28] px-3 py-1 rounded-xl">
+        <div className="flex items-center gap-1.5 font-semibold text-[var(--ikp-primary)] bg-[var(--ikp-surface-muted)] px-3 py-1 rounded-xl">
           <CheckCircle2 className="w-3.5 h-3.5" />
           <span>উৎস: {dua.reference}</span>
         </div>
