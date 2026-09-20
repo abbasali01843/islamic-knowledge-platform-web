@@ -252,7 +252,7 @@ export const HadithScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={handleCopyDailyHadith}
-                className="text-white/80 hover:text-white flex items-center gap-1 text-[11px] font-semibold shrink-0"
+                className="ikp-focus-ring rounded-lg px-2 py-1 text-white/80 hover:text-white flex items-center gap-1 text-[11px] font-semibold shrink-0"
               >
                 {dailyHadithCopied ? (
                   <>
@@ -370,7 +370,7 @@ export const HadithScreen: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#717A74] p-1"
+                  className="ikp-focus-ring absolute right-3 top-1/2 -translate-y-1/2 text-[#717A74] p-1 rounded-lg"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -384,7 +384,7 @@ export const HadithScreen: React.FC = () => {
                   key={g}
                   type="button"
                   onClick={() => setGradeFilter(g)}
-                  className={`py-1.5 px-2.5 rounded-xl font-bold transition-colors ${
+                  className={`ikp-focus-ring py-1.5 px-2.5 rounded-xl font-bold transition-colors ${
                     gradeFilter === g
                       ? g === 'SAHIH'
                         ? 'bg-emerald-600 text-white shadow-xs'
@@ -413,7 +413,7 @@ export const HadithScreen: React.FC = () => {
                     key={topic.id}
                     type="button"
                     onClick={() => setSelectedTopicId(topic.id)}
-                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
+                    className={`ikp-focus-ring flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 ${
                       isSelected
                         ? 'bg-[var(--ikp-primary)] text-white shadow-xs'
                         : 'bg-white dark:bg-[#1A221C] text-[var(--ikp-text-muted)] border border-[#E8EFEA] dark:border-[#3A4D43]/60'
@@ -447,7 +447,7 @@ export const HadithScreen: React.FC = () => {
               <button
                 type="button"
                 onClick={reloadHadiths}
-                className="px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold inline-flex items-center gap-1.5"
+                className="ikp-focus-ring px-4 py-2 rounded-xl bg-[var(--ikp-primary)] text-white text-xs font-bold inline-flex items-center gap-1.5"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 আবার চেষ্টা করুন
@@ -460,7 +460,7 @@ export const HadithScreen: React.FC = () => {
                   type="button"
                   onClick={loadNextSection}
                   disabled={loadingMore}
-                  className="px-5 py-2.5 rounded-2xl bg-[var(--ikp-primary)] text-white text-xs font-bold disabled:opacity-60"
+                  className="ikp-focus-ring px-5 py-2.5 rounded-2xl bg-[var(--ikp-primary)] text-white text-xs font-bold disabled:opacity-60"
                 >
                   {loadingMore
                     ? 'আরও হাদিস লোড হচ্ছে…'
@@ -480,7 +480,7 @@ export const HadithScreen: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="text-[#176B4D] dark:text-[#9DD6B9] hover:underline"
+                    className="ikp-focus-ring rounded-lg px-2 py-1 text-[#176B4D] dark:text-[#9DD6B9] hover:underline"
                   >
                     ফিল্টার মুছুন
                   </button>
@@ -521,7 +521,7 @@ export const HadithScreen: React.FC = () => {
                     onClick={() =>
                       setVisibleCount((count) => Math.min(count + 40, filteredHadiths.length))
                     }
-                    className="px-5 py-2.5 rounded-2xl border border-[#176B4D]/30 bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] text-xs font-bold"
+                    className="ikp-focus-ring px-5 py-2.5 rounded-2xl border border-[#176B4D]/30 bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] text-xs font-bold"
                   >
                     আরও{' '}
                     {toBengaliNumerals(
