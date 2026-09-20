@@ -141,7 +141,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
               সেহরি শেষ
             </div>
             <div className="text-lg font-bold font-sans">
-              {formatTimeBengali(prayer.sehriEnd, false)}
+              {formatTimeBengali(prayer.sehriEnd, false, location.timezone)}
             </div>
           </div>
           <div className="space-y-1 text-right">
@@ -150,7 +150,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
               ইফতার
             </div>
             <div className="text-lg font-bold font-sans">
-              {formatTimeBengali(prayer.iftar, false)}
+              {formatTimeBengali(prayer.iftar, false, location.timezone)}
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
             সেহরি
           </div>
           <div className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1] font-sans">
-            {formatTimeBengali(prayer.sehriEnd)}
+            {formatTimeBengali(prayer.sehriEnd, true, location.timezone)}
           </div>
           <div className="text-[11px] text-[#717A74] flex items-center gap-1">
             <Clock className="w-3 h-3" />
@@ -183,7 +183,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
             ইফতার
           </div>
           <div className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1] font-sans">
-            {formatTimeBengali(prayer.iftar)}
+            {formatTimeBengali(prayer.iftar, true, location.timezone)}
           </div>
           <div className="text-[11px] text-[#717A74] flex items-center gap-1">
             <Clock className="w-3 h-3" />
