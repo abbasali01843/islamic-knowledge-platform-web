@@ -28,6 +28,8 @@ import {
   toBengaliNumerals,
 } from '../../utils/prayerCalculation';
 import { LocationPickerModal } from './LocationPickerModal';
+import { fetchPrayerTimeOverrides } from '../../services/prayerTimesApi';
+import type { PrayerTimeOverrides } from '../../utils/prayerCalculation';
 import { QiblaCompass } from './QiblaCompass';
 import { MonthlyTimetable } from './MonthlyTimetable';
 import { SalahGuideView } from './SalahGuideView';
@@ -55,6 +57,8 @@ export const PrayerTimesScreen: React.FC = () => {
 
   // Real-time second ticker for live countdown
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [apiOverrides, setApiOverrides] = useState<PrayerTimeOverrides>({});
+  const [timingSource, setTimingSource] = useState<'api' | 'calculated'>('calculated');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -111,10 +115,38 @@ export const PrayerTimesScreen: React.FC = () => {
     });
   };
 
+  const locationDayKey = useMemo(() => {
+    const shifted = new Date(currentTime.getTime() + location.timezone * 60 * 60 * 1000);
+    return \`${shifted.getUTCFullYear()}-${shifted.getUTCMonth() + 1}-${shifted.getUTCDate()}\`;
+  }, [currentTime, location.timezone]);
+
+  // Use AlAdhan as the primary timing source. The local astronomical calculation
+  // remains an explicit fallback so the screen stays usable when the API is down.
+  useEffect(() => {
+    const controller = new AbortController();
+    setTimingSource('calculated');
+
+    fetchPrayerTimeOverrides(currentTime, location, madhab, calcMethod, controller.signal)
+      .then((overrides) => {
+        if (!controller.signal.aborted) {
+          setApiOverrides(overrides);
+          setTimingSource(Object.keys(overrides).length > 0 ? 'api' : 'calculated');
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setApiOverrides({});
+          setTimingSource('calculated');
+        }
+      });
+
+    return () => controller.abort();
+  }, [location, madhab, calcMethod, locationDayKey]);
+
   // Compute live prayer times
   const prayerData = useMemo(() => {
-    return calculatePrayerTimes(currentTime, location, madhab, calcMethod);
-  }, [currentTime, location, madhab, calcMethod]);
+    return calculatePrayerTimes(currentTime, location, madhab, calcMethod, apiOverrides);
+  }, [currentTime, location, madhab, calcMethod, apiOverrides]);
 
   const completedSalahCount = [
     tracker.fajr,
@@ -248,6 +280,11 @@ export const PrayerTimesScreen: React.FC = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between px-1 text-[11px] text-[#717A74] dark:text-[#8B958E]">
+        <span>সময় গণনা: {timingSource === 'api' ? 'AlAdhan লাইভ API' : 'স্থানীয় গণনা (fallback)'}</span>
+        <span>{location.country === 'বাংলাদেশ' ? 'UTC+৬' : \`UTC${location.timezone >= 0 ? '+' : ''}${location.timezone}\`}</span>
       </div>
 
       {/* Navigation Sub-Tabs */}
