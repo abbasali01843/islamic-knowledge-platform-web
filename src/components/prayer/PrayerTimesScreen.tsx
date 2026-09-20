@@ -216,26 +216,26 @@ export const PrayerTimesScreen: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28">
+    <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:py-7 space-y-5 pb-28">
       <div className="flex flex-wrap items-center justify-between gap-2.5">
         <button
           type="button"
           onClick={() => setIsLocationModalOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] hover:bg-[#dce7e0] dark:hover:bg-[#303c34] text-xs font-bold text-[#181D19] dark:text-[#E1E5E1] transition-colors border border-black/5 dark:border-white/5 active:scale-[0.98]"
+          className="ikp-focus-ring flex items-center gap-2 rounded-2xl bg-[var(--ikp-surface-muted)] px-3.5 py-2.5 text-xs font-bold text-[var(--ikp-text)] transition-colors border border-[var(--ikp-border)] active:scale-[0.98]"
         >
-          <MapPin className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
+          <MapPin className="w-4 h-4 text-[var(--ikp-primary)]" />
           <span>{location.nameBengali}</span>
           <span className="text-[10px] text-[#717A74] font-normal">পরিবর্তন</span>
         </button>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center bg-[#E8EFEA] dark:bg-[#252F28] p-1 rounded-2xl text-[11px] font-semibold">
+          <div className="flex items-center bg-[var(--ikp-surface-muted)] p-1 rounded-2xl text-[11px] font-semibold border border-[var(--ikp-border)]">
             <button
               type="button"
               onClick={() => handleToggleMadhab('HANAFI')}
               className={`px-2.5 py-1 rounded-xl transition-all ${
                 madhab === 'HANAFI'
-                  ? 'bg-[#176B4D] text-white shadow-xs'
+                  ? 'bg-[var(--ikp-primary)] text-white shadow-sm'
                   : 'text-[#414A45] dark:text-[#C1CAC4]'
               }`}
             >
@@ -246,7 +246,7 @@ export const PrayerTimesScreen: React.FC = () => {
               onClick={() => handleToggleMadhab('STANDARD')}
               className={`px-2.5 py-1 rounded-xl transition-all ${
                 madhab === 'STANDARD'
-                  ? 'bg-[#176B4D] text-white shadow-xs'
+                  ? 'bg-[var(--ikp-primary)] text-white shadow-sm'
                   : 'text-[#414A45] dark:text-[#C1CAC4]'
               }`}
             >
@@ -254,13 +254,13 @@ export const PrayerTimesScreen: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex items-center bg-[#E8EFEA] dark:bg-[#252F28] p-1 rounded-2xl text-[11px] font-semibold">
+          <div className="flex items-center bg-[var(--ikp-surface-muted)] p-1 rounded-2xl text-[11px] font-semibold border border-[var(--ikp-border)]">
             <button
               type="button"
               onClick={() => handleToggleCalcMethod('IFB')}
               className={`px-2.5 py-1 rounded-xl transition-all ${
                 calcMethod === 'IFB'
-                  ? 'bg-[#176B4D] text-white shadow-xs'
+                  ? 'bg-[var(--ikp-primary)] text-white shadow-sm'
                   : 'text-[#414A45] dark:text-[#C1CAC4]'
               }`}
             >
@@ -271,7 +271,7 @@ export const PrayerTimesScreen: React.FC = () => {
               onClick={() => handleToggleCalcMethod('MWL')}
               className={`px-2.5 py-1 rounded-xl transition-all ${
                 calcMethod === 'MWL'
-                  ? 'bg-[#176B4D] text-white shadow-xs'
+                  ? 'bg-[var(--ikp-primary)] text-white shadow-sm'
                   : 'text-[#414A45] dark:text-[#C1CAC4]'
               }`}
             >
@@ -281,7 +281,7 @@ export const PrayerTimesScreen: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between px-1 text-[11px] text-[#717A74] dark:text-[#8B958E]">
+      <div className="flex items-center justify-between px-1 text-[11px] text-[var(--ikp-text-muted)]">
         <span>
           সময়: {timingSource === 'api' ? 'AlAdhan API' : 'স্থানীয় গণনা'}
         </span>
@@ -292,7 +292,7 @@ export const PrayerTimesScreen: React.FC = () => {
         </span>
       </div>
 
-      <div className="grid grid-cols-4 gap-1.5 p-1 bg-[#E8EFEA] dark:bg-[#222C25] rounded-2xl">
+      <div className="grid grid-cols-4 gap-1.5 p-1 bg-[var(--ikp-surface-muted)] rounded-2xl border border-[var(--ikp-border)]">
         {[
           { id: 'TODAY' as PrayerSubTab, label: 'আজ', icon: Clock },
           { id: 'QIBLA' as PrayerSubTab, label: 'কিবলা', icon: Compass },
@@ -308,8 +308,8 @@ export const PrayerTimesScreen: React.FC = () => {
               onClick={() => setSelectedSubTab(tab.id)}
               className={`py-2 px-1.5 rounded-xl text-xs font-semibold flex flex-col sm:flex-row items-center justify-center gap-1 transition-all ${
                 isSelected
-                  ? 'bg-white dark:bg-[#1A221C] text-[#176B4D] dark:text-[#9DD6B9] shadow-xs'
-                  : 'text-[#717A74] dark:text-[#8B958E] hover:text-[#181D19] dark:hover:text-[#E1E5E1]'
+                  ? 'bg-[var(--ikp-surface)] text-[var(--ikp-primary)] shadow-sm'
+                  : 'text-[var(--ikp-text-muted)] hover:text-[#181D19] dark:hover:text-[#E1E5E1]'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -321,7 +321,7 @@ export const PrayerTimesScreen: React.FC = () => {
 
       {selectedSubTab === 'TODAY' && (
         <div className="space-y-6">
-          <div className="rounded-3xl p-6 bg-gradient-to-br from-[#176B4D] to-[#0D442F] text-white shadow-lg relative overflow-hidden">
+          <div className="rounded-[28px] p-5 sm:p-7 bg-gradient-to-br from-[#176B4D] to-[#0B4A34] text-white shadow-lg relative overflow-hidden">
             <div className="absolute -right-8 -bottom-8 w-44 h-44 rounded-full bg-white/5 pointer-events-none" />
 
             <div className="space-y-3 relative z-10">
@@ -336,7 +336,7 @@ export const PrayerTimesScreen: React.FC = () => {
 
               <div className="flex items-baseline justify-between">
                 <div>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                  <h2 className="text-3xl sm:text-[42px] leading-none font-black tracking-tight">
                     {prayerData.nextPrayer.nameBengali}
                   </h2>
                   <span className="text-xs text-white/80 font-serif">
@@ -344,13 +344,13 @@ export const PrayerTimesScreen: React.FC = () => {
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl sm:text-3xl font-bold font-sans">
+                  <span className="text-2xl sm:text-3xl font-extrabold font-sans tabular-nums">
                     {formatTimeBengali(prayerData.nextPrayer.time, true, location.timezone)}
                   </span>
                 </div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/10 flex items-center justify-between text-xs">
+              <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-between text-xs">
                 <span className="text-white/80">বাকি আছে:</span>
                 <span className="font-bold text-white font-sans text-sm tracking-wide">
                   {formatCountdownBengali(prayerData.nextPrayer.remainingMs)}
@@ -377,18 +377,18 @@ export const PrayerTimesScreen: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-4 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] border border-black/5 dark:border-white/5">
-              <span className="text-xs text-[#717A74] dark:text-[#8B958E] flex items-center gap-1 font-medium">
+            <div className="ikp-surface rounded-2xl p-4">
+              <span className="text-xs text-[var(--ikp-text-muted)] flex items-center gap-1 font-medium">
                 <Moon className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                 সেহরি শেষ
               </span>
-              <div className="text-lg font-bold text-[#181D19] dark:text-[#E1E5E1] mt-1">
+              <div className="text-lg font-bold text-[var(--ikp-text)] mt-1">
                 {formatTimeBengali(prayerData.sehriEnd, true, location.timezone)}
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] border border-black/5 dark:border-white/5">
-              <span className="text-xs text-[#717A74] dark:text-[#8B958E] flex items-center gap-1 font-medium">
+            <div className="ikp-surface rounded-2xl p-4">
+              <span className="text-xs text-[var(--ikp-text-muted)] flex items-center gap-1 font-medium">
                 <Sun className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 ইফতার
               </span>
@@ -412,10 +412,10 @@ export const PrayerTimesScreen: React.FC = () => {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between px-1">
-              <h3 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+              <h3 className="font-bold text-sm text-[var(--ikp-text)]">
                 ওয়াক্তের সময়সূচি
               </h3>
-              <span className="text-xs text-[#717A74] dark:text-[#8B958E]">
+              <span className="text-xs text-[var(--ikp-text-muted)]">
                 {prayerData.date.toLocaleDateString('bn-BD', {
                   weekday: 'long',
                   day: 'numeric',
@@ -424,7 +424,7 @@ export const PrayerTimesScreen: React.FC = () => {
               </span>
             </div>
 
-            <div className="divide-y divide-[#E8EFEA] dark:divide-[#3A4D43]/40 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-xs overflow-hidden">
+            <div className="divide-y divide-[var(--ikp-border)] rounded-3xl ikp-surface shadow-sm overflow-hidden">
               {prayersList.map((item) => {
                 const isNext = prayerData.nextPrayer.key === item.key;
                 const isCurrent = prayerData.currentPrayer?.key === item.key;
@@ -438,9 +438,9 @@ export const PrayerTimesScreen: React.FC = () => {
                     key={item.key}
                     className={`p-4 flex items-center justify-between transition-colors ${
                       isNext
-                        ? 'bg-[#D4F2E2]/50 dark:bg-[#005236]/30'
+                        ? 'bg-[var(--ikp-primary-soft)]/55'
                         : isCurrent
-                        ? 'bg-[#F0F5F1] dark:bg-[#202A22]'
+                        ? 'bg-[var(--ikp-surface-muted)]'
                         : ''
                     }`}
                   >
@@ -449,20 +449,20 @@ export const PrayerTimesScreen: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => toggleSalahCompleted(item.trackerProp!)}
-                          className="shrink-0"
+                          className="ikp-focus-ring shrink-0 rounded-lg"
                           aria-label={isDone ? 'সম্পন্ন' : 'চিহ্নিত করুন'}
                         >
                           {isDone ? (
                             <CheckCircle2 className="w-6 h-6 text-[#176B4D] dark:text-[#9DD6B9]" />
                           ) : (
-                            <Circle className="w-6 h-6 text-[#C5D0C8] dark:text-[#4A5A50]" />
+                            <Circle className="w-6 h-6 text-[var(--ikp-border)]" />
                           )}
                         </button>
                       ) : (
                         <div className="w-6 h-6 shrink-0" />
                       )}
                       <div className="min-w-0">
-                        <div className="font-semibold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                        <div className="font-semibold text-sm text-[var(--ikp-text)]">
                           {item.titleBengali}
                           {isNext && (
                             <span className="ml-2 text-[10px] font-bold text-[#176B4D] dark:text-[#9DD6B9]">
@@ -476,7 +476,7 @@ export const PrayerTimesScreen: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="font-bold text-base font-sans text-[#181D19] dark:text-[#E1E5E1]">
+                      <div className="font-bold text-base font-sans text-[var(--ikp-text)]">
                         {formatTimeBengali(item.time, true, location.timezone)}
                       </div>
                     </div>
@@ -486,9 +486,9 @@ export const PrayerTimesScreen: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-3">
+          <div className="ikp-surface rounded-2xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1] flex items-center gap-1.5">
+              <h3 className="font-bold text-sm text-[var(--ikp-text)] flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
                 আজকের নামাজ
               </h3>
@@ -496,9 +496,9 @@ export const PrayerTimesScreen: React.FC = () => {
                 {toBengaliNumerals(completedSalahCount)}/৫
               </span>
             </div>
-            <div className="w-full h-2 bg-[#E8EFEA] dark:bg-[#3F4943] rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-[var(--ikp-surface-muted)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#176B4D] dark:bg-[#9DD6B9] rounded-full transition-all"
+                className="h-full bg-[var(--ikp-primary)] rounded-full transition-all"
                 style={{ width: `${(completedSalahCount / 5) * 100}%` }}
               />
             </div>
@@ -509,20 +509,20 @@ export const PrayerTimesScreen: React.FC = () => {
             )}
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#F0F5F1] dark:bg-[#1C251F] border border-black/5 dark:border-white/5 space-y-2 text-xs">
+          <div className="ikp-muted-surface rounded-2xl p-4 space-y-2 text-xs">
             <h4 className="font-bold text-[#176B4D] dark:text-[#9DD6B9] flex items-center gap-1.5">
               <Moon className="w-4 h-4" /> নফল ও বিশেষ সময়
             </h4>
             <div className="grid grid-cols-2 gap-2 text-[#414A45] dark:text-[#C1CAC4]">
               <div>
                 <span className="block text-[#717A74] text-[11px]">তাহাজ্জুদ (রাতের শেষ তৃতীয়াংশ):</span>
-                <strong className="text-[#181D19] dark:text-[#E1E5E1] font-sans">
+                <strong className="text-[var(--ikp-text)] font-sans">
                   {formatTimeBengali(prayerData.lastThirdNight)}
                 </strong>
               </div>
               <div>
                 <span className="block text-[#717A74] text-[11px]">ইসলামিক মধ্যরাত:</span>
-                <strong className="text-[#181D19] dark:text-[#E1E5E1] font-sans">
+                <strong className="text-[var(--ikp-text)] font-sans">
                   {formatTimeBengali(prayerData.midnight)}
                 </strong>
               </div>
