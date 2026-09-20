@@ -18,7 +18,8 @@ const BOOKS = [
 const REQUEST_TIMEOUT_MS = 10000;
 
 async function getJson(url: string): Promise<unknown> {
-  const urls = [url.replace('.json', '.min.json'), url];
+  const base = url.replace('.json', '');
+  const urls = [base + '.min.json', base + '.json', base.replace(API_ROOT, 'https://raw.githubusercontent.com/fawazahmed0/hadith-api/1') + '.min.json', base.replace(API_ROOT, 'https://raw.githubusercontent.com/fawazahmed0/hadith-api/1') + '.json'];
   let lastError: unknown;
   for (const candidate of urls) {
     try {
