@@ -127,16 +127,16 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Info Banner */}
-      <div className="rounded-2xl p-5 bg-gradient-to-br from-[#176B4D] to-[#0E4933] text-white shadow-md relative overflow-hidden">
+      <div className="rounded-[28px] p-5 sm:p-6 bg-gradient-to-br from-[#176B4D] to-[#0B4A34] shadow-lg shadow-emerald-950/10 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-xs uppercase font-semibold tracking-wider text-[#9DD6B9]">
+            <span className="text-[10px] uppercase font-bold tracking-[0.14em] text-[#B6E8CF]">
               কিবলার কোণ ও দূরত্ব
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold font-sans">
+              <span className="text-3xl sm:text-4xl font-black font-sans tabular-nums">
                 {toBengaliNumerals(qiblaBearing)}°
               </span>
               <span className="text-sm font-medium text-white/80">
@@ -155,7 +155,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             <button
               type="button"
               onClick={() => setIsManualMode(!isManualMode)}
-              className="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold backdrop-blur-xs transition-colors flex items-center gap-1.5"
+              className="ikp-focus-ring px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold backdrop-blur-xs transition-colors flex items-center gap-1.5"
             >
               <RotateCw className="w-3.5 h-3.5" />
               <span>
@@ -172,15 +172,15 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
 
       {/* Permission / Sensor Alert */}
       {permissionState === 'prompt' && !isManualMode && (
-        <div className="p-4 rounded-2xl bg-[#D4F2E2] dark:bg-[#005236] text-[#002114] dark:text-[#D4F2E2] flex items-center justify-between gap-3 text-sm">
+        <div className="rounded-2xl bg-[var(--ikp-primary-soft)] text-[var(--ikp-text)] flex items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2.5">
-            <Compass className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
+            <Compass className="w-5 h-5 text-[var(--ikp-primary)] shrink-0" />
             <span>মোবাইলের কম্পাস সেন্সর সক্রিয় করতে পারমিশন দিন।</span>
           </div>
           <button
             type="button"
             onClick={requestCompassPermission}
-            className="px-3.5 py-1.5 rounded-xl bg-[#176B4D] text-white font-semibold text-xs shrink-0 active:scale-95"
+            className="ikp-focus-ring px-3.5 py-2 rounded-xl bg-[var(--ikp-primary)] text-white font-semibold text-xs shrink-0 active:scale-95"
           >
             পারমিশন দিন
           </button>
@@ -192,7 +192,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
         className={`p-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold transition-all duration-300 ${
           isAligned
             ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25 ring-2 ring-emerald-400 animate-pulse'
-            : 'bg-[#E8EFEA] dark:bg-[#252F28] text-[#414A45] dark:text-[#C1CAC4]'
+            : 'bg-[var(--ikp-surface-muted)] text-[var(--ikp-text)]'
         }`}
       >
         {isAligned ? (
@@ -212,13 +212,13 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
 
       {/* The Visual Compass Dial */}
       <div className="flex flex-col items-center justify-center py-4">
-        <div className="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center select-none">
+        <div className="relative w-[min(82vw,340px)] h-[min(82vw,340px)] flex items-center justify-center select-none">
           {/* Outer Ring with Direction Marks */}
           <div
             className={`w-full h-full rounded-full border-4 relative transition-transform duration-300 ease-out shadow-xl flex items-center justify-center ${
               isAligned
                 ? 'border-emerald-500 bg-emerald-50/20 dark:bg-emerald-950/20'
-                : 'border-[#176B4D]/20 dark:border-[#3A4D43] bg-white dark:bg-[#1A231D]'
+                : 'border-[#176B4D]/20 dark:border-[#3A4D43] bg-[var(--ikp-surface)]'
             }`}
             style={{
               transform: `rotate(-${currentHeading}deg)`,
@@ -227,13 +227,13 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             <div className="absolute top-2 text-center font-bold text-sm text-rose-600">
               N<span className="block text-[9px] font-normal text-[#717A74]">উত্তর (০°)</span>
             </div>
-            <div className="absolute right-3 text-center font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+            <div className="absolute right-3 text-center font-bold text-sm text-[var(--ikp-text)]">
               E<span className="block text-[9px] font-normal text-[#717A74]">পূর্ব (৯০°)</span>
             </div>
-            <div className="absolute bottom-2 text-center font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+            <div className="absolute bottom-2 text-center font-bold text-sm text-[var(--ikp-text)]">
               S<span className="block text-[9px] font-normal text-[#717A74]">দক্ষিণ (১৮০°)</span>
             </div>
-            <div className="absolute left-3 text-center font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+            <div className="absolute left-3 text-center font-bold text-sm text-[var(--ikp-text)]">
               W<span className="block text-[9px] font-normal text-[#717A74]">পশ্চিম (২৭০°)</span>
             </div>
 
@@ -267,13 +267,13 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             </div>
 
             <div className="w-36 h-36 rounded-full border border-dashed border-[#176B4D]/30 dark:border-[#9DD6B9]/30 flex flex-col items-center justify-center p-2 text-center">
-              <span className="text-xs text-[#717A74] dark:text-[#8B958E]">
+              <span className="text-xs text-[var(--ikp-text-muted)]">
                 {location.nameBengali}
               </span>
               <span className="text-lg font-extrabold text-[#176B4D] dark:text-[#9DD6B9]">
                 {toBengaliNumerals(qiblaBearing)}°
               </span>
-              <span className="text-[10px] text-[#717A74] dark:text-[#8B958E]">
+              <span className="text-[10px] text-[var(--ikp-text-muted)]">
                 কিবলার দিক
               </span>
             </div>
@@ -286,9 +286,9 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
       </div>
 
       {isManualMode && (
-        <div className="p-4 rounded-2xl bg-[#E8EFEA] dark:bg-[#252F28] space-y-3">
+        <div className="ikp-muted-surface rounded-2xl p-4 space-y-3">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-[#181D19] dark:text-[#E1E5E1]">
+            <span className="font-semibold text-[var(--ikp-text)]">
               ম্যানুয়াল হেড রোটেটর (পরীক্ষা বা ডেস্কটপ)
             </span>
             <span className="font-bold text-[#176B4D] dark:text-[#9DD6B9]">
@@ -301,7 +301,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             max="360"
             value={manualHeading}
             onChange={(e) => setManualHeading(parseInt(e.target.value, 10))}
-            className="w-full accent-[#176B4D] h-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer"
+            className="w-full accent-[var(--ikp-primary)] h-2 bg-black/10 dark:bg-white/10 rounded-lg cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-[#717A74]">
             <span>০° (উত্তর)</span>
@@ -313,7 +313,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
         </div>
       )}
 
-      <div className="p-4 rounded-2xl bg-[#F0F5F1] dark:bg-[#1E2721] border border-black/5 dark:border-white/5 space-y-2 text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">
+      <div className="ikp-muted-surface rounded-2xl p-4 space-y-2 text-xs text-[#414A45] dark:text-[#C1CAC4] leading-relaxed">
         <div className="flex items-center gap-1.5 font-bold text-[#176B4D] dark:text-[#9DD6B9]">
           <AlertCircle className="w-4 h-4" />
           <span>নির্ভুল কিবলা নির্ণয়ের জরুরি নির্দেশনা</span>
@@ -326,7 +326,7 @@ export const QiblaCompass: React.FC<QiblaCompassProps> = ({ location }) => {
             চৌম্বকীয় পদার্থ, ল্যাপটপ, স্পিকার বা ধাতব বস্তু থেকে ফোন দূরে রাখুন।
           </li>
           <li>
-            বাংলাদেশে কিবলার দিক সাধারণত পশ্চিম দিক থেকে সামান্য ডান (উত্তর) দিকে হেলে থাকে (প্রায় ২৭৪° থেকে ২৭৮° কোণে)।
+            কিবলার কোণ আপনার অবস্থানের ওপর নির্ভর করে; উপরের হিসাবটি আপনার নির্বাচিত অবস্থান অনুযায়ী দেখানো হচ্ছে।
           </li>
         </ul>
       </div>
