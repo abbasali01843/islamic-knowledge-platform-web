@@ -10,6 +10,8 @@ import {
   Calculator,
   Calendar,
   Sparkles,
+  Check,
+  BookMarked,
 } from 'lucide-react';
 import type { HomeDestination } from '../types';
 import { SectionHeader } from './SectionHeader';
@@ -33,9 +35,75 @@ interface QuickAction {
   icon: React.ComponentType<{ className?: string }>;
 }
 
+interface DailyAmal {
+  id: string;
+  label: string;
+  destination?: HomeDestination;
+}
+
+const DAILY_AMALS: DailyAmal[] = [
+  { id: 'fajr', label: 'ফজর নামাজ', destination: 'PRAYER' },
+  { id: 'quran', label: 'কুরআন তিলাওয়াত', destination: 'QURAN' },
+  { id: 'morning-dhikr', label: 'সকালের যিকির', destination: 'DUA' },
+  { id: 'dhuhr', label: 'যোহর নামাজ', destination: 'PRAYER' },
+  { id: 'evening-dhikr', label: 'সন্ধ্যার যিকির', destination: 'DUA' },
+];
+
+const INSPIRATION = [
+  {
+    arabic: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا',
+    bengali: 'নিশ্চয়ই কষ্টের সাথে স্বস্তি রয়েছে।',
+    source: 'সূরা আল-ইনশিরাহ, ৯৪:৬',
+  },
+  {
+    arabic: 'فَاذْكُرُونِي أَذْكُرْكُمْ',
+    bengali: 'তোমরা আমাকে স্মরণ কর, আমিও তোমাদের স্মরণ করব।',
+    source: 'সূরা আল-বাকারা, ২:১৫২',
+  },
+  {
+    arabic: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ',
+    bengali: 'যে আল্লাহর উপর ভরসা করে, তিনিই তার জন্য যথেষ্ট।',
+    source: 'সূরা আত-তালাক, ৬৫:৩',
+  },
+  {
+    arabic: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ',
+    bengali: 'জেনে রাখ, আল্লাহর স্মরণেই অন্তর প্রশান্ত হয়।',
+    source: 'সূরা আর-রাদ, ১৩:২৮',
+  },
+];
+
+function getTodayKey(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+function loadCheckedAmals(): Record<string, boolean> {
+  try {
+    const raw = localStorage.getItem('ikp-daily-amal');
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as { date: string; checked: Record<string, boolean> };
+    if (parsed.date !== getTodayKey()) return {};
+    return parsed.checked || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCheckedAmals(checked: Record<string, boolean>) {
+  try {
+    localStorage.setItem(
+      'ikp-daily-amal',
+      JSON.stringify({ date: getTodayKey(), checked })
+    );
+  } catch {
+    // ignore
+  }
+}
+
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [location, setLocation] = useState<LocationConfig>(DEFAULT_LOCATION);
+  const [checkedAmals, setCheckedAmals] = useState<Record<string, boolean>>(() => loadCheckedAmals());
 
   const madhab: Madhab = 'HANAFI';
   const calcMethod: CalculationMethod = 'IFB';
@@ -51,64 +119,69 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const prayerData = useMemo(() => calculatePrayerTimes(currentTime, location, madhab, calcMethod), [currentTime, location, madhab, calcMethod]);
+  const prayerData = useMemo(
+    () => calculatePrayerTimes(currentTime, location, madhab, calcMethod),
+    [currentTime, location, madhab, calcMethod]
+  );
+
+  const inspiration = useMemo(() => {
+    const dayOfYear = Math.floor(
+      (currentTime.getTime() - new Date(currentTime.getFullYear(), 0, 0).getTime()) /
+        (1000 * 60 * 60 * 24)
+    );
+    return INSPIRATION[dayOfYear % INSPIRATION.length];
+  }, [currentTime]);
+
+  const completedCount = DAILY_AMALS.filter((a) => checkedAmals[a.id]).length;
+
+  const toggleAmal = (id: string) => {
+    setCheckedAmals((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      saveCheckedAmals(next);
+      return next;
+    });
+  };
 
   const actions: QuickAction[] = [
-    {
-      title: 'কুরআন',
-      subtitle: '১১৪ সূরা ও অর্থ',
-      destination: 'QURAN',
-      icon: BookOpen,
-    },
-    {
-      title: 'নামাজ ও কিবলা',
-      subtitle: 'সময়সূচি ও দিকনির্ণয়',
-      destination: 'PRAYER',
-      icon: Landmark,
-    },
-    {
-      title: 'হাদিস',
-      subtitle: 'হাদিস ও মান',
-      destination: 'HADITH',
-      icon: BookOpen,
-    },
-    {
-      title: 'দোয়া ও যিকর',
-      subtitle: 'দৈনন্দিন আমল',
-      destination: 'DUA',
-      icon: Moon,
-    },
+    { title: 'কুরআন', subtitle: 'তিলাওয়াত ও অর্থ', destination: 'QURAN', icon: BookOpen },
+    { title: 'নামাজ ও কিবলা', subtitle: 'সময় ও দিকনির্ণয়', destination: 'PRAYER', icon: Landmark },
+    { title: 'দোয়া ও যিকির', subtitle: 'দৈনন্দিন আমল', destination: 'DUA', icon: Moon },
+    { title: 'হাদিস', subtitle: 'সহীহ হাদিস', destination: 'HADITH', icon: BookMarked },
   ];
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-24">
-      {/* Header Greeting */}
-      <div className="flex items-center justify-between">
+      {/* Greeting */}
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#181D19] dark:text-[#E1E5E1]">
             আসসালামু আলাইকুম
           </h1>
           <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">
-            আজ {currentTime.toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            আজ{' '}
+            {currentTime.toLocaleDateString('bn-BD', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
           </p>
         </div>
         <button
           type="button"
           onClick={() => onQuickActionClick('PRAYER')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8EFEA] dark:bg-[#252F28] text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] hover:opacity-80 transition-opacity"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#E8EFEA] dark:bg-[#252F28] text-xs font-semibold text-[#176B4D] dark:text-[#9DD6B9] hover:opacity-80 transition-opacity shrink-0"
         >
           <Compass className="w-3.5 h-3.5" />
-          <span>কিবলা ও নামাজ</span>
+          <span>কিবলা</span>
         </button>
       </div>
 
-      {/* Live Next Prayer Banner */}
+      {/* Next Prayer — primary focus */}
       <div
         role="button"
         tabIndex={0}
@@ -116,23 +189,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') onQuickActionClick('PRAYER');
         }}
-        className="cursor-pointer rounded-3xl bg-gradient-to-br from-[#176B4D] to-[#0E4933] text-white p-6 shadow-md transition-transform active:scale-[0.99] relative overflow-hidden group"
+        className="cursor-pointer rounded-3xl bg-gradient-to-br from-[#176B4D] to-[#0E4933] text-white p-5 sm:p-6 shadow-md transition-transform active:scale-[0.99] relative overflow-hidden group"
       >
         <div className="absolute right-4 top-4 text-white/40 group-hover:text-white transition-colors">
           <ArrowRight className="w-5 h-5" />
         </div>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#9DD6B9]">
               পরবর্তী ওয়াক্ত
             </span>
             <span className="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-medium">
-              {location.id === 'gps-current' ? location.nameBengali : `${location.nameBengali} (ডিফল্ট)`}
+              {location.id === 'gps-current'
+                ? location.nameBengali
+                : `${location.nameBengali} (ডিফল্ট)`}
             </span>
           </div>
 
-          <div className="flex items-baseline justify-between">
+          <div className="flex items-baseline justify-between gap-3">
             <div>
               <div className="text-3xl sm:text-4xl font-black tracking-tight">
                 {prayerData.nextPrayer.nameBengali}
@@ -148,7 +223,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
             </div>
           </div>
 
-          {/* Countdown timer */}
           <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/10 flex items-center justify-between text-xs">
             <span className="text-white/80 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-[#9DD6B9]" />
@@ -159,11 +233,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
             </span>
           </div>
 
-          {/* Sehri & Iftar mini-strip */}
           <div className="grid grid-cols-2 gap-2 pt-1 text-xs border-t border-white/10 text-white/90">
             <div className="flex items-center gap-1.5">
               <Moon className="w-3.5 h-3.5 text-rose-300" />
-              <span>সেহরি শেষ:</span>
+              <span>সেহরি:</span>
               <strong className="font-bold font-sans text-white">
                 {formatTimeBengali(prayerData.sehriEnd, false)}
               </strong>
@@ -179,7 +252,71 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         </div>
       </div>
 
-      {/* Quick Actions Grid */}
+      {/* Today's Amal Checklist */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <SectionHeader title="আজকের আমল" />
+          <span className="text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+            {completedCount}/{DAILY_AMALS.length}
+          </span>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 divide-y divide-[#E8EFEA] dark:divide-[#3A4D43]/40 overflow-hidden">
+          {DAILY_AMALS.map((amal) => {
+            const done = !!checkedAmals[amal.id];
+            return (
+              <div
+                key={amal.id}
+                className="flex items-center gap-3 px-4 py-3"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleAmal(amal.id)}
+                  aria-label={done ? `${amal.label} সম্পন্ন` : `${amal.label} চিহ্নিত করুন`}
+                  className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-colors ${
+                    done
+                      ? 'bg-[#176B4D] border-[#176B4D] text-white'
+                      : 'border-[#C5D0C8] dark:border-[#4A5A50] text-transparent'
+                  }`}
+                >
+                  <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (amal.destination) onQuickActionClick(amal.destination);
+                  }}
+                  className={`flex-1 text-left text-sm font-medium transition-colors ${
+                    done
+                      ? 'text-[#717A74] dark:text-[#8B958E] line-through'
+                      : 'text-[#181D19] dark:text-[#E1E5E1]'
+                  }`}
+                >
+                  {amal.label}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Daily Inspiration */}
+      <div className="rounded-2xl p-5 bg-[#F0F7F3] dark:bg-[#152019] border border-[#D4E8DC] dark:border-[#2A3A30] space-y-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>আজকের আয়াত</span>
+        </div>
+        <p className="text-right text-lg leading-relaxed font-serif text-[#0A3D2B] dark:text-[#C8E6D4]" dir="rtl">
+          {inspiration.arabic}
+        </p>
+        <p className="text-sm leading-relaxed text-[#414A45] dark:text-[#C1CAC4]">
+          “{inspiration.bengali}”
+        </p>
+        <p className="text-[11px] text-[#717A74] dark:text-[#8B958E]">{inspiration.source}</p>
+      </div>
+
+      {/* Quick Actions */}
       <div className="space-y-3">
         <SectionHeader title="দ্রুত অ্যাকশন" />
         <div className="grid grid-cols-2 gap-3">
@@ -209,96 +346,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onQuickActionClick }) =>
         </div>
       </div>
 
-      {/* Phase 4: Islamic Learning & Tools Section */}
+      {/* Tools */}
       <div className="space-y-3">
-        <SectionHeader title="ইসলামিক শিক্ষা ও আমল টুলস" />
+        <SectionHeader title="টুলস ও শিক্ষা" />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Card 1: Salah & Wudu */}
           <button
             type="button"
             onClick={() => onQuickActionClick('LEARN_SALAH')}
-            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] hover:bg-[#D4F2E2]/20 border border-[#E8EFEA] dark:border-[#3A4D43]/60 transition-all shadow-xs flex flex-col justify-between space-y-3 group active:scale-[0.99]"
+            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-all shadow-xs flex flex-col gap-3 active:scale-[0.99]"
           >
-            <div className="flex items-center justify-between w-full">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-[#005236] flex items-center justify-center text-[#176B4D] dark:text-[#9DD6B9]">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
-                উৎস-ভিত্তিক
-              </span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-[#005236] flex items-center justify-center text-[#176B4D] dark:text-[#9DD6B9]">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1] group-hover:text-[#176B4D] dark:group-hover:text-[#9DD6B9] transition-colors">
-                সালাত ও অজু শিক্ষা
-              </h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5 leading-relaxed">
-                ধারাবাহিক নিয়ম, রাকাত টেবিল, দোয়া ও অজু
-              </p>
+              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">সালাত শিক্ষা</h4>
+              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">অজু ও নামাজের নিয়ম</p>
             </div>
           </button>
 
-          {/* Card 2: Zakat Calculator */}
           <button
             type="button"
             onClick={() => onQuickActionClick('ZAKAT')}
-            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] hover:bg-[#D4F2E2]/20 border border-[#E8EFEA] dark:border-[#3A4D43]/60 transition-all shadow-xs flex flex-col justify-between space-y-3 group active:scale-[0.99]"
+            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-all shadow-xs flex flex-col gap-3 active:scale-[0.99]"
           >
-            <div className="flex items-center justify-between w-full">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center text-amber-700 dark:text-amber-300">
-                <Calculator className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
-                ২.৫% হিসাব
-              </span>
+            <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center text-amber-700 dark:text-amber-300">
+              <Calculator className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1] group-hover:text-[#176B4D] dark:group-hover:text-[#9DD6B9] transition-colors">
-                যাকাত ক্যালকুলেটর
-              </h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5 leading-relaxed">
-                স্বর্ণ, রৌপ্য ও নগদ অর্থের নিসাব নির্ধারণ
-              </p>
+              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">যাকাত</h4>
+              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">নিসাব ও হিসাব</p>
             </div>
           </button>
 
-          {/* Card 3: Hijri Calendar */}
           <button
             type="button"
             onClick={() => onQuickActionClick('CALENDAR')}
-            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] hover:bg-[#D4F2E2]/20 border border-[#E8EFEA] dark:border-[#3A4D43]/60 transition-all shadow-xs flex flex-col justify-between space-y-3 group active:scale-[0.99]"
+            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-all shadow-xs flex flex-col gap-3 active:scale-[0.99]"
           >
-            <div className="flex items-center justify-between w-full">
-              <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/60 flex items-center justify-center text-sky-700 dark:text-sky-300">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300">
-                হিজরি সন
-              </span>
+            <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/60 flex items-center justify-center text-sky-700 dark:text-sky-300">
+              <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1] group-hover:text-[#176B4D] dark:group-hover:text-[#9DD6B9] transition-colors">
-                হিজরি ক্যালেন্ডার
-              </h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5 leading-relaxed">
-                ইসলামিক দিনপঞ্জিকা ও আইয়ামে বীজ
-              </p>
+              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">হিজরি ক্যালেন্ডার</h4>
+              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">ইসলামিক দিনপঞ্জি</p>
             </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Online Islamic content entry points */}
-      <div className="space-y-3">
-        <SectionHeader title="অনলাইন ইসলামিক কনটেন্ট" />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button type="button" onClick={() => onQuickActionClick('QURAN')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
-            <h4 className="font-bold text-sm">কুরআন</h4><p className="text-xs text-[#717A74] mt-1">অনলাইন উৎস থেকে কুরআন পড়ুন</p>
-          </button>
-          <button type="button" onClick={() => onQuickActionClick('HADITH')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
-            <h4 className="font-bold text-sm">হাদিস</h4><p className="text-xs text-[#717A74] mt-1">উৎস ও মানসহ অনলাইন হাদিস</p>
-          </button>
-          <button type="button" onClick={() => onQuickActionClick('DUA')} className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-colors">
-            <h4 className="font-bold text-sm">দোয়া ও যিকর</h4><p className="text-xs text-[#717A74] mt-1">অনলাইন উৎস থেকে দোয়া ও যিকর</p>
           </button>
         </div>
       </div>

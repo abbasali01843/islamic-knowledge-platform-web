@@ -15,7 +15,7 @@ interface NavDestination {
 
 export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
   const destinations: NavDestination[] = [
-    { label: 'হোম', icon: Home },
+    { label: 'আজ', icon: Home },
     { label: 'কুরআন', icon: BookOpen },
     { label: 'নামাজ', icon: Clock },
     { label: 'দোয়া', icon: Moon },
@@ -34,7 +34,12 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
               aria-current={isSelected ? 'page' : undefined}
               aria-label={dest.label}
               href={paths[idx]}
-              onClick={(event) => { if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); onSelectTab(idx); } }}
+              onClick={(event) => {
+                if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+                  event.preventDefault();
+                  onSelectTab(idx);
+                }
+              }}
               className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 ${
                 isSelected
                   ? 'text-[#176B4D] dark:text-[#9DD6B9]'
