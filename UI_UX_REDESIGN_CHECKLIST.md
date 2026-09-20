@@ -31,9 +31,9 @@
 
 ## Phase 1 — App shell/navigation
 
-- [ ] Redesign top header without removing search, Qibla, or theme controls.
+- [x] Redesign top header without removing search, Qibla, or theme controls.
 - [x] Redesign bottom navigation for clear active/inactive states.
-- [ ] Preserve current five primary destinations unless a measured UX change requires otherwise.
+- [x] Preserve current five primary destinations unless a measured UX change requires otherwise.
 - [x] Improve safe-area spacing for Android/iOS.
 - [x] Improve keyboard/focus/aria behavior.
 - [ ] Ensure deep links and browser back/forward still work.
@@ -72,7 +72,7 @@
 - [x] Improve search/filter presentation.
 - [x] Redesign reader header and controls.
 - [x] Improve Arabic/Bengali reading hierarchy.
-- [ ] Improve ayah spacing and readability.
+- [x] Improve ayah spacing and readability.
 - [x] Improve last-read/resume flow.
 - [x] Improve reader navigation.
 - [ ] Preserve live API behavior and timeout/cancellation handling.
@@ -97,7 +97,7 @@
 - [x] Redesign Zakat/Nisab.
 - [x] Redesign Salah learning.
 - [x] Redesign Hajj/Seerah/Quiz modules.
-- [ ] Ensure secondary screens share the same design system.
+- [x] Ensure secondary screens share the same design system.
 - [ ] Acceptance: every existing secondary route remains functional.
 
 ## Phase 7 — Search and discovery
