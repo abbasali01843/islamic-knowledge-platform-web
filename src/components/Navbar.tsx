@@ -6,6 +6,8 @@ interface NavbarProps {
   onSelectTab: (index: number) => void;
 }
 
+const paths = ['/', '/quran', '/prayer', '/dua', '/hadith'];
+
 interface NavDestination {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -27,10 +29,10 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
           const isSelected = selectedTab === idx;
           const IconComponent = dest.icon;
           return (
-            <button
+            <a
               key={dest.label}
-              type="button"
-              onClick={() => onSelectTab(idx)}
+              href={paths[idx]}
+              onClick={(event) => { if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); onSelectTab(idx); } }}
               className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 ${
                 isSelected
                   ? 'text-[#176B4D] dark:text-[#9DD6B9]'
@@ -49,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
               <span className={`text-[11px] mt-0.5 ${isSelected ? 'font-bold' : 'font-normal'}`}>
                 {dest.label}
               </span>
-            </button>
+            </a>
           );
         })}
       </div>
