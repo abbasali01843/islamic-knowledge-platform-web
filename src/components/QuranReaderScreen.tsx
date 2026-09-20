@@ -215,7 +215,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
             <button
               type="button"
               onClick={onBack}
-              title="ফিরে যান"
+              title="ফিরে যান" aria-label="ফিরে যান"
               className="p-2 -ml-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -236,7 +236,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               type="button"
               disabled={!previousSurah}
               onClick={() => previousSurah && onNavigateToSurah(previousSurah)}
-              title="পূর্ববর্তী সূরা"
+              title="পূর্ববর্তী সূরা" aria-label="পূর্ববর্তী সূরা"
               className="p-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -245,7 +245,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               type="button"
               disabled={!nextSurah}
               onClick={() => nextSurah && onNavigateToSurah(nextSurah)}
-              title="পরবর্তী সূরা"
+              title="পরবর্তী সূরা" aria-label="পরবর্তী সূরা"
               className="p-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
