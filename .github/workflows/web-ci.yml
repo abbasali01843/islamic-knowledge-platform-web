@@ -68,6 +68,9 @@ jobs:
       - name: Regression smoke test
         run: npm run test:smoke
 
+      - name: Prayer and Qibla regression vectors
+        run: npm run test:prayer
+
       - name: Upload web dist
         uses: actions/upload-artifact@v4
         with:
