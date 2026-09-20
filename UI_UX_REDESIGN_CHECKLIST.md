@@ -102,10 +102,10 @@
 
 ## Phase 7 — Search and discovery
 
-- [ ] Audit current global search behavior.
-- [ ] Improve search dialog visual hierarchy.
-- [ ] Improve result grouping and keyboard navigation.
-- [ ] Clearly distinguish module results from Quran results.
+- [x] Audit current global search behavior.
+- [x] Improve search dialog visual hierarchy.
+- [x] Improve result grouping and keyboard navigation.
+- [x] Clearly distinguish module results from Quran results.
 - [ ] Do not claim full-content search until all relevant live content is actually indexed/searchable.
 
 ## Phase 8 — Accessibility and responsive QA
