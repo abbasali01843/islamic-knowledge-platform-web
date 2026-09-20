@@ -55,15 +55,15 @@
 
 ## Phase 3 — Prayer/Qibla
 
-- [ ] Redesign prayer dashboard hierarchy.
-- [ ] Improve five-prayer timeline/list.
-- [ ] Improve current prayer and next prayer states.
-- [ ] Improve forbidden-time presentation.
-- [ ] Improve location picker UX.
-- [ ] Improve calculation method/madhab controls.
-- [ ] Redesign Qibla compass presentation.
-- [ ] Preserve GPS/device-orientation permission flows.
-- [ ] Preserve monthly timetable.
+- [x] Redesign prayer dashboard hierarchy.
+- [x] Improve five-prayer timeline/list.
+- [x] Improve current prayer and next prayer states.
+- [x] Improve forbidden-time presentation.
+- [x] Improve location picker UX.
+- [x] Improve calculation method/madhab controls.
+- [x] Redesign Qibla compass presentation.
+- [x] Preserve GPS/device-orientation permission flows.
+- [x] Preserve monthly timetable.
 - [ ] Acceptance: calculation, timezone, method, madhab, Qibla, and timetable behavior remain correct.
 
 ## Phase 4 — Quran
