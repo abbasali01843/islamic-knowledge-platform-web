@@ -1,5 +1,5 @@
 import React,{useEffect,useMemo,useState} from 'react';
-import {BookOpen,Search,Bookmark,Sun,Flame,Loader2,RefreshCw} from 'lucide-react';
+import {BookOpen,Search,Sun,Flame,Loader2,RefreshCw from 'lucide-react';
 import type {DuaCategoryKey,DuaItem} from '../../types/dua';
 import {DUA_CATEGORIES,DUA_SOURCE_LABEL,DUA_SOURCE_URL,fetchLiveDuas} from '../../services/duaApi';
 import {DuaCard} from './DuaCard';
