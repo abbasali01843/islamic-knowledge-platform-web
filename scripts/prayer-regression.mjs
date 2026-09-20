@@ -41,7 +41,7 @@ for (const [label, pattern] of checks) assert.match(source, pattern, label);
 
 assert.equal(qiblaBearing(KAABA_LATITUDE, KAABA_LONGITUDE), 0, 'Kaaba should point to itself');
 const chattogramBearing = qiblaBearing(22.3569, 91.7832);
-assert.ok(chattogramBearing >= 285 && chattogramBearing <= 300, `Chattogram Qibla bearing out of expected range: ${chattogramBearing}°`);
+assert.ok(chattogramBearing >= 275 && chattogramBearing <= 285, `Chattogram Qibla bearing out of expected range: ${chattogramBearing}°`);
 
 const chattogramDistance = distanceKm(22.3569, 91.7832);
 assert.ok(chattogramDistance > 3600 && chattogramDistance < 3900, `Chattogram-Kaaba distance unexpected: ${chattogramDistance} km`);
