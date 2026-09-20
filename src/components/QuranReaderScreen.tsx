@@ -207,24 +207,24 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#F7FAF7] dark:bg-[#101511] pb-28">
+    <div ref={containerRef} className="min-h-screen bg-[var(--ikp-bg)] pb-28">
       {/* Top App Bar with sticky header */}
-      <div className="sticky top-0 z-30 bg-[#F7FAF7]/95 dark:bg-[#101511]/95 backdrop-blur-md border-b border-[#E8EFEA] dark:border-[#3A4D43]/60 px-4 py-2.5 shadow-2xs">
+      <div className="sticky top-0 z-30 bg-[color-mix(in_srgb,var(--ikp-bg)_94%,transparent)] backdrop-blur-xl border-b border-[var(--ikp-border)] px-4 py-2.5 shadow-2xs">
         <div className="max-w-3xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={onBack}
               title="ফিরে যান" aria-label="ফিরে যান"
-              className="p-2 -ml-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"
+              className="ikp-focus-ring p-2 -ml-2 rounded-xl text-[var(--ikp-text)] hover:bg-[var(--ikp-surface-muted)] transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h2 className="font-bold text-base sm:text-lg text-[#181D19] dark:text-[#E1E5E1] leading-tight">
+              <h2 className="font-bold text-base sm:text-lg text-[var(--ikp-text)] leading-tight">
                 {surah.nameBengali}
               </h2>
-              <p className="text-xs text-[#414A45] dark:text-[#C1CAC4]">
+              <p className="text-xs text-[var(--ikp-text-muted)]">
                 {surah.nameArabic} • {surah.ayahCount} আয়াত
               </p>
             </div>
@@ -237,7 +237,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               disabled={!previousSurah}
               onClick={() => previousSurah && onNavigateToSurah(previousSurah)}
               title="পূর্ববর্তী সূরা" aria-label="পূর্ববর্তী সূরা"
-              className="p-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="p-2 rounded-xl text-[var(--ikp-text)] hover:bg-[var(--ikp-surface-muted)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -246,7 +246,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               disabled={!nextSurah}
               onClick={() => nextSurah && onNavigateToSurah(nextSurah)}
               title="পরবর্তী সূরা" aria-label="পরবর্তী সূরা"
-              className="p-2 rounded-xl text-[#181D19] dark:text-[#E1E5E1] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+              className="p-2 rounded-xl text-[var(--ikp-text)] hover:bg-[var(--ikp-surface-muted)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -254,30 +254,30 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
         </div>
 
         {/* Reading Progress Indicator */}
-        <div className="w-full bg-[#E8EFEA] dark:bg-[#3F4943] h-1 rounded-full overflow-hidden mt-2">
+        <div className="w-full bg-[var(--ikp-surface-muted)] h-1 rounded-full overflow-hidden mt-2">
           <div
-            className="bg-[#176B4D] dark:bg-[#9DD6B9] h-full transition-all duration-150"
+            className="bg-[var(--ikp-primary)] h-full transition-all duration-150"
             style={{ width: `${Math.round(progress * 100)}%` }}
           />
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 pt-3 space-y-4">
+      <div className="mx-auto w-full max-w-3xl px-4 pt-4 space-y-5">
         {/* Source Attribution */}
-        <div className="text-[11px] text-[#717A74] dark:text-[#8B958E] px-1">
+        <div className="text-[11px] text-[var(--ikp-text-muted)] dark:text-[#8B958E] px-1">
           {QuranReaderRepository.sourceAttribution()}
         </div>
 
         {/* Reader Display Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-white dark:bg-[#1E2620] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl ikp-surface shadow-sm">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleToggleArabic}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors ${
+              className={`ikp-focus-ring px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
                 showArabic
-                  ? 'bg-[#176B4D] text-white dark:bg-[#9DD6B9] dark:text-[#003824]'
-                  : 'bg-[#E8EFEA] text-[#414A45] dark:bg-[#3F4943] dark:text-[#C1CAC4]'
+                  ? 'bg-[var(--ikp-primary)] text-white'
+                  : 'bg-[var(--ikp-surface-muted)] text-[var(--ikp-text-muted)]'
               }`}
             >
               عربي
@@ -285,10 +285,10 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
             <button
               type="button"
               onClick={handleToggleBengali}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors ${
+              className={`ikp-focus-ring px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
                 showBengali
-                  ? 'bg-[#176B4D] text-white dark:bg-[#9DD6B9] dark:text-[#003824]'
-                  : 'bg-[#E8EFEA] text-[#414A45] dark:bg-[#3F4943] dark:text-[#C1CAC4]'
+                  ? 'bg-[var(--ikp-primary)] text-white'
+                  : 'bg-[var(--ikp-surface-muted)] text-[var(--ikp-text-muted)]'
               }`}
             >
               বাংলা
@@ -300,18 +300,18 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               type="button"
               onClick={() => handleFontScaleChange(-0.1)}
               title="ফন্ট ছোট করুন"
-              className="p-1 rounded-lg text-[#181D19] dark:text-[#E1E5E1] hover:bg-black/5 dark:hover:bg-white/10"
+              className="p-1 rounded-lg text-[var(--ikp-text)] hover:bg-black/5 dark:hover:bg-white/10"
             >
               <Minus className="w-3.5 h-3.5" />
             </button>
-            <span className="text-xs font-semibold text-[#181D19] dark:text-[#E1E5E1] w-10 text-center">
+            <span className="text-xs font-semibold text-[var(--ikp-text)] w-10 text-center">
               {Math.round(fontScale * 100)}%
             </span>
             <button
               type="button"
               onClick={() => handleFontScaleChange(0.1)}
               title="ফন্ট বড় করুন"
-              className="p-1 rounded-lg text-[#181D19] dark:text-[#E1E5E1] hover:bg-black/5 dark:hover:bg-white/10"
+              className="p-1 rounded-lg text-[var(--ikp-text)] hover:bg-black/5 dark:hover:bg-white/10"
             >
               <Plus className="w-3.5 h-3.5" />
             </button>
@@ -320,13 +320,13 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
 
         {/* In-Surah Search Box */}
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#717A74] dark:text-[#8B958E]" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--ikp-text-muted)] dark:text-[#8B958E]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="এই সূরার আয়াত খুঁজুন"
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-white dark:bg-[#1E2620] border border-[#C1CAC4] dark:border-[#414A45] text-xs sm:text-sm text-[#181D19] dark:text-[#E1E5E1] focus:outline-none focus:border-[#176B4D] dark:focus:border-[#9DD6B9] transition-colors"
+            className="w-full pl-9 pr-4 py-3 rounded-xl ikp-surface text-xs sm:text-sm text-[var(--ikp-text)] focus:outline-none transition-colors"
           />
         </div>
 
@@ -334,11 +334,11 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
         {loadState === 'loading' ? (
           <div className="text-center py-20 px-4 space-y-3">
             <div className="mx-auto w-8 h-8 rounded-full border-2 border-[#176B4D] border-t-transparent animate-spin" />
-            <p className="text-sm text-[#414A45] dark:text-[#C1CAC4]">অনলাইন থেকে কুরআনের আয়াত লোড হচ্ছে…</p>
+            <p className="text-sm text-[var(--ikp-text-muted)]">অনলাইন থেকে কুরআনের আয়াত লোড হচ্ছে…</p>
           </div>
         ) : loadState === 'error' ? (
           <div className="text-center py-20 px-4 space-y-3">
-            <p className="text-sm text-[#414A45] dark:text-[#C1CAC4]">{loadError}</p>
+            <p className="text-sm text-[var(--ikp-text-muted)]">{loadError}</p>
             <button type="button" onClick={() => {
               setLoadState('loading');
               setLoadError('');
@@ -350,7 +350,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
           </div>
         ) : filteredAyahs.length === 0 ? (
           <div className="text-center py-16 px-4">
-            <p className="text-sm text-[#414A45] dark:text-[#C1CAC4]">
+            <p className="text-sm text-[var(--ikp-text-muted)]">
               কোনো আয়াত মেলেনি।
             </p>
           </div>
@@ -374,7 +374,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                     if (el) ayahRefs.current.set(ayah.number, el);
                     else ayahRefs.current.delete(ayah.number);
                   }}
-                  className="p-5 rounded-2xl bg-white dark:bg-[#1E2620] border border-[#E8EFEA] dark:border-[#3A4D43]/60 shadow-2xs space-y-3 transition-colors"
+                  className="p-5 rounded-2xl ikp-surface shadow-sm space-y-3 transition-colors"
                 >
                   {/* Ayah Header & Action Icons */}
                   <div className="flex items-center justify-between pb-2 border-b border-[#E8EFEA]/80 dark:border-[#3A4D43]/40">
@@ -394,10 +394,10 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                         type="button"
                         onClick={() => handleToggleBookmark(ayah.number)}
                         title={isBookmarked ? 'বুকমার্ক সরানো' : 'বুকমার্ক যোগ'}
-                        className={`p-1.5 rounded-lg transition-colors ${
+                        className={`ikp-focus-ring p-1.5 rounded-lg transition-colors ${
                           isBookmarked
-                            ? 'text-[#176B4D] dark:text-[#9DD6B9] bg-[#D4F2E2]/60 dark:bg-[#005236]/60'
-                            : 'text-[#717A74] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943]'
+                            ? 'text-[#176B4D] dark:text-[#9DD6B9] bg-[var(--ikp-primary-soft)]'
+                            : 'text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)]'
                         }`}
                       >
                         {isBookmarked ? (
@@ -411,10 +411,10 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                         type="button"
                         onClick={() => openNoteDialog(ayah)}
                         title="নোট যুক্ত করুন"
-                        className={`p-1.5 rounded-lg transition-colors ${
+                        className={`ikp-focus-ring p-1.5 rounded-lg transition-colors ${
                           savedNote
                             ? 'text-[#75603A] dark:text-[#E8C77E] bg-[#FFE8B7]/60 dark:bg-[#5A471E]/60'
-                            : 'text-[#717A74] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943]'
+                            : 'text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)]'
                         }`}
                       >
                         <FileText className="w-4 h-4" />
@@ -424,7 +424,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                         type="button"
                         onClick={() => handleCopyAyah(ayah)}
                         title="কপি করুন"
-                        className="p-1.5 rounded-lg text-[#717A74] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"
+                        className="ikp-focus-ring p-1.5 rounded-lg text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"
                       >
                         {copiedAyah === ayah.number ? (
                           <Check className="w-4 h-4 text-[#176B4D] dark:text-[#9DD6B9]" />
@@ -437,7 +437,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                         type="button"
                         onClick={() => handleShareAyah(ayah)}
                         title="শেয়ার করুন"
-                        className="p-1.5 rounded-lg text-[#717A74] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"
+                        className="ikp-focus-ring p-1.5 rounded-lg text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"
                       >
                         <Share2 className="w-4 h-4" />
                       </button>
@@ -446,7 +446,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
 
                   {/* Metadata line */}
                   {metaTokens.length > 0 && (
-                    <div className="text-[11px] text-[#717A74] dark:text-[#8B958E]">
+                    <div className="text-[11px] text-[var(--ikp-text-muted)] dark:text-[#8B958E]">
                       {metaTokens.join(' • ')}
                     </div>
                   )}
@@ -455,7 +455,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                   {showArabic && (
                     <div
                       dir="rtl"
-                      className="font-arabic text-[#181D19] dark:text-[#E1E5E1] text-right py-2 select-text"
+                      className="font-arabic text-[var(--ikp-text)] text-right py-2 select-text"
                       style={{
                         fontSize: `${Math.round(24 * fontScale)}px`,
                         lineHeight: `${Math.round(24 * fontScale * 1.85)}px`,
@@ -468,7 +468,7 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
                   {/* Bengali Translation */}
                   {showBengali && (
                     <div
-                      className="text-[#181D19] dark:text-[#E1E5E1] select-text font-bengali leading-relaxed"
+                      className="text-[var(--ikp-text)] select-text font-bengali leading-relaxed"
                       style={{
                         fontSize: `${Math.round(16 * fontScale)}px`,
                         lineHeight: `${Math.round(16 * fontScale * 1.6)}px`,
@@ -480,11 +480,11 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
 
                   {/* Display Note if exists */}
                   {savedNote && (
-                    <div className="mt-2 p-3 rounded-xl bg-[#F7FAF7] dark:bg-[#101511] border border-black/5 dark:border-white/5 space-y-1">
+                    <div className="mt-2 p-3 rounded-xl bg-[var(--ikp-bg)] border border-black/5 dark:border-white/5 space-y-1">
                       <span className="text-[11px] font-semibold text-[#75603A] dark:text-[#E8C77E]">
                         নোট:
                       </span>
-                      <p className="text-xs text-[#181D19] dark:text-[#E1E5E1] whitespace-pre-wrap">
+                      <p className="text-xs text-[var(--ikp-text)] whitespace-pre-wrap">
                         {savedNote}
                       </p>
                     </div>
@@ -499,8 +499,8 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
       {/* Note Editing Modal */}
       {editingNoteAyah && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md bg-white dark:bg-[#1E2620] rounded-2xl p-5 space-y-4 shadow-xl border border-[#C1CAC4] dark:border-[#414A45]">
-            <h3 className="font-semibold text-base text-[#181D19] dark:text-[#E1E5E1]">
+          <div className="w-full max-w-md bg-white dark:bg-[#1E2620] rounded-2xl p-5 space-y-4 shadow-xl border border-[var(--ikp-border)]">
+            <h3 className="font-semibold text-base text-[var(--ikp-text)]">
               আয়াত {editingNoteAyah.number}-এর নোট
             </h3>
             <textarea
@@ -508,20 +508,20 @@ export const QuranReaderScreen: React.FC<QuranReaderScreenProps> = ({
               value={noteInput}
               onChange={(e) => setNoteInput(e.target.value)}
               placeholder="আপনার ব্যক্তিগত ভাবনা বা শিক্ষণীয় নোট লিখুন..."
-              className="w-full p-3 rounded-xl bg-[#F7FAF7] dark:bg-[#101511] border border-[#C1CAC4] dark:border-[#414A45] text-sm text-[#181D19] dark:text-[#E1E5E1] focus:outline-none focus:border-[#176B4D] dark:focus:border-[#9DD6B9]"
+              className="w-full p-3 rounded-xl bg-[var(--ikp-bg)] border border-[var(--ikp-border)] text-sm text-[var(--ikp-text)] focus:outline-none focus:border-[#176B4D] dark:focus:border-[#9DD6B9]"
             />
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setEditingNoteAyah(null)}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-[#414A45] dark:text-[#C1CAC4] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"
               >
                 বাতিল
               </button>
               <button
                 type="button"
                 onClick={saveNote}
-                className="px-5 py-2 rounded-xl text-sm font-semibold bg-[#176B4D] text-white dark:bg-[#9DD6B9] dark:text-[#003824] hover:opacity-90 active:scale-95 transition-all"
+                className="px-5 py-2 rounded-xl text-sm font-semibold bg-[var(--ikp-primary)] text-white hover:opacity-90 active:scale-95 transition-all"
               >
                 সংরক্ষণ
               </button>
