@@ -6,7 +6,7 @@ The dedicated Web/PWA edition of Islamic Knowledge Platform.
 
 ## Current status — Release Candidate
 
-The current `main` branch has passed the production CI gate through the latest SEO/performance documentation milestone.
+The current `main` branch is the active Release Candidate. Core typecheck/build gates were previously verified; the latest accessibility changes have a verified Vercel deployment.
 
 - TypeScript typecheck: ✅
 - Production build: ✅
@@ -22,9 +22,10 @@ The current `main` branch has passed the production CI gate through the latest S
 - Performance optimization pass: ✅
 - Basic crawler/Open Graph metadata: ✅
 
-**Latest verified commit:** `92542ac8b9d35f8479612b9cbd2706ce711851a1`
+**Latest accessibility commit:** `564bf1c6f684f1ebe81b89d7911e1c26829b4693`  
+**Vercel deployment:** ✅ verified for the latest accessibility commit
 
-Production deployment and real-device QA are still pending.
+Production hosting is deployed on Vercel; real-device QA is still pending.
 
 ## Product principles
 
@@ -41,14 +42,14 @@ Production deployment and real-device QA are still pending.
 
 - Quran: 114-surah catalog, live Arabic/Bengali reader, Juz/page navigation, session/device preferences.
 - Prayer: GPS-aware location, calculation methods, madhab, monthly timetable and local fallback.
-- Qibla: GPS bearing + device orientation with iOS/browser handling.
-- Hadith: online API loading, grading, search/filtering, Nawawi 40 and books views.
+- Qibla: GPS bearing + device orientation with iOS/browser handling and clearer support/error guidance.
+- Hadith: progressive online API loading, grading, search/filtering, Nawawi 40 and books views, with a capped rendered list.
 - Dua: online Hisnul Muslim content, categories, search and session-only Tasbeeh.
 - Zakat: online Nisab data with Hanafi-oriented calculation flow.
 - Hijri Calendar: online AlAdhan calendar with location-aware month handling.
 - Salah/Wudu, Ramadan, Hajj, Seerah and Quiz learning modules.
 - Global Islamic Search across platform modules and Quran metadata.
-- Light/dark mode and PWA install guidance.
+- Light/dark mode, accessibility labels/navigation semantics and PWA install guidance.
 
 ## Online data sources
 
