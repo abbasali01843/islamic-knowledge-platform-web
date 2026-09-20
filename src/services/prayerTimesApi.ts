@@ -68,7 +68,7 @@ export async function fetchPrayerTimeOverrides(
 
   try {
     const response = await fetch(
-      \`${API_ROOT}/timings/${apiDate(date, location.timezone)}?${params.toString()}\`,
+      `${API_ROOT}/timings/${apiDate(date, location.timezone)}?${params.toString()}`,
       {
         signal: controller.signal,
         cache: 'no-store',
@@ -77,7 +77,7 @@ export async function fetchPrayerTimeOverrides(
     );
 
     if (!response.ok) {
-      throw new Error(\`PRAYER_API_HTTP_${response.status}\`);
+      throw new Error(`PRAYER_API_HTTP_${response.status}`);
     }
 
     const payload = (await response.json()) as AlAdhanResponse;
