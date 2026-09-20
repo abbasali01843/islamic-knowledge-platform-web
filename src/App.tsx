@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useCallback} from 'react';
 import {Sun,Moon,Search,X} from 'lucide-react';
 import type {Surah,HomeDestination} from './types';
 import {findQuranSurah} from './data/quranCatalog';
@@ -27,7 +27,7 @@ export const App:React.FC=()=>{
  const [isDarkMode,setIsDarkMode]=useState(()=>typeof window!=='undefined'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
  useEffect(()=>{const online=()=>setIsOnline(true),offline=()=>setIsOnline(false);window.addEventListener('online',online);window.addEventListener('offline',offline);return()=>{window.removeEventListener('online',online);window.removeEventListener('offline',offline)}},[]);
  useEffect(()=>{document.documentElement.classList.toggle('dark',isDarkMode)},[isDarkMode]);
- const applyRoute=()=>{
+ const applyRoute=useCallback(()=>{
   const path=window.location.pathname.replace(/\/+$/,'')||'/';const queryModule=new URLSearchParams(window.location.search).get('module');
   setShowWebModules(false);setActiveWebModule(null);setActiveSpecialModule(null);setSelectedSurahNumber(0);setSelectedAyah(0);
   if(queryModule==='quran'){setSelectedTab(1);return} if(queryModule==='hadith'){setSelectedTab(4);return}
