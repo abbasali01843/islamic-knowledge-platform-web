@@ -99,3 +99,84 @@ export async function fetchPrayerTimeOverrides(
     signal?.removeEventListener('abort', abortFromCaller);
   }
 }
+
+export interface MonthlyPrayerTimes {
+  dayNumber: number;
+  timings: PrayerTimeOverrides;
+}
+
+interface AlAdhanCalendarResponse {
+  code: number;
+  status: string;
+  data?: Array<{
+    date?: { gregorian?: { date?: string } };
+    timings?: Record<string, string>;
+  }>;
+}
+
+function parseCalendarDate(value: string | undefined, timezone: number): Date | undefined {
+  if (!value) return undefined;
+  const match = value.match(/^(\\d{2})-(\\d{2})-(\\d{4})$/);
+  if (!match) return undefined;
+  const day = Number(match[1]);
+  const month = Number(match[2]);
+  const year = Number(match[3]);
+  return new Date(Date.UTC(year, month - 1, day, 12) - timezone * 60 * 60 * 1000);
+}
+
+export async function fetchMonthlyPrayerTimes(
+  year: number,
+  month: number,
+  location: LocationConfig,
+  madhab: Madhab,
+  method: CalculationMethod,
+  signal?: AbortSignal,
+): Promise<MonthlyPrayerTimes[]> {
+  const params = new URLSearchParams({
+    latitude: String(location.latitude),
+    longitude: String(location.longitude),
+    method: String(METHOD_IDS[method]),
+    school: madhab === 'HANAFI' ? '1' : '0',
+  });
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const abortFromCaller = () => controller.abort();
+  signal?.addEventListener('abort', abortFromCaller, { once: true });
+
+  try {
+    const response = await fetch(
+      `${API_ROOT}/calendar/${month}/${year}?${params.toString()}`,
+      {
+        signal: controller.signal,
+        cache: 'no-store',
+        headers: { Accept: 'application/json' },
+      },
+    );
+    if (!response.ok) throw new Error(`PRAYER_CALENDAR_HTTP_${response.status}`);
+    const payload = (await response.json()) as AlAdhanCalendarResponse;
+    if (payload.code !== 200 || !Array.isArray(payload.data)) {
+      throw new Error('PRAYER_CALENDAR_INVALID_RESPONSE');
+    }
+
+    return payload.data.flatMap((entry) => {
+      const gregorianDate = entry.date?.gregorian?.date;
+      const parsedDate = parseCalendarDate(gregorianDate, location.timezone);
+      const timings = entry.timings;
+      if (!parsedDate || !timings) return [];
+      return [{
+        dayNumber: parsedDate.getUTCDate(),
+        timings: {
+          fajr: parseLocalClock(timings.Fajr, parsedDate, location.timezone),
+          sunrise: parseLocalClock(timings.Sunrise, parsedDate, location.timezone),
+          dhuhr: parseLocalClock(timings.Dhuhr, parsedDate, location.timezone),
+          asr: parseLocalClock(timings.Asr, parsedDate, location.timezone),
+          maghrib: parseLocalClock(timings.Maghrib, parsedDate, location.timezone),
+          isha: parseLocalClock(timings.Isha, parsedDate, location.timezone),
+        },
+      }];
+    });
+  } finally {
+    window.clearTimeout(timeoutId);
+    signal?.removeEventListener('abort', abortFromCaller);
+  }
+}
