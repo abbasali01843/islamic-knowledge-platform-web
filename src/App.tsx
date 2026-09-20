@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useCallback} from 'react';
+import React,{useState,useEffect} from 'react';
 import {Sun,Moon,Search,X} from 'lucide-react';
 import type {Surah,HomeDestination} from './types';
 import {findQuranSurah} from './data/quranCatalog';
@@ -27,7 +27,7 @@ export const App:React.FC=()=>{
  const [isDarkMode,setIsDarkMode]=useState(()=>typeof window!=='undefined'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
  useEffect(()=>{const online=()=>setIsOnline(true),offline=()=>setIsOnline(false);window.addEventListener('online',online);window.addEventListener('offline',offline);return()=>{window.removeEventListener('online',online);window.removeEventListener('offline',offline)}},[]);
  useEffect(()=>{document.documentElement.classList.toggle('dark',isDarkMode)},[isDarkMode]);
- const applyRoute=useCallback(()=>{
+ const applyRoute=()=>{
   const path=window.location.pathname.replace(/\/+$/,'')||'/';const queryModule=new URLSearchParams(window.location.search).get('module');
   setShowWebModules(false);setActiveWebModule(null);setActiveSpecialModule(null);setSelectedSurahNumber(0);setSelectedAyah(0);
   if(queryModule==='quran'){setSelectedTab(1);return} if(queryModule==='hadith'){setSelectedTab(4);return}
@@ -38,7 +38,7 @@ export const App:React.FC=()=>{
  };
  const navigate=(path:string)=>{window.history.pushState({},'',path);applyRoute()};
  const navLink=(path:string)=>({href:path,onClick:(e:React.MouseEvent<HTMLAnchorElement>)=>{if(e.button===0&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&!e.altKey){e.preventDefault();navigate(path)}}});
- useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[applyRoute]);
+ useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[]);
  const selectedSurah=findQuranSurah(selectedSurahNumber),isReaderOpen=selectedTab===1&&!!selectedSurah;
  const searchTerm=search.trim().toLowerCase();
  const searchSurahs=searchTerm?Array.from({length:114},(_,i)=>findQuranSurah(i+1)).filter((s):s is Surah=>!!s&&(`${s.number} ${s.nameBengali} ${s.nameEnglish}`.toLowerCase().includes(searchTerm))).slice(0,8):[];
