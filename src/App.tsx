@@ -1,20 +1,41 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Sun, Moon, Search, X, BookOpen, Clock, Compass, Calendar, Calculator, Sparkles, BookMarked, Moon as MoonIcon } from 'lucide-react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
+import { Sun, Moon, Search, X, BookOpen, Clock, Compass, Calendar, Calculator, Sparkles, BookMarked, Moon as MoonIcon, Loader2 } from 'lucide-react';
 import type { Surah, HomeDestination } from './types';
 import { findQuranSurah } from './data/quranCatalog';
 import { HomeScreen } from './components/HomeScreen';
-import { QuranScreen } from './components/QuranScreen';
-import { QuranReaderScreen } from './components/QuranReaderScreen';
-import { PrayerTimesScreen } from './components/prayer/PrayerTimesScreen';
-import { DuaScreen } from './components/dua/DuaScreen';
-import { HadithScreen } from './components/hadith/HadithScreen';
-import { LearnSalahScreen } from './components/learn/LearnSalahScreen';
-import { ZakatScreen } from './components/zakat/ZakatScreen';
-import { CalendarScreen } from './components/calendar/CalendarScreen';
-import { RamadanScreen } from './components/ramadan/RamadanScreen';
 import { Navbar } from './components/Navbar';
-import { WebModulesScreen } from './components/WebModulesScreen';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
+
+const QuranScreen = lazy(() =>
+  import('./components/QuranScreen').then((m) => ({ default: m.QuranScreen }))
+);
+const QuranReaderScreen = lazy(() =>
+  import('./components/QuranReaderScreen').then((m) => ({ default: m.QuranReaderScreen }))
+);
+const PrayerTimesScreen = lazy(() =>
+  import('./components/prayer/PrayerTimesScreen').then((m) => ({ default: m.PrayerTimesScreen }))
+);
+const DuaScreen = lazy(() =>
+  import('./components/dua/DuaScreen').then((m) => ({ default: m.DuaScreen }))
+);
+const HadithScreen = lazy(() =>
+  import('./components/hadith/HadithScreen').then((m) => ({ default: m.HadithScreen }))
+);
+const LearnSalahScreen = lazy(() =>
+  import('./components/learn/LearnSalahScreen').then((m) => ({ default: m.LearnSalahScreen }))
+);
+const ZakatScreen = lazy(() =>
+  import('./components/zakat/ZakatScreen').then((m) => ({ default: m.ZakatScreen }))
+);
+const CalendarScreen = lazy(() =>
+  import('./components/calendar/CalendarScreen').then((m) => ({ default: m.CalendarScreen }))
+);
+const RamadanScreen = lazy(() =>
+  import('./components/ramadan/RamadanScreen').then((m) => ({ default: m.RamadanScreen }))
+);
+const WebModulesScreen = lazy(() =>
+  import('./components/WebModulesScreen').then((m) => ({ default: m.WebModulesScreen }))
+);
 
 type Special = 'LEARN_SALAH' | 'ZAKAT' | 'CALENDAR' | 'RAMADAN' | null;
 type WebModule = 'QIBLA' | 'RAMADAN' | 'HAJJ' | 'SEERAH' | 'QUIZ';
@@ -51,6 +72,13 @@ const QUICK_SUGGESTIONS = [
   { path: '/qibla', label: 'কিবলা' },
   { path: '/ramadan', label: 'রমজান' },
 ];
+
+const ScreenFallback = () => (
+  <div className="flex flex-col items-center justify-center py-20 gap-3">
+    <Loader2 className="w-7 h-7 animate-spin text-[#176B4D] dark:text-[#9DD6B9]" />
+    <p className="text-sm text-[#717A74]">লোড হচ্ছে…</p>
+  </div>
+);
 
 const findQuranSurahs = (term: string) => {
   const q = term.trim().toLowerCase();
@@ -256,25 +284,27 @@ export const App: React.FC = () => {
             ইন্টারনেট সংযোগ নেই — এই Web App অনলাইন-ভিত্তিক; ডাটা লোড করতে ইন্টারনেট প্রয়োজন।
           </div>
         )}
-        {showWebModules && <WebModulesScreen initialModule={activeWebModule ?? undefined} onBack={() => navigate('/')} />}
-        {!showWebModules &&
-          (activeSpecialModule === 'LEARN_SALAH' ? (
-            <LearnSalahScreen onBack={() => navigate('/')} />
-          ) : activeSpecialModule === 'ZAKAT' ? (
-            <ZakatScreen onBack={() => navigate('/')} />
-          ) : activeSpecialModule === 'CALENDAR' ? (
-            <CalendarScreen onBack={() => navigate('/')} />
-          ) : activeSpecialModule === 'RAMADAN' ? (
-            <RamadanScreen onBack={() => navigate('/')} />
-          ) : (
-            <>
-              {selectedTab === 0 && <HomeScreen onQuickActionClick={handleQuickAction} onContinueReading={handleContinueReading} />}
-              {selectedTab === 1 && (!selectedSurah ? <QuranScreen onSurahClick={openSurah} /> : <QuranReaderScreen surah={selectedSurah} initialAyah={selectedAyah > 0 ? selectedAyah : null} onBack={() => navigate('/quran')} onNavigateToSurah={(next) => openSurah(next, null)} />)}
-              {selectedTab === 2 && <PrayerTimesScreen />}
-              {selectedTab === 3 && <DuaScreen />}
-              {selectedTab === 4 && <HadithScreen />}
-            </>
-          ))}
+        <Suspense fallback={<ScreenFallback />}>
+          {showWebModules && <WebModulesScreen initialModule={activeWebModule ?? undefined} onBack={() => navigate('/')} />}
+          {!showWebModules &&
+            (activeSpecialModule === 'LEARN_SALAH' ? (
+              <LearnSalahScreen onBack={() => navigate('/')} />
+            ) : activeSpecialModule === 'ZAKAT' ? (
+              <ZakatScreen onBack={() => navigate('/')} />
+            ) : activeSpecialModule === 'CALENDAR' ? (
+              <CalendarScreen onBack={() => navigate('/')} />
+            ) : activeSpecialModule === 'RAMADAN' ? (
+              <RamadanScreen onBack={() => navigate('/')} />
+            ) : (
+              <>
+                {selectedTab === 0 && <HomeScreen onQuickActionClick={handleQuickAction} onContinueReading={handleContinueReading} />}
+                {selectedTab === 1 && (!selectedSurah ? <QuranScreen onSurahClick={openSurah} /> : <QuranReaderScreen surah={selectedSurah} initialAyah={selectedAyah > 0 ? selectedAyah : null} onBack={() => navigate('/quran')} onNavigateToSurah={(next) => openSurah(next, null)} />)}
+                {selectedTab === 2 && <PrayerTimesScreen />}
+                {selectedTab === 3 && <DuaScreen />}
+                {selectedTab === 4 && <HadithScreen />}
+              </>
+            ))}
+        </Suspense>
       </main>
 
       {!showWebModules && !isReaderOpen && (
