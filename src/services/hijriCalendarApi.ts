@@ -33,7 +33,7 @@ const parse=(x:any):HijriDate=>{
 
 export async function fetchHijriDate(date=new Date(),timezone?:number,signal?:AbortSignal):Promise<HijriDate>{
   const parts=datePartsInTimezone(date,timezone);
-  const dd=String(parts.day).padStart(2,'0'),mm=String(parts.month+0).padStart(2,'0'),yy=parts.year;
+  const dd=String(parts.day).padStart(2,'0'),mm=String(parts.month).padStart(2,'0'),yy=parts.year;
   const controller=new AbortController();
   const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
   const abort=()=>controller.abort();
