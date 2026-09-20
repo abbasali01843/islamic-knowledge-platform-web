@@ -40,7 +40,7 @@ export const App:React.FC=()=>{
  useEffect(()=>{applyRoute();const onPopState=()=>applyRoute();window.addEventListener('popstate',onPopState);return()=>window.removeEventListener('popstate',onPopState)},[]);
  const selectedSurah=findQuranSurah(selectedSurahNumber),isReaderOpen=selectedTab===1&&!!selectedSurah;
  const searchTerm=search.trim().toLowerCase();
- const searchSurahs=searchTerm?Array.from({length:114},(_,i)=>findQuranSurah(i+1)).filter((s):s is Surah=>!!s&&(`${s.number} ${s.nameBengali} ${s.nameEnglish} ${s.transliteration}`.toLowerCase().includes(searchTerm))).slice(0,8):[];
+ const searchSurahs=searchTerm?Array.from({length:114},(_,i)=>findQuranSurah(i+1)).filter((s):s is Surah=>!!s&&(`${s.number} ${s.nameBengali} ${s.nameEnglish}`.toLowerCase().includes(searchTerm))).slice(0,8):[];
  const searchModules=[['/prayer','নামাজের সময়','Prayer'],['/dua','দোয়া','Dua'],['/hadith','হাদিস','Hadith'],['/qibla','কিবলা','Qibla'],['/calendar','হিজরি ক্যালেন্ডার','Calendar'],['/zakat','যাকাত','Zakat'],['/learn/salah','সালাত শিক্ষা','Salah'],['/ramadan','রমজান','Ramadan'],['/hajj','হজ','Hajj'],['/seerah','সীরাহ','Seerah'],['/quiz','কুইজ','Quiz']].filter(([,bn,en])=>!searchTerm||(`${bn} ${en}`).toLowerCase().includes(searchTerm));
  const openSurah=(surah:Surah,ayahNumber:number|null)=>{navigate('/quran/'+surah.number);setSelectedSurahNumber(surah.number);setSelectedAyah(ayahNumber||0)};
  const handleQuickAction=(dest:HomeDestination)=>{const paths:Partial<Record<HomeDestination,string>>={QURAN:'/quran',PRAYER:'/prayer',DUA:'/dua',HADITH:'/hadith',LEARN_SALAH:'/learn/salah',ZAKAT:'/zakat',CALENDAR:'/calendar'};const p=paths[dest];if(p)navigate(p)};
