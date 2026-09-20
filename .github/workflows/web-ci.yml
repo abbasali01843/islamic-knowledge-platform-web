@@ -68,3 +68,4 @@ jobs:
         with:
           name: islamic-knowledge-platform-web
           path: dist
+
