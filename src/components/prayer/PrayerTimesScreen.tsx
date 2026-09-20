@@ -307,7 +307,7 @@ export const PrayerTimesScreen: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <span className="text-2xl sm:text-3xl font-bold font-sans">
-                    {formatTimeBengali(prayerData.nextPrayer.time)}
+                    {formatTimeBengali(prayerData.nextPrayer.time, true, location.timezone)}
                   </span>
                 </div>
               </div>
@@ -350,7 +350,7 @@ export const PrayerTimesScreen: React.FC = () => {
                   সেহরি শেষ
                 </span>
                 <div className="text-lg font-bold text-[#181D19] dark:text-[#E1E5E1]">
-                  {formatTimeBengali(prayerData.sehriEnd)}
+                  {formatTimeBengali(prayerData.sehriEnd, true, location.timezone)}
                 </div>
               </div>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 font-semibold">
@@ -365,7 +365,7 @@ export const PrayerTimesScreen: React.FC = () => {
                   ইফতার সময়
                 </span>
                 <div className="text-lg font-bold text-[#176B4D] dark:text-[#9DD6B9]">
-                  {formatTimeBengali(prayerData.iftar)}
+                  {formatTimeBengali(prayerData.iftar, true, location.timezone)}
                 </div>
               </div>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#D4F2E2] dark:bg-[#005236] text-[#002114] dark:text-[#D4F2E2] font-semibold">
@@ -453,7 +453,7 @@ export const PrayerTimesScreen: React.FC = () => {
 
                     <div className="text-right">
                       <div className="text-base font-bold text-[#181D19] dark:text-[#E1E5E1] font-sans">
-                        {formatTimeBengali(item.time)}
+                        {formatTimeBengali(item.time, true, location.timezone)}
                       </div>
                     </div>
                   </div>
