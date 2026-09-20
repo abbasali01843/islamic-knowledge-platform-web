@@ -80,13 +80,13 @@
 
 ## Phase 5 — Dua and Hadith
 
-- [ ] Redesign Dua categories/list.
-- [ ] Redesign Dua card/detail reading experience.
-- [ ] Improve Tasbeeh counter presentation without changing behavior.
-- [ ] Redesign Hadith browsing/books view.
-- [ ] Redesign Hadith card/detail presentation.
-- [ ] Improve source/reference visibility.
-- [ ] Improve loading/error/empty states.
+- [x] Redesign Dua categories/list.
+- [x] Redesign Dua card/detail reading experience.
+- [x] Improve Tasbeeh counter presentation without changing behavior.
+- [x] Redesign Hadith browsing/books view.
+- [x] Redesign Hadith card/detail presentation.
+- [x] Improve source/reference visibility.
+- [x] Improve loading/error/empty states.
 - [ ] Preserve live API and fallback behavior.
 - [ ] Acceptance: existing content loading and navigation work.
 
