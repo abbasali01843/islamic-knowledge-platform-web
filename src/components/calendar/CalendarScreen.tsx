@@ -2,10 +2,14 @@ import React,{useEffect,useState} from 'react';
 import {ArrowLeft,Calendar as CalendarIcon,Moon,Loader2,RefreshCw} from 'lucide-react';
 import {fetchHijriDate,fetchHijriMonth,MONTHS, HijriDate} from '../../services/hijriCalendarApi';
 import {toBengaliNumerals} from '../../utils/prayerCalculation';
+import {DEFAULT_LOCATION} from '../../data/bangladeshDistricts';
+import {requestGrantedBrowserLocation} from '../../utils/browserLocation';
+import type {LocationConfig} from '../../types/prayer';
 
 export const CalendarScreen:React.FC<{onBack:()=>void}>=({onBack})=>{
- const [today,setToday]=useState<HijriDate|null>(null);const [month,setMonth]=useState<any[]>([]);const [customDate,setCustomDate]=useState(new Date().toISOString().slice(0,10));const [converted,setConverted]=useState<HijriDate|null>(null);const [loading,setLoading]=useState(true);const [error,setError]=useState('');
- const load=async()=>{setLoading(true);setError('');try{const d=await fetchHijriDate();setToday(d);setMonth(await fetchHijriMonth(d.hijriYear,d.hijriMonth))}catch{setError('হিজরি ক্যালেন্ডার অনলাইন উৎস থেকে লোড করা যাচ্ছে না।')}finally{setLoading(false)}};useEffect(()=>{void load()},[]);
+ const [today,setToday]=useState<HijriDate|null>(null);
+ const [location,setLocation]=useState<LocationConfig>(DEFAULT_LOCATION);const [month,setMonth]=useState<any[]>([]);const [customDate,setCustomDate]=useState(new Date().toISOString().slice(0,10));const [converted,setConverted]=useState<HijriDate|null>(null);const [loading,setLoading]=useState(true);const [error,setError]=useState('');
+ const load=async()=>{setLoading(true);setError('');try{const d=await fetchHijriDate();setToday(d);setMonth(await fetchHijriMonth(d.hijriYear,d.hijriMonth,location.latitude,location.longitude,1))}catch{setError('হিজরি ক্যালেন্ডার অনলাইন উৎস থেকে লোড করা যাচ্ছে না।')}finally{setLoading(false)}};useEffect(()=>{void load()},[]);
  useEffect(()=>{if(!customDate)return;const [y,m,d]=customDate.split('-').map(Number);fetchHijriDate(new Date(y,m-1,d)).then(setConverted).catch(()=>setConverted(null))},[customDate]);
  if(loading)return <div className="max-w-4xl mx-auto py-20 text-center"><Loader2 className="w-7 h-7 animate-spin mx-auto text-[#176B4D]"/><p className="mt-3 text-sm">হিজরি ক্যালেন্ডার লোড হচ্ছে…</p></div>;
  if(error)return <div className="max-w-4xl mx-auto p-6 text-center space-y-3"><p>{error}</p><button onClick={()=>void load()} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#176B4D] text-white text-xs font-bold"><RefreshCw className="w-4 h-4"/>আবার চেষ্টা করুন</button></div>;
