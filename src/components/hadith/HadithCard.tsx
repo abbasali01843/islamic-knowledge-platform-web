@@ -84,7 +84,7 @@ export const HadithCard: React.FC<HadithCardProps> = ({
           <button
             type="button"
             onClick={handleCopy}
-            title="হাদিস কপি করুন"
+            title="হাদিস কপি করুন" aria-label="হাদিস কপি করুন"
             className="p-2 rounded-xl text-[#717A74] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
@@ -92,7 +92,7 @@ export const HadithCard: React.FC<HadithCardProps> = ({
           <button
             type="button"
             onClick={handleShare}
-            title="শেয়ার করুন"
+            title="শেয়ার করুন" aria-label="হাদিস শেয়ার করুন"
             className="p-2 rounded-xl text-[#717A74] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           >
             <Share2 className="w-4 h-4" />
@@ -100,7 +100,7 @@ export const HadithCard: React.FC<HadithCardProps> = ({
           <button
             type="button"
             onClick={() => onToggleBookmark(hadith.id)}
-            title={isBookmarked ? 'বুকমার্ক সরান' : 'বুকমার্ক করুন'}
+            title={isBookmarked ? 'বুকমার্ক সরান' : 'বুকমার্ক করুন'} aria-label={isBookmarked ? 'বুকমার্ক সরান' : 'বুকমার্ক করুন'}
             className="p-2 rounded-xl text-[#176B4D] dark:text-[#9DD6B9] hover:bg-[#D4F2E2]/40 transition-colors"
           >
             {isBookmarked ? (
