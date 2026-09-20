@@ -15,14 +15,22 @@ const BOOKS = [
   { id: 'nawawi', api: 'nawawi', name: 'ইমাম নববীর ৪০ হাদিস' },
 ] as const;
 
+const REQUEST_TIMEOUT_MS = 10000;
+
 async function getJson(url: string): Promise<unknown> {
   const urls = [url.replace('.json', '.min.json'), url];
   let lastError: unknown;
   for (const candidate of urls) {
     try {
-      const response = await fetch(candidate, { headers: { Accept: 'application/json' } });
-      if (!response.ok) throw new Error('Hadith API ' + response.status);
-      return await response.json();
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+      try {
+        const response = await fetch(candidate, { headers: { Accept: 'application/json' }, signal: controller.signal });
+        if (!response.ok) throw new Error('Hadith API ' + response.status);
+        return await response.json();
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
     } catch (error) {
       lastError = error;
     }
