@@ -35,7 +35,7 @@ export const HadithBooksView: React.FC<Props> = ({ bookmarks, onToggleBookmark }
   if (selectedBook) return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <button type="button" onClick={() => setSelectedBook(null)} className="p-2.5 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 text-[#176B4D]"><ArrowLeft className="w-5 h-5"/></button>
+        <button type="button" onClick={() => setSelectedBook(null)} className="ikp-focus-ring p-2.5 rounded-2xl ikp-surface dark:border-[#3A4D43]/60 text-[#176B4D]"><ArrowLeft className="w-5 h-5"/></button>
         <div><h3 className="font-extrabold text-base">{selectedBook.nameBengali}</h3><p className="text-xs text-[#717A74]">{selectedBook.compilerBengali} • মোট: {selectedBook.totalHadithBengali}</p></div>
       </div>
       <div className="p-4 rounded-2xl bg-[#E8EFEA]/70 dark:bg-[#252F28] text-xs leading-relaxed">{selectedBook.description} • প্রথম সেকশন অনলাইন API থেকে লোড হয়েছে।</div>
@@ -51,11 +51,11 @@ export const HadithBooksView: React.FC<Props> = ({ bookmarks, onToggleBookmark }
       <p className="text-xs text-[#717A74] mt-1">গ্রন্থের হাদিস অনলাইন API থেকে সরাসরি লোড হয়; এই অ্যাপে কপি রাখা নেই।</p>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-      {BOOKS.map(book => <button type="button" key={book.id} onClick={() => setSelectedBook(book)} className="group p-5 rounded-3xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:border-[#176B4D] shadow-xs text-left space-y-3">
+      {BOOKS.map(book => <button type="button" key={book.id} onClick={() => setSelectedBook(book)} className="ikp-focus-ring group p-5 rounded-3xl ikp-surface hover:border-[#176B4D] shadow-xs text-left space-y-3">
         <div className="flex items-start justify-between gap-2"><div><h3 className="font-extrabold text-base">{book.nameBengali}</h3><p className="text-[11px] font-serif text-[#176B4D] mt-0.5">{book.nameArabic}</p></div><span className="text-[11px] font-bold text-[#176B4D] bg-[#D4F2E2]/60 px-2 py-0.5 rounded-full">{book.totalHadithBengali}</span></div>
         <p className="text-xs text-[#717A74]">সংকলক: {book.compilerBengali}</p>
         <p className="text-xs leading-relaxed text-[#414A45]">{book.description}</p>
-        <div className="flex items-center justify-between pt-2 border-t border-[#E8EFEA] text-xs font-bold text-[#176B4D]"><span>অনলাইন হাদিস পড়ুন</span><ChevronRight className="w-4 h-4 group-hover:translate-x-1"/></div>
+        <div className="flex items-center justify-between pt-2 border-t border-[var(--ikp-border)] text-xs font-bold text-[#176B4D]"><span>অনলাইন হাদিস পড়ুন</span><ChevronRight className="w-4 h-4 group-hover:translate-x-1"/></div>
       </button>)}
     </div>
   </div>;
