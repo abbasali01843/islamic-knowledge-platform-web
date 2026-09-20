@@ -123,6 +123,15 @@ function hoursToDate(year: number, month: number, day: number, decimalHours: num
   return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds) - timezone * 60 * 60 * 1000);
 }
 
+export interface PrayerTimeOverrides {
+  fajr?: Date;
+  sunrise?: Date;
+  dhuhr?: Date;
+  asr?: Date;
+  maghrib?: Date;
+  isha?: Date;
+}
+
 /**
  * Core function to calculate all prayer times for a given date, location, and juristic options
  */
@@ -180,7 +189,7 @@ export function calculatePrayerTimes(
   const dhuhr = hoursToDate(year, month, day, dhuhrDecimal, location.timezone);
   const asr = hoursToDate(year, month, day, asrDecimal, location.timezone);
   const maghrib = hoursToDate(year, month, day, maghribDecimal, location.timezone);
-  const isha = hoursToDate(year, month, day, ishaDecimal, location.timezone);
+  const isha = hoursToDate(year, month, day, ishaDecimal, location.timezone);\n\n  // Prefer authoritative API timings when supplied; retain the local calculation\n  // as a deterministic fallback if the network/API is unavailable.\n  const finalFajr = overrides.fajr ?? fajr;\n  const finalSunrise = overrides.sunrise ?? sunrise;\n  const finalDhuhr = overrides.dhuhr ?? dhuhr;\n  const finalAsr = overrides.asr ?? asr;\n  const finalMaghrib = overrides.maghrib ?? maghrib;\n  const finalIsha = overrides.isha ?? isha;
 
   // Sehri End: 10 minutes before Fajr as recommended precautionary buffer
   const sehriEnd = new Date(fajr.getTime() - 10 * 60 * 1000);
@@ -196,19 +205,19 @@ export function calculatePrayerTimes(
   // Determine current & next prayer
   const now = date;
   const prayerSequence: Array<{ key: PrayerKey; nameBengali: string; nameArabic: string; time: Date }> = [
-    { key: 'fajr', nameBengali: 'ফজর', nameArabic: 'الفجر', time: fajr },
-    { key: 'sunrise', nameBengali: 'সূর্যোদয়', nameArabic: 'الشروق', time: sunrise },
-    { key: 'dhuhr', nameBengali: 'যোহর', nameArabic: 'الظهر', time: dhuhr },
-    { key: 'asr', nameBengali: 'আসর', nameArabic: 'العصر', time: asr },
-    { key: 'maghrib', nameBengali: 'মাগরিব', nameArabic: 'المغرب', time: maghrib },
-    { key: 'isha', nameBengali: 'এশা', nameArabic: 'العشاء', time: isha },
+    { key: 'fajr', nameBengali: 'ফজর', nameArabic: 'الفجر', time: finalFajr },
+    { key: 'sunrise', nameBengali: 'সূর্যোদয়', nameArabic: 'الشروق', time: finalSunrise },
+    { key: 'dhuhr', nameBengali: 'যোহর', nameArabic: 'الظهر', time: finalDhuhr },
+    { key: 'asr', nameBengali: 'আসর', nameArabic: 'العصر', time: finalAsr },
+    { key: 'maghrib', nameBengali: 'মাগরিব', nameArabic: 'المغرب', time: finalMaghrib },
+    { key: 'isha', nameBengali: 'এশা', nameArabic: 'العشاء', time: finalIsha },
   ];
 
   // Find next prayer
   let nextPrayerItem = prayerSequence.find((p) => p.time.getTime() > now.getTime());
   if (!nextPrayerItem) {
     // Tomorrow Fajr
-    const tomorrowFajrTime = new Date(fajr.getTime() + 24 * 60 * 60 * 1000);
+    const tomorrowFajrTime = new Date(finalFajr.getTime() + 24 * 60 * 60 * 1000);
     nextPrayerItem = {
       key: 'fajr',
       nameBengali: 'ফজর',
@@ -231,7 +240,7 @@ export function calculatePrayerTimes(
       const cur = prayerSequence[i];
       const nextTime = (i < prayerSequence.length - 1)
         ? prayerSequence[i + 1].time.getTime()
-        : fajr.getTime() + 24 * 60 * 60 * 1000;
+        : finalFajr.getTime() + 24 * 60 * 60 * 1000;
       const totalSpan = nextTime - cur.time.getTime();
       const elapsed = Math.max(0, now.getTime() - cur.time.getTime());
       const progressPercent = Math.min(100, Math.round((elapsed / totalSpan) * 100));
@@ -250,7 +259,7 @@ export function calculatePrayerTimes(
   if (!currentPrayerItem) {
     // Before today's Fajr (Isha of previous night)
     const yesterdayIsha = new Date(isha.getTime() - 24 * 60 * 60 * 1000);
-    const totalSpan = fajr.getTime() - yesterdayIsha.getTime();
+    const totalSpan = finalFajr.getTime() - yesterdayIsha.getTime();
     const elapsed = Math.max(0, now.getTime() - yesterdayIsha.getTime());
     const progressPercent = Math.min(100, Math.round((elapsed / totalSpan) * 100));
     currentPrayerItem = {
@@ -264,29 +273,29 @@ export function calculatePrayerTimes(
 
   // Forbidden / Makruh prayer times (৩টি হারাম/মাকরূহ সময়)
   // 1. Sunrise window (সূর্যোদয় থেকে ১৫ মিনিট)
-  const sunriseForbiddenEnd = new Date(sunrise.getTime() + 15 * 60 * 1000);
+  const sunriseForbiddenEnd = new Date(finalSunrise.getTime() + 15 * 60 * 1000);
   // 2. Solar noon (যাওয়াল - যোহরের ১০ মিনিট পূর্ব থেকে যোহর)
-  const zawalStart = new Date(dhuhr.getTime() - 10 * 60 * 1000);
+  const zawalStart = new Date(finalDhuhr.getTime() - 10 * 60 * 1000);
   // 3. Sunset window (সূর্যাস্তের ১৫ মিনিট পূর্ব থেকে সূর্যাস্ত)
-  const sunsetForbiddenDate = new Date(maghrib.getTime() - 15 * 60 * 1000);
+  const sunsetForbiddenDate = new Date(finalMaghrib.getTime() - 15 * 60 * 1000);
 
   const forbiddenPeriods = [
     {
       nameBengali: 'সূর্যোদয় কালীন',
-      start: sunrise,
+      start: finalSunrise,
       end: sunriseForbiddenEnd,
       reason: 'সূর্যোদয়ের সময় থেকে সূর্য এক বর্শা পরিমাণ ওপরে ওঠার আগ পর্যন্ত (প্রায় ১৫ মিনিট) নামাজ পড়া নিষেধ। (সহীহ মুসলিম: ৮৩১)',
     },
     {
       nameBengali: 'ঠিক দ্বিপ্রহর (যাওয়াল)',
       start: zawalStart,
-      end: dhuhr,
+      end: finalDhuhr,
       reason: 'সূর্য ঠিক মাথার ওপর থাকার সময় থেকে পশ্চিমাকাশে ঢলে পড়ার পূর্ব পর্যন্ত নামাজ নিষেধ। (সহীহ মুসলিম: ৮৩১)',
     },
     {
       nameBengali: 'সূর্যাস্ত কালীন',
       start: sunsetForbiddenDate,
-      end: maghrib,
+      end: finalMaghrib,
       reason: 'সূর্য হলুদ বর্ণ ধারণ করে ডোবার আগ পর্যন্ত (১৫ মিনিট) নফল নামাজ নিষেধ। (সহীহ মুসলিম: ৮৩১)',
     },
   ];
