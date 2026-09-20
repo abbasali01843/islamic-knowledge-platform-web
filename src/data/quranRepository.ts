@@ -3,6 +3,7 @@ import { ReaderAyah } from '../types';
 const API_ROOT = 'https://api.alquran.cloud/v1';
 const ARABIC_EDITION = 'quran-uthmani';
 const BENGALI_EDITION = 'bn.bengali';
+const REQUEST_TIMEOUT_MS = 10_000;
 const SOURCE = 'কুরআন: Al Quran Cloud API • Arabic: quran-uthmani • বাংলা edition: bn.bengali';
 
 interface ApiAyah {
@@ -16,88 +17,63 @@ interface ApiAyah {
   surah?: { number?: number };
 }
 
-interface ApiSurah {
-  ayahs: ApiAyah[];
+interface ApiSurah { ayahs: ApiAyah[]; }
+interface ApiResponse { code: number; status: string; data: ApiSurah; }
+
+async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const onAbort = () => controller.abort();
+  if (signal) {
+    if (signal.aborted) controller.abort();
+    else signal.addEventListener('abort', onAbort, { once: true });
+  }
+  try {
+    const response = await fetch(url, { headers: { Accept: 'application/json' }, signal: controller.signal });
+    if (!response.ok) throw new Error('কুরআন API সংযোগ ব্যর্থ (' + response.status + ')');
+    return (await response.json()) as T;
+  } finally {
+    window.clearTimeout(timeout);
+    signal?.removeEventListener('abort', onAbort);
+  }
 }
 
-interface ApiResponse {
-  code: number;
-  status: string;
-  data: ApiSurah;
-}
-
-async function getJson<T>(url: string): Promise<T> {
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
-  if (!response.ok) throw new Error('কুরআন API সংযোগ ব্যর্থ (' + response.status + ')');
-  const payload = (await response.json()) as T;
-  return payload;
-}
-
-function hasSajdah(value: ApiAyah['sajda']): boolean {
-  return typeof value === 'boolean' ? value : Boolean(value);
-}
+function hasSajdah(value: ApiAyah['sajda']): boolean { return typeof value === 'boolean' ? value : Boolean(value); }
 
 function normalize(arabic: ApiAyah[], bengali: ApiAyah[]): ReaderAyah[] {
   const bn = new Map(bengali.map((ayah) => [ayah.numberInSurah, ayah]));
-  return arabic.map((ayah) => {
-    const translation = bn.get(ayah.numberInSurah);
-    return {
-      number: ayah.numberInSurah,
-      arabic: ayah.text,
-      bengali: translation?.text ?? '',
-      juz: ayah.juz ?? null,
-      hizb: ayah.hizbQuarter ?? null,
-      page: ayah.page ?? null,
-      hasSajdah: hasSajdah(ayah.sajda),
-    };
-  });
+  return arabic.map((ayah) => ({
+    number: ayah.numberInSurah,
+    arabic: ayah.text,
+    bengali: bn.get(ayah.numberInSurah)?.text ?? '',
+    juz: ayah.juz ?? null,
+    hizb: ayah.hizbQuarter ?? null,
+    page: ayah.page ?? null,
+    hasSajdah: hasSajdah(ayah.sajda),
+  }));
 }
 
 export class QuranReaderRepository {
-  static async ayahsForSurah(surahNumber: number): Promise<ReaderAyah[]> {
+  static async ayahsForSurah(surahNumber: number, signal?: AbortSignal): Promise<ReaderAyah[]> {
     const [arabic, bengali] = await Promise.all([
-      getJson<ApiResponse>(API_ROOT + '/surah/' + surahNumber + '/' + ARABIC_EDITION),
-      getJson<ApiResponse>(API_ROOT + '/surah/' + surahNumber + '/' + BENGALI_EDITION),
+      getJson<ApiResponse>(API_ROOT + '/surah/' + surahNumber + '/' + ARABIC_EDITION, signal),
+      getJson<ApiResponse>(API_ROOT + '/surah/' + surahNumber + '/' + BENGALI_EDITION, signal),
     ]);
     if (arabic.code !== 200 || bengali.code !== 200) throw new Error('কুরআন ডেটা পাওয়া যায়নি');
     return normalize(arabic.data.ayahs, bengali.data.ayahs);
   }
 
-  static async firstAyahForJuz(juz: number): Promise<{ surahNumber: number; ayah: ReaderAyah } | null> {
-    const payload = await getJson<ApiResponse>(API_ROOT + '/juz/' + juz + '/' + ARABIC_EDITION);
+  static async firstAyahForJuz(juz: number, signal?: AbortSignal): Promise<{ surahNumber: number; ayah: ReaderAyah } | null> {
+    const payload = await getJson<ApiResponse>(API_ROOT + '/juz/' + juz + '/' + ARABIC_EDITION, signal);
     const first = payload.data.ayahs[0];
-    return first ? {
-      surahNumber: Number(first.surah?.number ?? 1),
-      ayah: {
-        number: first.numberInSurah,
-        arabic: first.text,
-        bengali: '',
-        juz: first.juz ?? juz,
-        hizb: first.hizbQuarter ?? null,
-        page: first.page ?? null,
-        hasSajdah: hasSajdah(first.sajda),
-      },
-    } : null;
+    return first ? { surahNumber: Number(first.surah?.number ?? 1), ayah: { number: first.numberInSurah, arabic: first.text, bengali: '', juz: first.juz ?? juz, hizb: first.hizbQuarter ?? null, page: first.page ?? null, hasSajdah: hasSajdah(first.sajda) } } : null;
   }
 
-  static async firstAyahForPage(page: number): Promise<{ surahNumber: number; ayah: ReaderAyah } | null> {
-    const payload = await getJson<ApiResponse>(API_ROOT + '/page/' + page + '/' + ARABIC_EDITION);
+  static async firstAyahForPage(page: number, signal?: AbortSignal): Promise<{ surahNumber: number; ayah: ReaderAyah } | null> {
+    const payload = await getJson<ApiResponse>(API_ROOT + '/page/' + page + '/' + ARABIC_EDITION, signal);
     const first = payload.data.ayahs[0];
-    return first ? {
-      surahNumber: Number((first as ApiAyah & { surah?: { number?: number } }).surah?.number ?? 1),
-      ayah: {
-        number: first.numberInSurah,
-        arabic: first.text,
-        bengali: '',
-        juz: first.juz ?? null,
-        hizb: first.hizbQuarter ?? null,
-        page: first.page ?? page,
-        hasSajdah: hasSajdah(first.sajda),
-      },
-    } : null;
+    return first ? { surahNumber: Number(first.surah?.number ?? 1), ayah: { number: first.numberInSurah, arabic: first.text, bengali: '', juz: first.juz ?? null, hizb: first.hizbQuarter ?? null, page: first.page ?? page, hasSajdah: hasSajdah(first.sajda) } } : null;
   }
 
-  static sourceAttribution(): string {
-    return SOURCE;
-  }
+  static sourceAttribution(): string { return SOURCE; }
 }
