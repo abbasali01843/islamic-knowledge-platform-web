@@ -75,8 +75,8 @@ const QUICK_SUGGESTIONS = [
 
 const ScreenFallback = () => (
   <div className="flex flex-col items-center justify-center py-20 gap-3">
-    <Loader2 className="w-7 h-7 animate-spin text-[#176B4D] dark:text-[#9DD6B9]" />
-    <p className="text-sm text-[#717A74]">লোড হচ্ছে…</p>
+    <Loader2 className="w-7 h-7 animate-spin text-[var(--ikp-primary)]" />
+    <p className="text-sm text-[var(--ikp-text-muted)]">লোড হচ্ছে…</p>
   </div>
 );
 
@@ -211,20 +211,29 @@ export const App: React.FC = () => {
   };
 
   const closeSearch = () => { setSearchOpen(false); setSearch(''); };
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeSearch();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [searchOpen]);
   const goFromSearch = (path: string) => { closeSearch(); navigate(path); };
 
   return (
-    <div className="min-h-screen bg-[#F7FAF7] dark:bg-[#101511] text-[#181D19] dark:text-[#E1E5E1] transition-colors flex flex-col">
+    <div className="min-h-screen bg-[var(--ikp-bg)] text-[var(--ikp-text)] transition-colors flex flex-col">
       {!isReaderOpen && !activeSpecialModule && (
-        <header className="sticky top-0 z-30 bg-[#F7FAF7]/95 dark:bg-[#101511]/95 backdrop-blur border-b border-[#E8EFEA] dark:border-[#3A4D43]/60 px-4 py-2.5">
+        <header className="sticky top-0 z-30 border-b border-[var(--ikp-border)] bg-[color-mix(in_srgb,var(--ikp-bg)_94%,transparent)] px-4 py-2.5 backdrop-blur-xl">
           <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base sm:text-lg tracking-tight text-[#176B4D] dark:text-[#9DD6B9]">ইসলামিক জ্ঞান</span>
-              <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-[#D4F2E2] text-[#002114] dark:bg-[#005236] dark:text-[#D4F2E2] font-semibold">Web</span>
+              <span className="font-bold text-base sm:text-lg tracking-tight text-[var(--ikp-primary)]">ইসলামিক জ্ঞান</span>
+              <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-[var(--ikp-primary-soft)] text-[var(--ikp-primary-strong)] font-semibold">Web</span>
             </div>
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setSearchOpen(true)} aria-label="ইসলামিক অনুসন্ধান খুলুন" className="p-2 rounded-xl text-[#414A45] dark:text-[#C1CAC4] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors"><Search className="w-5 h-5" /></button>
-              <a {...navLink('/qibla')} aria-label="কিবলা খুলুন" className="px-3 py-2 rounded-xl bg-[#D4F2E2] dark:bg-[#005236] text-[#176B4D] dark:text-[#D4F2E2] text-xs font-bold">কিবলা</a>
+              <button type="button" onClick={() => setSearchOpen(true)} aria-label="ইসলামিক অনুসন্ধান খুলুন" className="p-2 rounded-xl text-[var(--ikp-text-muted)] hover:bg-[var(--ikp-surface-muted)] transition-colors"><Search className="w-5 h-5" /></button>
+              <a {...navLink('/qibla')} aria-label="কিবলা খুলুন" className="px-3 py-2 rounded-xl bg-[var(--ikp-primary-soft)] text-[var(--ikp-primary)] text-xs font-bold">কিবলা</a>
               <button type="button" onClick={() => setIsDarkMode((v) => !v)} aria-label={isDarkMode ? 'লাইট মোড' : 'ডার্ক মোড'} className="p-2 rounded-xl text-[#414A45] dark:text-[#C1CAC4] hover:bg-[#E8EFEA] dark:hover:bg-[#3F4943] transition-colors">{isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}</button>
             </div>
           </div>
@@ -232,27 +241,27 @@ export const App: React.FC = () => {
       )}
 
       {searchOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="ইসলামিক অনুসন্ধান" onClick={(e) => { if (e.target === e.currentTarget) closeSearch(); }}>
-          <div className="max-w-2xl mx-auto mt-4 rounded-3xl bg-white dark:bg-[#1A221C] shadow-2xl border border-[#E8EFEA] dark:border-[#3A4D43] overflow-hidden">
-            <div className="flex items-center gap-2 p-3 border-b border-[#E8EFEA] dark:border-[#3A4D43]">
+        <div className="fixed inset-0 z-50 bg-black/35 backdrop-blur-md p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="ইসলামিক অনুসন্ধান" onClick={(e) => { if (e.target === e.currentTarget) closeSearch(); }}>
+          <div className="max-w-2xl mx-auto mt-4 rounded-3xl ikp-surface shadow-2xl overflow-hidden">
+            <div className="flex items-center gap-2 p-3 border-b border-[var(--ikp-border)]">
               <Search className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0" />
-              <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') closeSearch(); }} placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..." className="flex-1 bg-transparent outline-none text-sm text-[#181D19] dark:text-[#E1E5E1]" />
+              <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Escape') closeSearch(); }} placeholder="সূরা, দোয়া, হাদিস, নামাজ, যাকাত..." className="flex-1 bg-transparent outline-none text-sm text-[var(--ikp-text)]" />
               <button type="button" onClick={closeSearch} aria-label="অনুসন্ধান বন্ধ করুন"><X className="w-5 h-5 text-[#717A74]" /></button>
             </div>
             <div className="max-h-[70vh] overflow-y-auto p-3 space-y-4">
               {!searchTerm && (
                 <div className="space-y-3">
-                  <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">দ্রুত অ্যাকসেস</p>
-                  <div className="flex flex-wrap gap-2">{QUICK_SUGGESTIONS.map((s) => (<button key={s.path} type="button" onClick={() => goFromSearch(s.path)} className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#E8EFEA] dark:bg-[#252F28] text-[#176B4D] dark:text-[#9DD6B9]">{s.label}</button>))}</div>
-                  <p className="text-[11px] text-[#717A74] px-1 pt-1">সূরার নাম (বাংলা/ইংরেজি/আরবি) বা ফিচারের নাম লিখে খুঁজুন।</p>
+                  <p className="text-xs font-bold text-[var(--ikp-text-muted)] px-1">দ্রুত অ্যাকসেস</p>
+                  <div className="flex flex-wrap gap-2">{QUICK_SUGGESTIONS.map((s) => (<button key={s.path} type="button" onClick={() => goFromSearch(s.path)} className="px-3 py-1.5 rounded-full text-xs font-bold bg-[var(--ikp-surface-muted)] text-[var(--ikp-primary)]">{s.label}</button>))}</div>
+                  <p className="text-[11px] text-[var(--ikp-text-muted)] px-1 pt-1">সূরার নাম (বাংলা/ইংরেজি/আরবি) বা ফিচারের নাম লিখে খুঁজুন।</p>
                 </div>
               )}
               {searchTerm && searchSurahs.length > 0 && (
                 <div className="space-y-1.5">
                   <p className="text-xs font-bold text-[#717A74] dark:text-[#8B958E] px-1">কুরআনের সূরা</p>
                   {searchSurahs.map((s) => (
-                    <button key={s.number} type="button" onClick={() => { closeSearch(); openSurah(s, null); }} className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25] flex items-center justify-between gap-3">
-                      <div className="min-w-0"><div className="font-bold text-sm">{s.nameBengali}</div><div className="text-[11px] text-[#717A74]">সূরা {s.number} • {s.nameEnglish} • {s.ayahCount} আয়াত</div></div>
+                    <button key={s.number} type="button" onClick={() => { closeSearch(); openSurah(s, null); }} className="w-full text-left p-3 rounded-2xl hover:bg-[var(--ikp-surface-muted)] flex items-center justify-between gap-3">
+                      <div className="min-w-0"><div className="font-bold text-sm">{s.nameBengali}</div><div className="text-[11px] text-[var(--ikp-text-muted)]">সূরা {s.number} • {s.nameEnglish} • {s.ayahCount} আয়াত</div></div>
                       <span className="text-lg font-serif text-[#176B4D] dark:text-[#9DD6B9] shrink-0" dir="rtl">{s.nameArabic}</span>
                     </button>
                   ))}
@@ -265,14 +274,14 @@ export const App: React.FC = () => {
                     const Icon = m.icon;
                     return (
                       <button key={m.path} type="button" onClick={() => goFromSearch(m.path)} className="w-full text-left p-3 rounded-2xl hover:bg-[#F0F5F1] dark:hover:bg-[#222C25] flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-[#D4F2E2] dark:bg-[#005236] flex items-center justify-center text-[#176B4D] dark:text-[#9DD6B9] shrink-0"><Icon className="w-4 h-4" /></div>
-                        <div className="min-w-0"><div className="font-bold text-sm">{m.titleBn}</div><div className="text-[11px] text-[#717A74]">{m.titleEn}</div></div>
+                        <div className="w-9 h-9 rounded-xl bg-[var(--ikp-primary-soft)] flex items-center justify-center text-[var(--ikp-primary)] shrink-0"><Icon className="w-4 h-4" /></div>
+                        <div className="min-w-0"><div className="font-bold text-sm">{m.titleBn}</div><div className="text-[11px] text-[var(--ikp-text-muted)]">{m.titleEn}</div></div>
                       </button>
                     );
                   })}
                 </div>
               )}
-              {searchTerm && !hasResults && <p className="text-sm text-center text-[#717A74] py-10">কোনো ফল পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।</p>}
+              {searchTerm && !hasResults && <p className="text-sm text-center text-[var(--ikp-text-muted)] py-10">কোনো ফল পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করুন।</p>}
             </div>
           </div>
         </div>
