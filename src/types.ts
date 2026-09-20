@@ -50,6 +50,7 @@ export type HomeDestination =
   | 'DUA'
   | 'LEARN_SALAH'
   | 'ZAKAT'
-  | 'CALENDAR';
+  | 'CALENDAR'
+  | 'RAMADAN';
 
 export type QuranLibraryTab = 'SURAHS' | 'JUZ' | 'PAGES' | 'BOOKMARKS' | 'NOTES';
