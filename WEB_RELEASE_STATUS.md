@@ -8,43 +8,73 @@
 
 | Area | Status |
 |---|---|
-| Typecheck | ✅ GitHub Actions passed on `dc1bb955` |
-| Production build | ✅ GitHub Actions production build passed on `dc1bb955` |
-| CI artifact upload | ⏳ Not completed on `dc1bb955` because the prayer regression step failed first |
+| Typecheck | ✅ GitHub Actions passed on `97731d23` |
+| Production build | ✅ GitHub Actions production build passed on `97731d23` |
+| CI artifact upload | ✅ Web dist artifact uploaded successfully |
+| Prayer/Qibla regression suite | ✅ Passed in CI |
+| Smoke regression suite | ✅ Passed: 29 regression checks |
 | Online-only Islamic content policy | ✅ Audited; device preferences use localStorage, Islamic content is not persisted locally |
-| PWA install flow | ✅ Implemented |
-| SPA deep links | ✅ Implemented |
-| Geolocation | ✅ Implemented |
-| Prayer API + fallback | ✅ Implemented |
-| Prayer preference persistence | ✅ All declared calculation methods supported |
+| PWA install flow | ✅ Implemented; production-device verification pending |
+| SPA deep links | ✅ Implemented; production-device verification pending |
+| Geolocation | ✅ Implemented; device verification pending |
+| Prayer API + fallback | ✅ Implemented; live production verification pending |
+| Prayer preference persistence | ✅ Implemented |
 | Monthly prayer timetable | ✅ Implemented |
 | Hijri calendar | ✅ Implemented; selected-location timezone is used for date conversion |
-| Quran live reader | ✅ Implemented; API requests now have a 10s timeout |
-| Hadith live API | ✅ Implemented |
-| Dua live API | ✅ Implemented; detail requests are concurrency-limited |
+| Quran live reader | ✅ Implemented; API requests have a 10s timeout |
+| Hadith live API | ✅ Implemented with upstream fallback candidates |
+| Dua live API | ✅ Implemented with concurrency-limited detail requests |
 | Zakat/Nisab | ✅ Implemented |
-| Qibla compass | ⚠️ Implemented; real-device verification pending |
-| Global Islamic Search | ⚠️ Implemented; does not search all live content |
-| Navigation/accessibility pass | ⚠️ Code-level focus/ARIA/reduced-motion improvements implemented; browser/device verification pending |
-| Performance pass | ⚠️ Implemented; production measurement pending |
+| Qibla compass | ⚠️ Implemented; real-device orientation verification pending |
+| Global Islamic Search | ⚠️ Implemented; module/content coverage is not full live-content search |
+| Navigation/accessibility pass | ⚠️ Code-level focus/ARIA/reduced-motion guards implemented; browser/device verification pending |
+| Performance pass | ⚠️ Production build verified; real-device measurement pending |
 | SEO metadata pass | ⚠️ Basic metadata only; route-specific metadata/SSR remains future work |
-| Production deployment | ✅ Vercel deployment passed for latest audited commit (`856b875b`) |
+| Production deployment | ❌ Latest commit `97731d23` currently reports Vercel `failure` with a `build-rate-limit` target |
 | Real-device QA | ⏳ Pending |
+| Final 100% release verification | ⏳ Blocked until deployment and browser/device QA are verified |
 
-## Current audit findings
+## Current verified CI result
 
-- Hijri date conversion now uses the selected location timezone instead of browser-local calendar fields.
-- Quran API requests now abort after 10 seconds and support caller cancellation.
-- Prayer preferences now preserve IFB, MWL, ISNA, Umm al-Qura and Egypt selections.
-- Documentation now reflects actual localStorage use for device preferences and the salah tracker.
-- Lightweight smoke checks and Prayer/Qibla regression vectors are now included in CI.
+Latest green GitHub Actions run:
+
+- **Run:** `35522967334`
+- **Workflow:** Web CI
+- **Run number:** 274
+- **Commit:** `97731d23b6d4be0a12d8d2ff4e76fb383dcd8598`
+- **Conclusion:** Success
+
+The run completed all configured gates successfully:
+
+1. `npm ci`
+2. TypeScript typecheck
+3. Production build
+4. Smoke test
+5. Prayer/Qibla regression test
+6. Web distribution artifact upload
+
+The smoke test reported: **8 required files and 29 regression checks verified.**
+
+## Current deployment blocker
+
+The latest GitHub combined status for `97731d23` reports:
+
+- **Context:** Vercel
+- **State:** Failure
+- **Target:** Vercel account/build-rate-limit page
+
+This is currently treated as a deployment-platform/build-limit blocker, not as a failed application build, because the same commit passed the complete GitHub CI pipeline including the production build.
+
+No successful production deployment is being claimed for `97731d23`.
 
 ## Verification snapshot
 
-- Vercel deployment for `856b875b` reports **Success**.
-- GitHub Actions run `35522728008` exposed the exact failure: the prayer regression helper returned `180°` for the exact Kaaba coordinate; typecheck, production build, and smoke test all passed.
-- Connected GitHub interface exposes **no workflow run** for `856b875b`; CI execution is therefore not independently verified here.
-- Browser/device QA remains pending and is not being represented as complete.
+The prayer regression history is now resolved in CI:
+
+- Exact Kaaba-coordinate bearing regression was corrected.
+- Chattogram Qibla bearing expectation was corrected to the verified calculation range.
+- Chattogram-to-Kaaba distance expectation was corrected to the verified calculation range.
+- Run 274 is fully green after these regression-vector corrections.
 
 ## Production QA checklist
 
@@ -63,10 +93,12 @@
 - [ ] Dark mode
 - [ ] Loading/error states
 
+## Documentation policy
+
+The complete project documentation will be rewritten from scratch only after the project reaches the 100% verification gate. Until then, this file is maintained as a factual release-status record and is not treated as the final documentation set.
+
 ## Next milestone
 
-**Expand automated coverage + real-device QA**
+**Resolve/verify production deployment → run browser/device QA → complete final release verification → rewrite all documentation from scratch from verified facts.**
 
-After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
-
-Latest audited commit: `cf9be8ea7d0bc508cb8a8fe62cbb3f68ca5e0d19`
+Latest audited commit: `97731d23b6d4be0a12d8d2ff4e76fb383dcd8598`
