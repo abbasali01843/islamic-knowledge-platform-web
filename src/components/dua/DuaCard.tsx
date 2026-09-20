@@ -75,7 +75,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
             type="button"
             onClick={() => onToggleBookmark(dua.id)}
             title={isBookmarked ? 'বুকমার্ক সরান' : 'বুকমার্ক করুন'}
-            className="ikp-focus-ring p-2 rounded-xl text-[var(--ikp-primary)] hover:bg-[#D4F2E2]/40 transition-colors"
+            className="ikp-focus-ring p-2 rounded-xl text-[var(--ikp-primary)] hover:bg-[var(--ikp-primary-soft)]/40 transition-colors"
           >
             {isBookmarked ? (
               <BookmarkCheck className="w-4 h-4 fill-[#176B4D] dark:fill-[#9DD6B9]" />
@@ -110,7 +110,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
       )}
 
       {/* Bengali Meaning */}
-      <div className="space-y-1 text-xs border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 pt-2.5">
+      <div className="space-y-1 text-xs border-t border-[var(--ikp-border)] pt-2.5">
         <span className="text-[11px] font-bold text-[var(--ikp-text-muted)] block uppercase tracking-wider">
           অর্থ:
         </span>
@@ -131,7 +131,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
       )}
 
       {/* Footer: Source reference & Repeat Counter */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E8EFEA] dark:border-[#3A4D43]/40 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[var(--ikp-border)] text-xs">
         <div className="flex items-center gap-1.5 font-semibold text-[var(--ikp-primary)] bg-[var(--ikp-surface-muted)] px-3 py-1 rounded-xl">
           <CheckCircle2 className="w-3.5 h-3.5" />
           <span>উৎস: {dua.reference}</span>
@@ -142,7 +142,7 @@ export const DuaCard: React.FC<DuaCardProps> = ({
           <button
             type="button"
             onClick={handleRepeatTap}
-            className={`px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 ${
+            className={`ikp-focus-ring px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 ${
               isCompleted
                 ? 'bg-emerald-600 text-white'
                 : 'bg-[#D4F2E2] dark:bg-[#005236] text-[#002114] dark:text-[#D4F2E2]'
