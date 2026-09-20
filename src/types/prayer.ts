@@ -1,5 +1,5 @@
 export type CalculationMethod =
-  | 'IFB' // Islamic Foundation Bangladesh / Karachi (18°, 18°)
+  | 'IFB' // Internal key for the 18°/18° Karachi convention used by AlAdhan method 1
   | 'MWL' // Muslim World League (18°, 17°)
   | 'ISNA' // ISNA (15°, 15°)
   | 'UMM_AL_QURA' // Umm al-Qura, Makkah
