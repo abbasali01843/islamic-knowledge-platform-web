@@ -1,6 +1,6 @@
 name: Web CI
 # CI runs typecheck and production build on every Web/PWA source change.
-# Verification trigger: live API adapter and PWA source updates.
+# Verification trigger: final typecheck and production build.
 
 on:
   push:
