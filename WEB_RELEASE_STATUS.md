@@ -69,4 +69,4 @@
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest audited commit: `ad2b04e5085bde9644872c45006a277136e49931`
+Latest audited commit: `cf9be8ea7d0bc508cb8a8fe62cbb3f68ca5e0d19`
