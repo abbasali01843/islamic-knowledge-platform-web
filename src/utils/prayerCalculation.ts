@@ -268,7 +268,7 @@ export function calculatePrayerTimes(
 
   if (!currentPrayerItem) {
     // Before today's Fajr (Isha of previous night)
-    const yesterdayIsha = new Date(isha.getTime() - 24 * 60 * 60 * 1000);
+    const yesterdayIsha = new Date(finalIsha.getTime() - 24 * 60 * 60 * 1000);
     const totalSpan = finalFajr.getTime() - yesterdayIsha.getTime();
     const elapsed = Math.max(0, now.getTime() - yesterdayIsha.getTime());
     const progressPercent = Math.min(100, Math.round((elapsed / totalSpan) * 100));
@@ -316,12 +316,12 @@ export function calculatePrayerTimes(
 
   return {
     date,
-    fajr,
-    sunrise,
-    dhuhr,
-    asr,
-    maghrib,
-    isha,
+    fajr: finalFajr,
+    sunrise: finalSunrise,
+    dhuhr: finalDhuhr,
+    asr: finalAsr,
+    maghrib: finalMaghrib,
+    isha: finalIsha,
     sehriEnd,
     iftar,
     tahajjudEnd,
