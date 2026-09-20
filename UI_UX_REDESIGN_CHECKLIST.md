@@ -92,11 +92,11 @@
 
 ## Phase 6 — Secondary tools
 
-- [ ] Redesign Hijri Calendar.
-- [ ] Redesign Ramadan screen.
-- [ ] Redesign Zakat/Nisab.
-- [ ] Redesign Salah learning.
-- [ ] Redesign Hajj/Seerah/Quiz modules.
+- [x] Redesign Hijri Calendar.
+- [x] Redesign Ramadan screen.
+- [x] Redesign Zakat/Nisab.
+- [x] Redesign Salah learning.
+- [x] Redesign Hajj/Seerah/Quiz modules.
 - [ ] Ensure secondary screens share the same design system.
 - [ ] Acceptance: every existing secondary route remains functional.
 
