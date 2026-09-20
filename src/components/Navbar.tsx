@@ -31,6 +31,8 @@ export const Navbar: React.FC<NavbarProps> = ({ selectedTab, onSelectTab }) => {
           return (
             <a
               key={dest.label}
+              aria-current={isSelected ? 'page' : undefined}
+              aria-label={dest.label}
               href={paths[idx]}
               onClick={(event) => { if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); onSelectTab(idx); } }}
               className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 ${
