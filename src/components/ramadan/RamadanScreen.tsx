@@ -89,25 +89,25 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
   const focusOnIftar = iftarMs > 0 && (sehriMs <= 0 || iftarMs < sehriMs);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28">
+    <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:py-7 space-y-5 pb-28">
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onBack}
           aria-label="ফিরে যান"
-          className="p-2.5 rounded-2xl border border-[#E8EFEA] dark:border-[#3A4D43] bg-white dark:bg-[#1A221C]"
+          className="ikp-focus-ring p-2.5 rounded-2xl ikp-surface border border-[var(--ikp-border)]"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1]">রমজান</h1>
-          <p className="text-xs text-[#717A74] dark:text-[#8B958E]">
+          <h1 className="text-xl font-black text-[var(--ikp-text)]">রমজান</h1>
+          <p className="text-xs text-[var(--ikp-text-muted)]">
             সেহরি · ইফতার · রোজার সহায়িকা
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5 text-xs text-[#717A74] dark:text-[#8B958E]">
+      <div className="flex items-center gap-1.5 text-xs text-[var(--ikp-text-muted)]">
         <MapPin className="w-3.5 h-3.5" />
         <span>
           {location.nameBengali}
@@ -161,12 +161,12 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+        <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-2">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--ikp-primary)]">
             <Moon className="w-3.5 h-3.5" />
             সেহরি
           </div>
-          <div className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1] font-sans">
+          <div className="text-xl font-black text-[var(--ikp-text)] font-sans">
             {formatTimeBengali(prayer.sehriEnd, true, location.timezone)}
           </div>
           <div className="text-[11px] text-[#717A74] flex items-center gap-1">
@@ -177,12 +177,12 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-2">
+        <div className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)] space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-300">
             <Sun className="w-3.5 h-3.5" />
             ইফতার
           </div>
-          <div className="text-xl font-black text-[#181D19] dark:text-[#E1E5E1] font-sans">
+          <div className="text-xl font-black text-[var(--ikp-text)] font-sans">
             {formatTimeBengali(prayer.iftar, true, location.timezone)}
           </div>
           <div className="text-[11px] text-[#717A74] flex items-center gap-1">
@@ -195,7 +195,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
       </div>
 
       <div className="space-y-3">
-        <h2 className="font-black text-[#181D19] dark:text-[#E1E5E1]">রমজান সহায়িকা</h2>
+        <h2 className="font-black text-[var(--ikp-text)]">রমজান সহায়িকা</h2>
 
         {guideLoading && <LoadingView message="গাইড লোড হচ্ছে…" />}
 
@@ -212,15 +212,15 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
             {guide.map((item, i) => (
               <div
                 key={item.title}
-                className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60"
+                className="p-4 rounded-2xl ikp-surface border border-[var(--ikp-border)]"
               >
                 <div className="flex gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-[#176B4D] dark:text-[#9DD6B9] shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[var(--ikp-primary)] shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <div className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">
+                    <div className="font-bold text-sm text-[var(--ikp-text)]">
                       {i + 1}. {item.title}
                     </div>
-                    <p className="mt-1 text-sm leading-relaxed text-[#414A45] dark:text-[#C1CAC4]">
+                    <p className="mt-1 text-sm leading-relaxed text-[var(--ikp-text-muted)]">
                       {item.text}
                     </p>
                     <p className="mt-2 text-[11px] text-[#717A74]">উৎস: {item.source}</p>
