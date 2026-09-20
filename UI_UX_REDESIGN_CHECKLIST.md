@@ -32,10 +32,10 @@
 ## Phase 1 — App shell/navigation
 
 - [ ] Redesign top header without removing search, Qibla, or theme controls.
-- [ ] Redesign bottom navigation for clear active/inactive states.
+- [x] Redesign bottom navigation for clear active/inactive states.
 - [ ] Preserve current five primary destinations unless a measured UX change requires otherwise.
-- [ ] Improve safe-area spacing for Android/iOS.
-- [ ] Improve keyboard/focus/aria behavior.
+- [x] Improve safe-area spacing for Android/iOS.
+- [x] Improve keyboard/focus/aria behavior.
 - [ ] Ensure deep links and browser back/forward still work.
 - [ ] Acceptance: all existing primary routes open correctly.
 
