@@ -245,21 +245,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </span>
           </div>
 
-          <div
-            className="grid grid-cols-2 gap-3 pt-1 text-[11px] text-white/80"
-            onClick={(e) => {
-              e.stopPropagation();
-              onQuickActionClick('RAMADAN');
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.stopPropagation();
-                onQuickActionClick('RAMADAN');
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
+          <div className="grid grid-cols-2 gap-3 pt-1 text-[11px] text-white/80">
             <div className="flex items-center gap-1.5">
               <Moon className="w-3.5 h-3.5 text-rose-300" />
               <span>ফজর শুরু:</span>
@@ -307,11 +293,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       )}
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-end justify-between gap-3">
           <SectionHeader title="আজকের আমল" />
           <span className="text-xs font-bold text-[var(--ikp-primary)]">
             {completedCount}/{DAILY_AMALS.length}
           </span>
+        </div>
+        <div
+          className="h-1.5 overflow-hidden rounded-full bg-[var(--ikp-surface-muted)]"
+          aria-label={`আজকের আমল ${amalProgress}% সম্পন্ন`}
+        >
+          <div
+            className="h-full rounded-full bg-[var(--ikp-primary)] transition-[width]"
+            style={{ width: `${amalProgress}%` }}
+          />
         </div>
 
         <div className="ikp-surface overflow-hidden rounded-2xl divide-y divide-[var(--ikp-border)]">
@@ -352,7 +347,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       </div>
 
       <div className="rounded-2xl border border-[var(--ikp-primary-soft)] bg-[var(--ikp-primary-soft)]/45 p-5 space-y-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
+        <div className="flex items-center gap-2 text-xs font-bold text-[var(--ikp-primary)]">
           <Sparkles className="w-3.5 h-3.5" />
           <span>আজকের আয়াত</span>
         </div>
@@ -410,21 +405,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </div>
             <div>
               <h4 className="font-bold text-sm text-[var(--ikp-text)]">সালাত শিক্ষা</h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">অজু ও নামাজ</p>
+              <p className="mt-0.5 text-xs text-[var(--ikp-text-muted)]">অজু ও নামাজ</p>
             </div>
           </button>
 
           <button
             type="button"
             onClick={() => onQuickActionClick('RAMADAN')}
-            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-all shadow-xs flex flex-col gap-3 active:scale-[0.99]"
+            className="ikp-focus-ring text-left rounded-2xl ikp-surface p-4 transition-all hover:bg-[var(--ikp-primary-soft)]/25 shadow-sm flex flex-col gap-3 active:scale-[0.99]"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-300">
               <Flame className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">রমজান</h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">সেহরি · ইফতার</p>
+              <h4 className="font-bold text-sm text-[var(--ikp-text)]">রমজান</h4>
+              <p className="mt-0.5 text-xs text-[var(--ikp-text-muted)]">সেহরি · ইফতার</p>
             </div>
           </button>
 
