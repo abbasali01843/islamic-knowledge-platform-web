@@ -43,7 +43,7 @@ async function getPage(page:number):Promise<{items:ApiDua[];pages:number}> {
 export async function fetchLiveDuas():Promise<DuaItem[]> {
  const first=await getPage(1);
  const rest=await Promise.all(Array.from({length:Math.max(0,first.pages-1)},(_,i)=>getPage(i+2)));
- return [first.items,...rest.flatMap((page)=>page.items)].map((d):DuaItem=> {
+ return [...first.items,...rest.flatMap((page)=>page.items)].map((d):DuaItem=> {
    const segment=d.segments?.[0]||{};
    const category=mapCategory(d.categories?.[0]?.name||'');
    return {id:'api-dua-'+d.dua_global_id,category,titleBengali:d.duaname,arabicText:d.segments?.map(s=>s.arabic||'').filter(Boolean).join('\n'),bengaliTransliteration:'',bengaliMeaning:d.segments?.map(s=>s.translations||'').filter(Boolean).join('\n'),reference:segment.reference||'Hisnul Muslim',tags:(d.categories||[]).map(c=>c.name),sourceLabel:DUA_SOURCE_LABEL,sourceUrl:DUA_SOURCE_URL};
