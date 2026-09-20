@@ -39,6 +39,12 @@
 - Documentation now reflects actual localStorage use for device preferences and the salah tracker.
 - Lightweight smoke checks and Prayer/Qibla regression vectors are now included in CI.
 
+## Verification snapshot
+
+- Vercel deployment for `856b875b` reports **Success**.
+- Connected GitHub interface exposes **no workflow run** for `856b875b`; CI execution is therefore not independently verified here.
+- Browser/device QA remains pending and is not being represented as complete.
+
 ## Production QA checklist
 
 - [ ] Android Chrome
