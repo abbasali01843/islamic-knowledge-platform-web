@@ -8,9 +8,9 @@
 
 | Area | Status |
 |---|---|
-| Typecheck | ⏳ Re-run required after audit fixes |
-| Production build | ⏳ Re-run required after audit fixes |
-| CI artifact upload | ⏳ Re-run required after audit fixes |
+| Typecheck | ✅ Vercel deployment passed |
+| Production build | ✅ Vercel deployment passed |
+| CI artifact upload | ⚠️ GitHub Actions status not exposed by connected check; Vercel build is successful |
 | Online-only Islamic content policy | ✅ Audited; device preferences use localStorage, Islamic content is not persisted locally |
 | PWA install flow | ✅ Implemented |
 | SPA deep links | ✅ Implemented |
@@ -28,7 +28,7 @@
 | Navigation/accessibility pass | ⚠️ Implemented; automated accessibility verification pending |
 | Performance pass | ⚠️ Implemented; production measurement pending |
 | SEO metadata pass | ⚠️ Basic metadata only; route-specific metadata/SSR remains future work |
-| Production deployment | ⏳ Vercel status must be re-verified after new commits |
+| Production deployment | ✅ Vercel deployment passed for latest audited commit |
 | Real-device QA | ⏳ Pending |
 
 ## Current audit findings
@@ -37,7 +37,7 @@
 - Quran API requests now abort after 10 seconds and support caller cancellation.
 - Prayer preferences now preserve IFB, MWL, ISNA, Umm al-Qura and Egypt selections.
 - Documentation now reflects actual localStorage use for device preferences and the salah tracker.
-- No meaningful automated regression test suite is present yet.
+- Lightweight smoke checks and Prayer/Qibla regression vectors are now included in CI.
 
 ## Production QA checklist
 
@@ -58,8 +58,8 @@
 
 ## Next milestone
 
-**Automated regression tests + real-device QA**
+**Expand automated coverage + real-device QA**
 
 After that: route-level code splitting → full-content Islamic search → optional account/cloud synchronization.
 
-Latest audited commit: `e34f28230c3cb8d3bd124d316d617bb2d200ac2c`
+Latest audited commit: `daf0a956b3c3317bc6b22dbc9b1e5b3237c0d8d8`
