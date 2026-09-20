@@ -11,11 +11,12 @@ import { HadithScreen } from './components/hadith/HadithScreen';
 import { LearnSalahScreen } from './components/learn/LearnSalahScreen';
 import { ZakatScreen } from './components/zakat/ZakatScreen';
 import { CalendarScreen } from './components/calendar/CalendarScreen';
+import { RamadanScreen } from './components/ramadan/RamadanScreen';
 import { Navbar } from './components/Navbar';
 import { WebModulesScreen } from './components/WebModulesScreen';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 
-type Special = 'LEARN_SALAH' | 'ZAKAT' | 'CALENDAR' | null;
+type Special = 'LEARN_SALAH' | 'ZAKAT' | 'CALENDAR' | 'RAMADAN' | null;
 type WebModule = 'QIBLA' | 'RAMADAN' | 'HAJJ' | 'SEERAH' | 'QUIZ';
 
 type SearchModule = {
@@ -132,7 +133,7 @@ const QUICK_SUGGESTIONS = [
   { path: '/dua', label: 'সকাল-সন্ধ্যার দোয়া' },
   { path: '/hadith', label: 'হাদিস' },
   { path: '/qibla', label: 'কিবলা' },
-  { path: '/zakat', label: 'যাকাত' },
+  { path: '/ramadan', label: 'রমজান' },
 ];
 
 const findQuranSurahs = (term: string) => {
@@ -148,7 +149,6 @@ const findQuranSurahs = (term: string) => {
 
 const moduleByPath: Record<string, WebModule> = {
   '/qibla': 'QIBLA',
-  '/ramadan': 'RAMADAN',
   '/hajj': 'HAJJ',
   '/seerah': 'SEERAH',
   '/quiz': 'QUIZ',
@@ -230,6 +230,10 @@ export const App: React.FC = () => {
     }
     if (path === '/calendar') {
       setActiveSpecialModule('CALENDAR');
+      return;
+    }
+    if (path === '/ramadan') {
+      setActiveSpecialModule('RAMADAN');
       return;
     }
     if (moduleByPath[path]) {
@@ -501,6 +505,8 @@ export const App: React.FC = () => {
             <ZakatScreen onBack={() => navigate('/')} />
           ) : activeSpecialModule === 'CALENDAR' ? (
             <CalendarScreen onBack={() => navigate('/')} />
+          ) : activeSpecialModule === 'RAMADAN' ? (
+            <RamadanScreen onBack={() => navigate('/')} />
           ) : (
             <>
               {selectedTab === 0 && (

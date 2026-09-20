@@ -17,7 +17,7 @@ import {
 } from '../../utils/prayerCalculation';
 import { fetchWebModulesContent, type GuideItem } from '../../services/webModulesApi';
 import { LoadingView, ErrorView } from '../ui/StateViews';
-import { PrayerPreferences } from '../../utils/prayerPrefs';
+import { loadPrayerPrefs } from '../../utils/prayerPrefs';
 
 interface Props {
   onBack: () => void;
@@ -27,7 +27,7 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
   const [now, setNow] = useState(() => new Date());
   const [location, setLocation] = useState<LocationConfig>(() => {
     try {
-      return PrayerPreferences.getLocation() || DEFAULT_LOCATION;
+      return loadPrayerPrefs().location || DEFAULT_LOCATION;
     } catch {
       return DEFAULT_LOCATION;
     }
@@ -76,7 +76,6 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
   const sehriMs = prayer.sehriEnd.getTime() - now.getTime();
   const iftarMs = prayer.iftar.getTime() - now.getTime();
 
-  // After iftar, show tomorrow's sehri conceptually by adding a day to sehri if past
   const sehriUpcoming =
     sehriMs > 0
       ? prayer.sehriEnd
@@ -108,7 +107,6 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Location chip */}
       <div className="flex items-center gap-1.5 text-xs text-[#717A74] dark:text-[#8B958E]">
         <MapPin className="w-3.5 h-3.5" />
         <span>
@@ -117,7 +115,6 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
         </span>
       </div>
 
-      {/* Primary countdown card */}
       <div className="rounded-3xl p-6 bg-gradient-to-br from-[#176B4D] to-[#0A3D2B] text-white space-y-4 shadow-md">
         <div className="flex items-center gap-2 text-xs font-bold text-[#9DD6B9]">
           {focusOnIftar ? (
@@ -163,7 +160,6 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
         </p>
       </div>
 
-      {/* Both times at a glance */}
       <div className="grid grid-cols-2 gap-3">
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
@@ -198,7 +194,6 @@ export const RamadanScreen: React.FC<Props> = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Guide */}
       <div className="space-y-3">
         <h2 className="font-black text-[#181D19] dark:text-[#E1E5E1]">রমজান সহায়িকা</h2>
 
