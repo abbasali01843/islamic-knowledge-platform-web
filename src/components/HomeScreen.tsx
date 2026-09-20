@@ -12,6 +12,7 @@ import {
   Sparkles,
   Check,
   BookMarked,
+  Flame,
 } from 'lucide-react';
 import type { HomeDestination } from '../types';
 import { SectionHeader } from './SectionHeader';
@@ -192,7 +193,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </button>
       </div>
 
-      {/* Next Prayer */}
       <div
         role="button"
         tabIndex={0}
@@ -244,7 +244,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 pt-1 text-xs border-t border-white/10 text-white/90">
+          <div
+            className="grid grid-cols-2 gap-2 pt-1 text-xs border-t border-white/10 text-white/90"
+            onClick={(e) => {
+              e.stopPropagation();
+              onQuickActionClick('RAMADAN');
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.stopPropagation();
+                onQuickActionClick('RAMADAN');
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
             <div className="flex items-center gap-1.5">
               <Moon className="w-3.5 h-3.5 text-rose-300" />
               <span>সেহরি:</span>
@@ -263,7 +277,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Continue reading Quran */}
       {resumeSurah && lastRead && onContinueReading && (
         <button
           type="button"
@@ -292,7 +305,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </button>
       )}
 
-      {/* Today's Amal */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <SectionHeader title="আজকের আমল" />
@@ -338,7 +350,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Daily Inspiration */}
       <div className="rounded-2xl p-5 bg-[#F0F7F3] dark:bg-[#152019] border border-[#D4E8DC] dark:border-[#2A3A30] space-y-3">
         <div className="flex items-center gap-2 text-xs font-bold text-[#176B4D] dark:text-[#9DD6B9]">
           <Sparkles className="w-3.5 h-3.5" />
@@ -356,7 +367,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <p className="text-[11px] text-[#717A74] dark:text-[#8B958E]">{inspiration.source}</p>
       </div>
 
-      {/* Quick Actions */}
       <div className="space-y-3">
         <SectionHeader title="দ্রুত অ্যাকশন" />
         <div className="grid grid-cols-2 gap-3">
@@ -386,10 +396,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Tools */}
       <div className="space-y-3">
         <SectionHeader title="টুলস ও শিক্ষা" />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button
             type="button"
             onClick={() => onQuickActionClick('LEARN_SALAH')}
@@ -400,7 +409,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </div>
             <div>
               <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">সালাত শিক্ষা</h4>
-              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">অজু ও নামাজের নিয়ম</p>
+              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">অজু ও নামাজ</p>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onQuickActionClick('RAMADAN')}
+            className="text-left p-4 rounded-2xl bg-white dark:bg-[#1A221C] border border-[#E8EFEA] dark:border-[#3A4D43]/60 hover:bg-[#D4F2E2]/20 transition-all shadow-xs flex flex-col gap-3 active:scale-[0.99]"
+          >
+            <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-950/50 flex items-center justify-center text-orange-700 dark:text-orange-300">
+              <Flame className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-sm text-[#181D19] dark:text-[#E1E5E1]">রমজান</h4>
+              <p className="text-xs text-[#717A74] dark:text-[#8B958E] mt-0.5">সেহরি · ইফতার</p>
             </div>
           </button>
 
