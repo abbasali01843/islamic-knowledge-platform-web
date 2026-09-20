@@ -44,7 +44,7 @@ const chattogramBearing = qiblaBearing(22.3569, 91.7832);
 assert.ok(chattogramBearing >= 275 && chattogramBearing <= 285, `Chattogram Qibla bearing out of expected range: ${chattogramBearing}°`);
 
 const chattogramDistance = distanceKm(22.3569, 91.7832);
-assert.ok(chattogramDistance > 3600 && chattogramDistance < 3900, `Chattogram-Kaaba distance unexpected: ${chattogramDistance} km`);
+assert.ok(chattogramDistance > 5250 && chattogramDistance < 5400, `Chattogram-Kaaba distance unexpected: ${chattogramDistance} km`);
 
 assert.match(source, /case 'HANAFI':|shadowFactor = madhab === 'HANAFI' \? 2 : 1/, 'Hanafi Asr shadow factor must remain distinct');
 assert.match(source, /case 'UMM_AL_QURA':[\s\S]*ishaMinutesAfterMaghrib: 90/, 'Umm al-Qura Isha rule must remain explicit');
