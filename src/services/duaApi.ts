@@ -41,12 +41,26 @@ async function getPage(page:number):Promise<{items:ApiDua[];pages:number}> {
  return {items:Array.isArray(json.data)?json.data:[],pages:Math.max(1,Number(json.pagination?.pages||1))}; } finally { window.clearTimeout(timeoutId); }
 }
 
+async function getDuaDetail(id:number):Promise<ApiDua> {
+ const controller=new AbortController();
+ const timeoutId=window.setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+ try {
+  const res=await fetch(API_ROOT+'/duas/'+id,{headers:{Accept:'application/json'},signal:controller.signal});
+  if(!res.ok) throw new Error('Dua API '+res.status);
+  const json=(await res.json()) as {data?:ApiDua};
+  if(!json.data) throw new Error('Dua detail unavailable');
+  return json.data;
+ } finally {
+  window.clearTimeout(timeoutId);
+ }
+}
+
 export async function fetchLiveDuas():Promise<DuaItem[]> {
  const first=await getPage(1);
- const rest=await Promise.all(Array.from({length:Math.max(0,first.pages-1)},(_,i)=>getPage(i+2)));
- return [...first.items,...rest.flatMap((page)=>page.items)].map((d):DuaItem=> {
+ const detailed=await Promise.all(first.items.map(item=>getDuaDetail(item.dua_global_id)));
+ return detailed.map((d):DuaItem=> {
    const segment=d.segments?.[0]||{};
    const category=mapCategory(d.categories?.[0]?.name||'');
-   return {id:'api-dua-'+d.dua_global_id,category,titleBengali:d.duaname,arabicText:d.segments?.map(s=>s.arabic||'').filter(Boolean).join('\n')||'',bengaliTransliteration:'',bengaliMeaning:d.segments?.map(s=>s.translations||'').filter(Boolean).join('\n')||'',reference:segment.reference||'Hisnul Muslim',tags:(d.categories||[]).map(c=>c.name),sourceLabel:DUA_SOURCE_LABEL,sourceUrl:DUA_SOURCE_URL};
+   return {id:'api-dua-'+d.dua_global_id,category,titleBengali:d.duaname,arabicText:d.segments?.map(s=>s.arabic||'').filter(Boolean).join('\n')||'',bengaliTransliteration:d.segments?.map(s=>s.transliteration||'').filter(Boolean).join('\n')||'',bengaliMeaning:d.segments?.map(s=>s.translations||'').filter(Boolean).join('\n')||'',reference:segment.reference||'Hisnul Muslim',tags:(d.categories||[]).map(c=>c.name),sourceLabel:DUA_SOURCE_LABEL,sourceUrl:DUA_SOURCE_URL};
  });
 }
