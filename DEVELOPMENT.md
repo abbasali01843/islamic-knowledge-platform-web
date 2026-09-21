@@ -1,74 +1,67 @@
-# Development guide — Islamic Knowledge Platform
+# Development Guide
 
-## Prerequisites
+## Environment
 
-- JDK 17+
-- Android SDK (compileSdk 35)
-- Python 3.x (for Quran content generation)
-- Optional local Gradle 8.11+ if `gradle-wrapper.jar` is not yet committed
+This repository is a Vite React application.
 
-## One-time: Gradle Wrapper jar
+- Node.js: CI uses 22
+- Package manager: npm
+- TypeScript: 5.6.x
+- React: 18.3.x
+- Vite: 6.x
+- Tailwind CSS: 4.x
 
-This repository includes `gradlew`, `gradlew.bat`, and `gradle/wrapper/gradle-wrapper.properties`.
-
-If `gradle/wrapper/gradle-wrapper.jar` is missing (binary not committed yet), generate it once:
-
-```bash
-gradle wrapper --gradle-version 8.11.1
-```
-
-Then commit `gradle/wrapper/gradle-wrapper.jar` so CI and other developers can use `./gradlew` without a system Gradle install.
-
-## Quran offline content
-
-The committed asset at `feature/quran/src/main/assets/quran_reader.json` is a **small stub** (sample surahs only) so the repo stays light.
-
-**CI always regenerates the full package** (114 surahs / 6,236 ayahs) before building.
-
-For local full-content development:
+## Setup
 
 ```bash
-python3 scripts/generate_quran_content.py --output feature/quran/src/main/assets/quran_reader.json
-python3 scripts/validate_quran_content.py feature/quran/src/main/assets/quran_reader.json
+git clone https://github.com/abbasali01843/islamic-knowledge-platform-web.git
+cd islamic-knowledge-platform-web
+npm ci
 ```
 
-Requires network access to:
-
-- jsDelivr / quran-json (Arabic text)
-- QuranEnc API (Bengali Rowwad translation)
-- Al Quran Cloud API (Juz / Hizb / page / Sajdah metadata)
-
-Do **not** commit the full generated JSON unless the team decides to vendor it permanently (it is large).
-
-## Active Gradle modules
-
-Only modules with real `build.gradle.kts` files are included in `settings.gradle.kts`:
-
-| Module | Role |
-|--------|------|
-| `:app` | Application shell |
-| `:core:design` | Theme, typography, shapes |
-| `:core:model` | Shared domain models |
-| `:feature:home` | Home screen |
-| `:feature:quran` | Quran catalog + reader |
-
-Placeholder directories (`feature/hadith`, `core/database`, etc.) stay in the tree for roadmap structure. **Add them to `settings.gradle.kts` only when they have a real build script.**
-
-## Common commands
+## Local commands
 
 ```bash
-# After wrapper jar exists:
-./gradlew :app:assembleDebug
-./gradlew test
-./gradlew lint
-
-# Or with system Gradle while bootstrapping:
-gradle :app:assembleDebug
+npm run dev
+npm run lint
+npm run build
+npm run test:smoke
+npm run test:prayer
+npm run preview
 ```
 
-## Branch policy
+## CI contract
 
-- `main` — releasable / integration
-- `develop` — integration (optional)
-- `feature/*` — new work
-- `fix/*` — fixes
+The GitHub Actions workflow at `.github/workflows/web-ci.yml` runs:
+
+1. checkout
+2. Node 22 setup
+3. `npm ci`
+4. `npm run lint`
+5. `npm run build`
+6. `npm run test:smoke`
+7. `npm run test:prayer`
+8. dist artifact upload
+
+The current verified green run is run 274.
+
+## Development rules
+
+- Preserve working routes and live data behavior when changing UI.
+- Use the shared `--ikp-*` design tokens in `src/index.css`.
+- Keep Bengali and Arabic typography readable on narrow screens.
+- Keep visible focus states and semantic labels.
+- Add a regression guard when fixing a calculation or routing regression.
+- Do not claim a live API works solely because its code exists; verify it when making a release claim.
+- Do not mark a QA checklist item complete without evidence.
+
+## Adding a feature
+
+1. Identify the route and existing component.
+2. Inspect related services/types.
+3. Preserve loading, error and empty states.
+4. Add route/search registration when needed.
+5. Add or update regression coverage for important behavior.
+6. Run typecheck, build and smoke/regression tests.
+7. Test the changed flow on a real supported device.
+8. Update documentation only with verified facts.
