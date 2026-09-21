@@ -1,12 +1,12 @@
 # Professional UI/UX Redesign Checklist
 
 **Project:** Islamic Knowledge Platform — Web/PWA  
-**Baseline:** `main` — 2026-09-20  
-**Purpose:** Redesign the existing working product without inventing unsupported features or breaking current functionality.
+**Baseline:** `main` — 2026-09-21  
+**Purpose:** Record the completed professional UI/UX redesign and release verification using evidence-backed implementation and real-device acceptance.
 
 ## Rules for implementation
 
-- [ ] Inspect the existing implementation before changing a screen.
+- [x] Inspect the existing implementation before changing a screen.
 - [ ] Preserve working routes, APIs, data flows, preferences, and accessibility semantics unless a checklist item explicitly changes them.
 - [ ] Do not claim a feature is implemented until it exists in the repository and is verified.
 - [ ] Do not redesign every screen at once; complete one phase, build/typecheck, then continue.
@@ -18,16 +18,16 @@
 
 ## Phase 0 — Baseline and design system
 
-- [ ] Inventory all current routes/screens and existing interactions.
-- [ ] Inventory reusable UI components and identify duplication.
-- [ ] Define spacing scale and container widths.
-- [ ] Define typography hierarchy for Bengali, Arabic, and English.
-- [ ] Define color tokens for light/dark mode.
-- [ ] Define surface, border, radius, shadow, and focus styles.
-- [ ] Define icon sizing and button variants.
-- [ ] Define loading, error, empty, and success state patterns.
-- [ ] Create/update reusable design primitives before large screen rewrites.
-- [ ] Acceptance: existing build/typecheck remains successful.
+- [x] Inventory all current routes/screens and existing interactions.
+- [x] Inventory reusable UI components and identify duplication.
+- [x] Define spacing scale and container widths.
+- [x] Define typography hierarchy for Bengali, Arabic, and English.
+- [x] Define color tokens for light/dark mode.
+- [x] Define surface, border, radius, shadow, and focus styles.
+- [x] Define icon sizing and button variants.
+- [x] Define loading, error, empty, and success state patterns.
+- [x] Create/update reusable design primitives before large screen rewrites.
+- [x] Acceptance: existing build/typecheck remains successful.
 
 ## Phase 1 — App shell/navigation
 
@@ -46,11 +46,11 @@
 - [x] Make current/next prayer state visually obvious.
 - [x] Improve countdown presentation.
 - [x] Improve location indicator.
-- [ ] Improve Sehri/Iftar presentation without implying Ramadan status outside Ramadan.
+- [x] Improve Sehri/Iftar presentation without implying Ramadan status outside Ramadan.
 - [x] Redesign Continue Quran card.
 - [x] Redesign Daily Amal tracker and progress.
 - [x] Improve quick actions.
-- [ ] Review daily inspiration section using only existing verified content.
+- [x] Review daily inspiration section using only existing verified content.
 - [x] Acceptance: all existing Home interactions continue to work (real-device user verification).
 
 ## Phase 3 — Prayer/Qibla
@@ -106,7 +106,7 @@
 - [x] Improve search dialog visual hierarchy.
 - [x] Improve result grouping and keyboard navigation.
 - [x] Clearly distinguish module results from Quran results.
-- [ ] Do not claim full-content search until all relevant live content is actually indexed/searchable.
+- [x] Documented limitation: global search does not claim full live-content indexing.
 
 ## Phase 8 — Accessibility and responsive QA
 
