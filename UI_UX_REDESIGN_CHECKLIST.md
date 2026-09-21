@@ -118,8 +118,8 @@
 - [x] Touch target sizing (user verification).
 - [x] Reduced-motion behavior where appropriate (CSS preference guard verified).
 - [x] Android Chrome narrow viewport (user verification).
-- [x] iOS Safari narrow viewport (user verification).
-- [x] Tablet/desktop layout (user verification).
+- [ ] iOS Safari narrow viewport — not separately evidenced.
+- [ ] Tablet/desktop layout — not separately evidenced.
 - [x] Dark mode (user verification).
 
 ## Phase 9 — Verification gate
