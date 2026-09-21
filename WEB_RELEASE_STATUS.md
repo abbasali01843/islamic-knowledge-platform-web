@@ -114,4 +114,4 @@ The complete project documentation will be rewritten from scratch only after the
 
 **Complete feature-by-feature browser/device QA → verify API and interaction flows → complete final 100% release verification → rewrite all documentation from scratch from verified facts.**
 
-Latest release-state commit: `84f8d85f`
+Latest release-status update commit: `f6e19df9`
