@@ -124,15 +124,15 @@
 
 ## Phase 9 — Verification gate
 
-- [ ] Typecheck passes.
-- [ ] Production build passes.
-- [ ] Regression smoke test passes.
-- [ ] Prayer/Qibla regression tests pass.
+- [x] Typecheck passes.
+- [x] Production build passes.
+- [x] Regression smoke test passes.
+- [x] Prayer/Qibla regression tests pass.
 - [ ] Deep links verified.
 - [ ] No console/runtime errors on core flows.
-- [ ] Vercel deployment verified.
+- [x] Vercel deployment verified.
 - [ ] Real-device QA completed.
-- [ ] Release status document updated with only verified claims.
+- [x] Release status document updated with only verified claims.
 
 ## Definition of “professional”
 
