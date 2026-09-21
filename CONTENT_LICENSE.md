@@ -1,61 +1,25 @@
-# Content sources and licenses
+# Content and Source Notes
 
-This document tracks **religious and third-party content** used by Islamic Knowledge Platform.
-Application source code is separate from content rights.
+## Purpose
 
-> **Policy:** We do not modify Quranic Arabic text. Hadith and dua entries show source references in the UI. Content is for end-user display inside the app — not for resale as a raw dataset or API.
+This document records how the application treats external Islamic content and source attribution.
 
-## Quran
+## Source attribution
 
-| Asset | Source | Notes |
-|-------|--------|--------|
-| Arabic text (Hafs / Uthmani-style) | Generated offline package via project scripts; aligned with widely used verified digital texts (e.g. Tanzil-class sources) | Do not alter ayah text |
-| Bengali translation | Packaged with reader metadata (e.g. Rowwad-class attribution in content pipeline) | Show translator credit in-app |
-| Structural metadata (juz, page, sajdah) | Content generation pipeline | Validated in CI (114 surahs / 6236 ayahs) |
-| Optional fonts (future) | e.g. KFGQPC Uthmanic | Respect KFGQPC terms if bundled |
-| Audio (future) | e.g. EveryAyah / Quran.com ecosystem | Stream or download per upstream terms; not redistributed as a separate product |
+Where live normalized content includes source metadata, the UI can expose the configured source label and URL.
 
-## Prayer times & Qibla
+Current documented live sources include:
+- ThelightHub Hisnul Muslim Dua API
+- Fawaz Ahmed Hadith API
 
-| Asset | Source | Notes |
-|-------|--------|--------|
-| Calculation | On-device algorithm (IFB / MWL / ISNA parameters; Hanafi vs standard Asr shadow) | Same family as common open prayer-time math (praytimes.org-style) |
-| Default method (BD) | Islamic Foundation Bangladesh–style 18° angles | User-selectable |
-| City coordinates | App location list (Bangladesh districts / major cities) | Offline |
-| Qibla | Great-circle bearing to Kaaba (approx. 21.4225°N, 39.8262°E) | On-device |
+The Quran, prayer and Hijri modules use their repository-configured data/services as described in `API_SOURCES.md`.
 
-## Hadith (planned / web preview)
+## Repository responsibility
 
-| Asset | Source | Notes |
-|-------|--------|--------|
-| Collections | e.g. open datasets compatible with sunnah.com / community JSON APIs | Always show book + number |
-| Translations | Per-edition rights | Attribute translator; prefer explicitly licensed open packages for offline bundles |
+Code in this repository should not remove source attribution from normalized live content.
 
-**Editorial rule:** Prefer graded sahih/hasan material for default offline “lite” packs; never present weak narrations as sahih.
+External content remains subject to the terms, licenses and usage conditions of its respective upstream source. Users and maintainers should verify upstream licensing before redistributing content outside the intended application.
 
-## Dua & adhkar (planned / web preview)
+## Scope
 
-| Asset | Source | Notes |
-|-------|--------|--------|
-| Hisnul Muslim–style compilations | Classical compilation (Sa’id bin Ali bin Wahf al-Qahtani) as commonly published | Arabic + meaning + source reference per item |
-| Quranic duas | Quran text | Same rules as Quran |
-
-## Names of Allah, fiqh guides, zakat help text
-
-Educational summaries must cite Quran/Hadith where claims are made. Zakat *rates* for gold/silver may be user-entered or fetched online; calculations run on-device.
-
-## Third-party libraries
-
-See Gradle / npm lockfiles for software licenses (Apache-2.0, MIT, etc.). Those govern code, not revelation text.
-
-## In-app attribution
-
-Screens that show Quran, Hadith, or dua SHOULD expose:
-
-- Source name (and number for Hadith)
-- Translation/edition credit where applicable
-- A link or path to this document (About / Settings)
-
-## Updates
-
-When adding a new content pack, append a row here and bump the pack `manifest` version in the offline content pipeline.
+This file is a source/attribution note, not a legal opinion and not a substitute for reviewing the current license of an upstream dataset or API.
