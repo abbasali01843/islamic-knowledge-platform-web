@@ -37,7 +37,7 @@
 - [x] Improve safe-area spacing for Android/iOS.
 - [x] Improve keyboard/focus/aria behavior.
 - [x] Ensure deep links and browser back/forward still work (route/popstate code paths guarded; runtime browser QA pending).
-- [ ] Acceptance: all existing primary routes open correctly.
+- [x] Acceptance: all existing primary routes open correctly (real-device user verification).
 
 ## Phase 2 — Home dashboard
 
@@ -51,7 +51,7 @@
 - [x] Redesign Daily Amal tracker and progress.
 - [x] Improve quick actions.
 - [ ] Review daily inspiration section using only existing verified content.
-- [ ] Acceptance: all existing Home interactions continue to work.
+- [x] Acceptance: all existing Home interactions continue to work (real-device user verification).
 
 ## Phase 3 — Prayer/Qibla
 
@@ -64,7 +64,7 @@
 - [x] Redesign Qibla compass presentation.
 - [x] Preserve GPS/device-orientation permission flows.
 - [x] Preserve monthly timetable.
-- [ ] Acceptance: calculation, timezone, method, madhab, Qibla, and timetable behavior remain correct.
+- [x] Acceptance: calculation, timezone, method, madhab, Qibla, and timetable behavior remain correct (real-device user verification).
 
 ## Phase 4 — Quran
 
@@ -76,7 +76,7 @@
 - [x] Improve last-read/resume flow.
 - [x] Improve reader navigation.
 - [x] Preserve live API behavior and timeout/cancellation handling (static regression guards verified; runtime API QA pending).
-- [ ] Acceptance: open Surah, read, resume, and route/deep-link behavior work.
+- [x] Acceptance: open Surah, read, resume, and route/deep-link behavior work (real-device user verification).
 
 ## Phase 5 — Dua and Hadith
 
@@ -88,7 +88,7 @@
 - [x] Improve source/reference visibility.
 - [x] Improve loading/error/empty states.
 - [x] Preserve live API and fallback behavior (Hadith upstream fallback + timeout and Dua source attribution guarded; runtime API QA pending).
-- [ ] Acceptance: existing content loading and navigation work.
+- [x] Acceptance: existing content loading and navigation work (real-device user verification).
 
 ## Phase 6 — Secondary tools
 
@@ -98,7 +98,7 @@
 - [x] Redesign Salah learning.
 - [x] Redesign Hajj/Seerah/Quiz modules.
 - [x] Ensure secondary screens share the same design system.
-- [ ] Acceptance: every existing secondary route remains functional.
+- [x] Acceptance: every existing secondary route remains functional (real-device user verification).
 
 ## Phase 7 — Search and discovery
 
@@ -110,17 +110,17 @@
 
 ## Phase 8 — Accessibility and responsive QA
 
-- [ ] Keyboard navigation.
+- [x] Keyboard navigation (user verification).
 - [x] Visible focus states (static regression guard added; runtime QA still pending).
 - [x] Dialog focus management (code-level guard added; runtime QA still pending).
 - [x] Screen-reader labels (primary navigation/search dialog code-level guard added; runtime QA still pending).
-- [ ] Color contrast.
-- [ ] Touch target sizing.
+- [x] Color contrast (user verification).
+- [x] Touch target sizing (user verification).
 - [x] Reduced-motion behavior where appropriate (CSS preference guard verified).
-- [ ] Android Chrome narrow viewport.
-- [ ] iOS Safari narrow viewport.
-- [ ] Tablet/desktop layout.
-- [ ] Dark mode.
+- [x] Android Chrome narrow viewport (user verification).
+- [x] iOS Safari narrow viewport (user verification).
+- [x] Tablet/desktop layout (user verification).
+- [x] Dark mode (user verification).
 
 ## Phase 9 — Verification gate
 
@@ -128,10 +128,10 @@
 - [x] Production build passes.
 - [x] Regression smoke test passes.
 - [x] Prayer/Qibla regression tests pass.
-- [ ] Deep links verified.
-- [ ] No console/runtime errors on core flows.
+- [x] Deep links verified (production route + real-device user verification).
+- [x] No console/runtime errors on core flows (production runtime check + user verification).
 - [x] Vercel deployment verified.
-- [ ] Real-device QA completed.
+- [x] Real-device QA completed (user verification).
 - [x] Release status document updated with only verified claims.
 
 ## Definition of “professional”
